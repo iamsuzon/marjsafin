@@ -79,6 +79,7 @@
                                 <th>Passport</th>
                                 <th>Reference</th>
                                 <th>Traveling To</th>
+                                <th>Center</th>
                                 <th>Result</th>
                                 <th>Action</th>
                             </tr>
@@ -107,6 +108,16 @@
                                     <td>
                                         <p class="text-capitalize">{{$item->gender}}</p>
                                         <p>{{travelingToName($item->traveling_to)}}</p>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $center = centerName($item->center_name);
+                                            $center_name = explode(' - ', $center)[0] ?? '';
+                                            $center_address = explode(' - ', $center)[1] ?? '';
+                                        @endphp
+
+                                        <p class="text-capitalize">{{$center_name}}</p>
+                                        <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
                                     <td>
                                         <p @class([

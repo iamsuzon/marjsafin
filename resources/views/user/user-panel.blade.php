@@ -77,6 +77,7 @@
                                 <th>Passport</th>
                                 <th>Reference</th>
                                 <th>Traveling To</th>
+                                <th>Center</th>
                                 <th>Result</th>
                                 <th>PDF</th>
                             </tr>
@@ -106,7 +107,25 @@
                                         <p class="text-capitalize">{{$item->gender}}</p>
                                         <p>{{travelingToName($item->traveling_to)}}</p>
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        @php
+                                            $center = centerName($item->center_name);
+                                            $center_name = explode(' - ', $center)[0] ?? '';
+                                            $center_address = explode(' - ', $center)[1] ?? '';
+                                        @endphp
+
+                                        <p class="text-capitalize">{{$center_name}}</p>
+                                        <p class="text-capitalize">{{$center_address}}</p>
+                                    </td>
+                                    <td>
+                                        <p @class([
+                                            'text-capitalize',
+                                            'text-success' => $item->health_status == 'fit',
+                                            'text-danger' => $item->health_status == 'unfit',
+                                            'text-warning' => $item->health_status == 'held-up',
+                                        ])>{{$item->health_status}}</p>
+                                        <p>{{$item->health_status_details}}</p>
+                                    </td>
                                     <td class="text-end px-15">
                                         <a class="view-btn" href="{{route('user.generate.pdf', $item->id)}}">
                                             <i class="ri-printer-line"></i>

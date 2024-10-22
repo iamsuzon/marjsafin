@@ -19,6 +19,12 @@
         .header {
             font-size: 20px;
             font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+        .sub-header {
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 15px;
             text-transform: capitalize;
         }
@@ -46,7 +52,13 @@
 </head>
 <body>
 <div class="container">
-    <div class="header">{{$center_name}}</div>
+    @php
+        $center = explode(' - ', $center_name)[0] ?? '';
+        $center_address = explode(' - ', $center_name)[1] ?? '';
+    @endphp
+
+    <div class="header">{{$center}}</div>
+    <div class="sub-header">{{$center_address}}</div>
     <div class="divider"></div>
     <div class="content">
         <p><strong>From:</strong> {{ $agent }}</p>
@@ -59,7 +71,6 @@
     </div>
     <div class="divider"></div>
     <div class="footer">
-        <p><strong>CreatedBy:</strong> {{ $created_by }}, For: {{ $for }}</p>
         <p>Notes: Passengers are advised to contact Agent only for Medical Test Report and all other official procedures, Not at the Medical Center. Thanks</p>
     </div>
 </div>
