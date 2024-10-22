@@ -1,0 +1,63 @@
+.mw-100{
+    min-width: 100px !important;
+}
+.mw-250{
+    max-width: 250px;
+}
+.invoice-logo-size {
+	max-width: 160px;
+}
+.td-padding-9{
+    padding-top:9px !important;
+    padding-bottom:9px !important;
+}
+
+.td-padding-4{
+    padding-top:4px !important;
+    padding-bottom:4px !important;
+}
+
+.invoice-btn-size{
+    padding: 8px 11px;
+}
+
+.discriptions-head{
+    background: var(--body-bg);
+    padding: 10px 1px;
+    border-radius: 3px;
+}
+
+.invoice-receipt-table{
+    tbody, td, tfoot, th, thead, tr {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+    }
+    tbody td {
+        font-weight: 400;
+        padding: 3px 0;
+        padding-left: 14px;
+        font-size: 12px;
+        color: var(--primary-title);
+        vertical-align: initial;
+    }
+
+}
+
+
+.modal-receipt-table{
+    tbody, td, tfoot, th, thead, tr {
+        border-color: inherit;
+        border-style: solid;
+        border-width: 0;
+    }
+    tbody td {
+        font-weight: 400;
+        padding: 8px 0;
+        padding-left: 14px;
+        font-size: 14px;
+        color: var(--primary-title);
+        vertical-align: initial;
+    }
+
+}

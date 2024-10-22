@@ -1,0 +1,1064 @@
+
+//Btn multiple style
+
+
+.btn-sm {
+	padding: 7px 8px !important;
+	height: 38px;
+}
+	// Fill button
+	@each $btn-name, $btn-color in (
+		primary, var(--primary-btn)),
+		(secondary, var(--secondary-btn)) ,
+		(tertiary, var(--tertiary-btn)) ,
+		(cancel, var(--red) ) ,
+		(danger, #FF6767 ) ,
+		(light, $light-gray),
+		(dark, var(--dar)),
+		(warning, $warning-color) {
+			.btn-#{$btn-name}-fill{
+
+				padding:12px 21px;
+				color: var(--white);
+				text-transform: capitalize;
+				border: 1px solid transparent;
+				font-size: 14px;
+				font-weight: 400;
+				border-radius: 6px;
+				text-align: center;
+				cursor: pointer;
+				display: inline-block;
+				overflow: hidden;
+				transition: .3s;
+				// display: flex;
+				// align-items: center;
+				// gap: 5px;
+
+				@if($btn-name == primary){
+					background: var(--primary-btn);
+				}
+				@if($btn-name == secondary){
+					background: var(--secondary-btn);
+				}
+				@if($btn-name == tertiary){
+					background: var(--tertiary-btn);
+				}
+				@if($btn-name == cancel){
+					background: var(--red);
+				}
+				@if($btn-name == danger){
+					background: #FF6767;
+				}
+				@if($btn-name == light){
+					background: var(--light);
+				}
+				@if($btn-name == dark){
+					background: var(--dark);
+				}
+				@if($btn-name == warning){
+					background: var(--warning);
+				}
+
+				&:hover{
+					background: none;
+					@if($btn-name == primary){
+						border: 1px solid var(--primary-btn);
+						color: var(--primary-btn);
+					}
+					@if($btn-name == secondary){
+						border: 1px solid var(--secondary-btn);
+						color: var(--secondary-btn);
+					}
+					@if($btn-name == tertiary){
+						border: 1px solid var(--tertiary-btn);
+						color: var(--tertiary-btn);
+					}
+					@if($btn-name == cancel){
+						border: 1px solid var(--red);
+						color: var(--red);
+					}
+					@if($btn-name == danger){
+						border: 1px solid #FF6767;
+						color: #FF6767;
+					}
+					@if($btn-name == light){
+						border: 1px solid var(--light);
+						color: var(--primary-paragraph);
+					}
+					@if($btn-name == dark){
+						border: 1px solid var(--dark);
+						color: var(--dark);
+					}
+					@if($btn-name == warning){
+						border: 1px solid var(--warning);
+						color: var(--warning);
+					}
+					@else{
+						// border: 1px solid var(--primary-btn);
+					}
+				}
+				.icon{
+					line-height: 1;
+				}
+				i {
+					@include transition(.3s);
+					font-size: 20px;
+					transition: 0.3s;
+					position: relative;
+					left: 0;
+					top: 1px;
+					line-height: 1;
+				}
+
+				@if($btn-name == light){
+					color: var(--dar);
+				}
+				@else{
+					// color:var(--white);
+				}
+				&:focus{
+					border-color: $btn-color;
+					background: $btn-color;
+					@if($btn-name == light){
+						color: var(--dar);
+					}
+					@else{
+						color: var(--primary-border);;
+					}
+					&:active{
+						border-color: $btn-color;
+						background: $btn-color;
+						@if($btn-name == light){
+							color: var(--dar);
+						}
+						@else{
+							color: var(--white);
+						}
+					}
+				}
+			}
+		}
+
+	// Border button
+	@each $btn-name, $btn-color in (primary, var(--primary-btn)),
+		(secondary, --secondary-btn) ,
+		(tertiary, --tertiary-btn) ,
+		(cancel, var(--red) ) ,
+		(danger, #FF6767 ) ,
+		(light, $light-gray),
+		(dark, var(--dar)),
+		(warning, $warning-color) {
+			.btn-#{$btn-name}-outline{
+
+				padding:12px 21px;
+				color: var(--white);
+				text-transform: capitalize;
+				border: 1px solid transparent;
+				font-size: 14px;
+				font-weight: 400;
+				border-radius: 6px;
+				text-align: center;
+				cursor: pointer;
+				display: inline-block;
+				overflow: hidden;
+				background: none;
+
+				@if($btn-name == primary){
+					color: var(--primary-btn);
+					border: 1px solid var(--primary-btn);
+				}
+				@if($btn-name == secondary){
+					color:var(--secondary-btn);
+					border: 1px solid var(--secondary-btn);
+				}
+				@if($btn-name == tertiary){
+					color:var(--tertiary-btn);
+					border: 1px solid var(--tertiary-btn);
+				}
+				@if($btn-name == cancel){
+					background: none;
+					color: var(--red);
+					border: 1px solid var(--tertiary-btn);
+				}
+				@if($btn-name == danger){
+					background: none;
+					color: #FF6767;
+					border: 1px solid #FF6767;
+				}
+				@if($btn-name == light){
+					background: none;
+					color: var(--primary-paragraph);
+					border: 1px solid var(--light);
+				}
+				@if($btn-name == dark){
+					background: none;
+					color: var(--dark);
+					border: 1px solid var(--dark);
+				}
+				@if($btn-name == warning){
+					background: none;
+					color: var(--warning);
+					border: 1px solid var(--warning);
+				}
+
+
+				&:hover{
+					color:var(--white);
+					@if($btn-name == primary){
+						border: 1px solid var(--primary-btn);
+						background: var(--primary-btn);
+					}
+					@if($btn-name == secondary){
+						border: 1px solid var(--secondary-btn);
+						background: var(--secondary-btn);
+					}
+					@if($btn-name == tertiary){
+						border: 1px solid var(--tertiary-btn);
+						background: var(--tertiary-btn);
+					}
+					@if($btn-name == cancel){
+						border: 1px solid var(--red);
+						background: var(--red);
+					}
+					@if($btn-name == danger){
+						border: 1px solid #FF6767;
+						background: #FF6767;
+					}
+					@if($btn-name == light){
+						border: 1px solid var(--light);
+						color: var(--primary-paragraph);
+					}
+					@if($btn-name == dark){
+						border: 1px solid var(--dark);
+						background: var(--dark);
+					}
+					@if($btn-name == warning){
+						border: 1px solid var(--warning);
+						background: var(--warning);
+					}
+					@else{
+						// border: 1px solid var(--primary-btn);
+					}
+				}
+				i {
+					@include transition(.3s);
+					font-size: 20px;
+					transition: 0.3s;
+					position: relative;
+					left: 0;
+					top: 1px;
+					line-height: 1;
+				}
+
+				@if($btn-name == light){
+					color:var(--dar);
+				}
+				@else{
+					// color:var(--white);
+				}
+				&:focus{
+					border-color:$btn-color;
+					background:$btn-color;
+					@if($btn-name == light){
+						color:var(--dar);
+					}
+					@else{
+						color:var(--white);
+					}
+					&:active{
+						border-color:$btn-color;
+						background:$btn-color;
+						@if($btn-name == light){
+							color:var(--dar);
+						}
+						@else{
+							color:var(--white);
+						}
+					}
+				}
+			}
+		}
+
+
+	// Payment btn
+		$card : var(--primary-title);
+		$cash : var(--secondary);
+		$draft : var(--primary);
+		$gift-card : #FA5F1C;
+		$cheque : #1EA7FF;
+		$deposit : #003DD9;
+		$points :var(--primary);
+		$cancel : #FF6767;
+		$transection : #FF9900;
+
+	@each $btn-name, $btn-color in (card, $card) ,
+		(cash, $cash) ,
+		(draft, $draft),
+		(gift-card, $gift-card),
+		(cheque, $cheque),
+		(deposit, $deposit),
+		(points, $points),
+		(cancel, $cancel),
+		(transection, $transection) {
+			.payment-btn-#{$btn-name}{
+
+				padding: 12px 22px;
+				border: 1px solid var(--primary-border);
+				font-size: 14px;
+				font-weight: 400;
+				text-transform: capitalize;
+				border-radius: 6px;
+				text-align: center;
+				cursor: pointer;
+				display: inline-block;
+				overflow: hidden;
+				background: none;
+
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				justify-content: center;
+				@if($btn-name == card){
+					color: $card;
+				}
+				@if($btn-name == cash){
+					color: $cash;
+				}
+				@if($btn-name == draft){
+					color: $draft;
+				}
+				@if($btn-name == gift-card){
+					color: $gift-card;
+				}
+				@if($btn-name == cheque){
+					color: $cheque;
+				}
+				@if($btn-name == deposit){
+					color: $deposit;
+				}
+				@if($btn-name == points){
+					color: $points;
+				}
+				@if($btn-name == cancel){
+					color: $cancel;
+				}
+				@if($btn-name == transection){
+					color: $transection;
+				}
+
+				&:hover{
+					@if($btn-name == card){
+						border: 1px solid $card;
+						color: $card;
+					}
+					@if($btn-name == cash){
+						border: 1px solid $cash;
+						color: $cash;
+					}
+					@if($btn-name == draft){
+						border: 1px solid $draft;
+						color: $draft;
+					}
+					@if($btn-name == gift-card){
+						border: 1px solid $gift-card;
+						color: $gift-card;
+					}
+					@if($btn-name == cheque){
+						border: 1px solid $cheque;
+						color: $cheque;
+					}
+					@if($btn-name == deposit){
+						border: 1px solid $deposit;
+						color: $deposit;
+					}
+					@if($btn-name == points){
+						border: 1px solid $points;
+						color: $points;
+					}
+					@if($btn-name == cancel){
+						border: 1px solid $cancel;
+						color: $cancel;
+					}
+					@if($btn-name == transection){
+						border: 1px solid $transection;
+						color: $transection;
+					}
+				}
+				i {
+					font-size: 21px;
+					line-height: 1;
+					// position: relative;
+					// top: 4px;
+				}
+			}
+		}
+
+
+
+	
+
+	.cmn-btn {
+
+		color: var(--white);
+		background:var(--primary);
+		font-family: var(--primary-title);
+		padding:24px 25px;
+		font-size: 16px;
+		font-weight: 500;
+		border-radius: 0px;
+		line-height: 1;
+		text-align: center;
+		
+		cursor: pointer;
+		display: inline-block;
+		-moz-user-select: none;
+		line-height: 0;
+		margin-bottom: 0;
+		cursor: pointer;
+		transition: color 0.4s linear;
+		position: relative;
+		z-index: 1;
+		border: 0;
+		overflow: hidden;
+		.icon {
+			font-size: 11px;
+			@include transition(.3s);
+			transform: rotate(45deg);
+			display: inline-block;
+			position: relative;
+			left: 0;
+		}
+		&::before{
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 101%;
+			height: 101%;
+			background:var(--primary-title);
+			z-index: 1;
+			border-radius: 5px;
+			transition: transform 0.5s;
+			transition-timing-function: ease;
+			transform-origin: 0 0;
+			transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+			// 
+			transform: scaleX(0);
+			border-radius: 0px;
+		}
+		&:hover{
+			color:$white !important;
+			&::before {
+				transform: scaleX(1);
+				z-index: -1;
+			}
+			&::after{
+				background:var(--primary);
+			}
+			.icon {
+				left: 3px;
+			}
+		}
+		&.cmn-btns{
+			background: var(--paragraph-color);
+			&:hover{
+				color: $white !important;
+				
+				&::before{
+					background: var(--primary);
+				}
+				.icon {
+					left: 3px;
+				}
+			}
+		}
+	}
+
+	.btn-primary-submit{
+		font-family: var(--primary-title);
+		@include transition(.4s);
+		border: 1px solid transparent;
+		background:var(--primary);
+		color: var(--white);
+		padding: 15px 48px;
+		font-size: 16px;
+		font-weight: 500;
+		display: inline-block;
+		border-radius: 6px;
+		text-align: center;
+		text-transform: capitalize;
+		.icon {
+			@include transition(.3s);
+			margin-right:5px;
+			font-size: 16px;
+			line-height: 1;
+			position: relative;
+			bottom: -3px;
+		}
+		&:hover{
+			background:none;
+			border: 1px solid var(--primary);
+			color: var(--primary);
+			.icon {
+				color: var(--primary);
+			}
+		}
+		&:focus{
+			background: var(--primary);
+			color: var(--white);
+		}
+	}
+
+	.fill-btn{
+		border: 0;
+		color: var(--white);
+		background: var(--primary);
+		padding: 11px 15px !important;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 1px;
+		border-radius: 6px;
+
+		-moz-user-select: none;
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: color 0.4s linear;
+		position: relative;
+		overflow: hidden;
+		z-index: 1;
+		.icon {
+			font-size: 11px;
+			@include transition(.3s);
+			transform: rotate(45deg);
+			display: inline-block;
+			position: relative;
+			left: 0;
+		}
+		&:focus{
+			color: var(--white);
+		}
+		&::before{
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 101%;
+			height: 101%;
+			background: var(--white);
+			// @extend %btn-bgs;
+			z-index: -1;
+			transition: transform 0.5s;
+			transition-timing-function: ease;
+			transform-origin: 0 0;
+			transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+			// 
+			transform: scaleX(0);
+			border-radius: 0;
+		}
+		&:hover{
+			color: var(--primary);
+			&::before {
+				transform: scaleX(1);
+			}
+			.icon {
+				left: 3px;
+			}
+		}
+		&.border-btn2{
+			border: 1px solid var(--secondary) !important;
+			color: var(--secondary) !important;
+			padding: 11px 27px !important;
+			font-weight: 500;
+			&::before {
+				background: var(--secondary) !important;
+			}
+			&:hover{
+				// color:var(--primary);
+				border: 1px solid var(--secondary)  !important;
+				color: $white !important;
+			}
+		}
+
+		&.border-btn3{
+			padding: 8px 28px !important;
+			border-radius: 5px;
+		}
+		
+	}
+
+	.fill-btn-white{
+		border:0;
+		color:var(--primary);
+		background: var(--white);
+		padding: 11px 15px !important;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 1px;
+		border-radius: 6px;
+
+		-moz-user-select: none;
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: color 0.4s linear;
+		position: relative;
+		overflow: hidden;
+		z-index: 1;
+		.icon {
+			font-size: 11px;
+			@include transition(.3s);
+			transform: rotate(45deg);
+			display: inline-block;
+			position: relative;
+			left: 0;
+		}
+		&::before{
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 101%;
+			height: 101%;
+			background: var(--tertiary);
+			// @extend %btn-bgs;
+			z-index: -1;
+			transition: transform 0.5s;
+			transition-timing-function: ease;
+			transform-origin: 0 0;
+			transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+			// 
+			transform: scaleX(0);
+			border-radius: 0;
+		}
+		&:hover{
+			color:var(--white);
+			&::before {
+				transform: scaleX(1);
+			}
+			.icon {
+				left: 3px;
+			}
+		}		
+	}
+	.outline-btn-white{
+		border: 1px solid var(--white);
+		color:var(--white);
+		background: none;
+		padding: 10px 15px !important;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 1px;
+		border-radius: 6px;
+
+		-moz-user-select: none;
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		transition: color 0.4s linear;
+		position: relative;
+		overflow: hidden;
+		z-index: 1;
+		.icon {
+			font-size: 11px;
+			@include transition(.3s);
+			transform: rotate(45deg);
+			display: inline-block;
+			position: relative;
+			left: 0;
+		}
+		&::before{
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 101%;
+			height: 101%;
+			background: var(--white);
+			// @extend %btn-bgs;
+			z-index: -1;
+			transition: transform 0.5s;
+			transition-timing-function: ease;
+			transform-origin: 0 0;
+			transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+			// 
+			transform: scaleX(0);
+			border-radius: 0;
+		}
+		&:hover{
+			color: var(--primary);
+			&::before {
+				transform: scaleX(1);
+			}
+			.icon {
+				left: 3px;
+			}
+		}
+	}
+
+	.outline-btn{
+		border: 1px solid var(--primary);
+		color:var(--primary);
+		text-transform: normal;
+		padding: 11px 15px !important;
+		-moz-user-select: none;
+		cursor: pointer;
+		display: inline-block;
+		font-size: 14px;
+		font-weight: 500;
+		letter-spacing: 1px;
+		position: relative;
+		transition: color 0.4s linear;
+		position: relative;
+		overflow: hidden;
+		border-radius: 30px;
+		background: none;
+		z-index: 1;
+		.icon {
+			font-size: 11px;
+			@include transition(.3s);
+			transform: rotate(45deg);
+			display: inline-block;
+			position: relative;
+			left: 0;
+		}
+		&::before{
+			border: 1px solid transparent;
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 101%;
+			height: 101%;
+			background:var(--primary);
+			// @extend %btn-bgs;
+			z-index: -1;
+			transition: transform 0.5s;
+			transition-timing-function: ease;
+			transform-origin: 0 0;
+			transition-timing-function: cubic-bezier(0.5,1.6,0.4,0.7);
+			// 
+			transform: scaleX(0);
+			border-radius: 0;
+		}
+		&:hover{
+			color: var(--primary-title);
+			&::before {
+				transform: scaleX(1);
+				border: 1px solid transparent;
+			}
+			.icon {
+				left: 3px;
+			}
+		}
+		&.border-btn2{
+			border: 1px solid var(--secondary) !important;
+			color: var(--secondary) !important;
+			padding: 11px 27px !important;
+			font-weight: 500;
+			&::before {
+				background: var(--secondary) !important;
+			}
+			&:hover{
+				// color:var(--primary);
+				border: 1px solid var(--secondary)  !important;
+				color: $white !important;
+			}
+		}
+
+		&.border-btn3{
+			padding: 8px 28px !important;
+			border-radius: 5px;
+		}
+		
+	}
+
+	.more-btn {
+		color: var(--primary);
+		font-size: 18px;
+		font-weight: 500;
+		position: relative;
+		transition: .4s;
+		&::before {
+			transition: .4s;
+			background: var(--primary);
+			content: "";
+			position: absolute;
+			width: 100%;
+			bottom: 0px;
+			height: 2px;
+		}
+		&:hover {
+			letter-spacing: 0.5px;
+			color: var(--primary);
+		}
+	}
+
+	.browse-btn {
+		@include transition(.3s);
+		color: var(--primary);
+		font-weight: 600;
+		font-size: 16px;
+		display: inline-block;
+		text-transform: capitalize;
+		font-family: var(--poppins);
+		i{
+			font-size: 22px;
+			position: relative;
+			top: 5px;
+			margin-left: 6px;
+		}
+		&:hover{
+			letter-spacing: .3px;
+		}
+	}
+	.browse-btn2 {
+		@include transition(.3s);
+		color: var(--primary-title);
+		font-weight: 400;
+		font-size: 18px;
+		display: inline-block;
+		text-transform: capitalize;
+		font-family: var(--poppins);
+		i{
+			font-size: 20px;
+			position: relative;
+			top: 5px;
+			margin-left: 6px;
+		}
+		&:hover{
+			letter-spacing: .3px;
+		}
+	}
+
+	.btn.focus, .btn:focus {
+		outline: 0;
+		box-shadow:none; 
+	}
+
+	.big-btn{
+		padding: 14px 30px;
+		font-weight: 600;
+	}
+
+	.primary-soft-btn{
+		color: #7976FB;
+		background-color: rgba(121, 118, 251, 0.1);
+		border: 0;
+		&:hover{
+			color: #7976FB;
+			background-color: rgba(121, 118, 251, 0.1);
+			border: 0;
+		}
+	}
+
+
+	.small-btn{
+		font-size: 21px;
+		width: 40px;
+		height: 40px;
+		line-height: 37px;
+		border-radius: 6px;
+		color: var(--primary-paragraph);
+		transition: 0.3s;
+		border: 1px solid var(--primary-border);
+		cursor: pointer;
+		background: none;
+		text-align: center;
+		&:hover {
+			background: var(--primary);
+			color: #fff;
+			border: 1px solid transparent !important;
+		}
+	}
+	
+	.add-btn {
+		width: 47px;
+		height: 38px;
+		line-height: 30px;
+		color: var(--primary);
+		-webkit-transition: 0.3s;
+		transition: 0.3s;
+		border-left: 1px solid var(--primary-border);
+		cursor: pointer;
+		background: none;
+		position: absolute;
+		right: 0;
+		top: 37px;
+		font-size: 25px;
+		text-align: center;
+	}
+
+	.btn-uplode {
+		padding: 8px 23px;
+		color: var(--primary-paragraph);
+		text-transform: capitalize;
+		border: 1px solid transparent;
+		font-size: 14px;
+		font-weight: 400;
+		border-radius: 6px;
+		text-align: center;
+		cursor: pointer;
+		background: var(--body-bg);
+		margin: 3px;
+		&.theme-color{
+			background: var(--primary);
+			color: #fff;
+		}
+	}
+
+	.btn-dropdown {
+		width: 30px;
+		height: 30px;
+		background: var(--body-bg);
+		border-radius: 50px;
+		color: var(--primary-paragraph);
+		font-size: 16px;
+		line-height: 30px;
+		font-weight: 500;
+	}
+
+
+	.btn-height2 {
+		padding: 5px 11px !important;
+		font-size: 12px;
+		gap: 2px;
+		height: 35px;
+		display: flex;
+		align-items: center;
+		i {
+			font-size: 17px;
+		}
+	}
+
+	.btn-height3 {
+		padding: 5px 11px !important;
+		font-size: 12px !important;
+		height: 35px;
+		gap: 2px;
+		height: 35px;
+		display: flex;
+		align-items: center;
+		i {
+			font-size: 13px;
+		}
+	}
+
+	.login-btn {
+		border: 1px solid var(--primary-border);
+		border-radius: 6px;
+		text-align: center;
+		display: inline-block;
+		color: var(--primary-paragraph);
+		font-size: 14px;
+		padding: 12px 15px;
+		font-weight: 500;
+		&:hover{
+			background: var(--primary);
+			border: 1px solid transparent;
+			color: #fff;
+		}
+		span{
+			line-height: 1;
+		}
+	}
+
+
+	.img-uploder {
+		color: var(--primary-title);
+		height: 246px;
+		width: 100%;
+		font-size: 16px;
+		border-radius: 8px;
+		background: none;
+		border: 2px solid var(--primary-border);
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		border-style: dashed;
+		&.img-uploder2{
+			width: 200px;
+			height: 200px;
+		}
+		.img-uplode-btn {
+			font-weight: 500;
+			font-size: 16px;
+			text-transform: capitalize;
+			color: var(--tertiary-title);
+			background: none;
+			border: 0;
+			line-height: 1;
+			i {
+				color: var(--primary-title);
+				font-size: 27px;
+				margin-bottom: 10px;
+				line-height: 1;
+				display: block;
+			}
+		  }
+	}
+
+	.admin-btn{
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		padding: 3px 11px;
+		background: var(--primary);
+		border-radius: 3px;
+		color: #fff;
+	}
+
+.edit-btn{
+	width: 30px;
+	height: 30px;
+	background:transparent;
+	border: 1px solid #1EA7FF;
+	border-radius: 30px;
+	color: #1EA7FF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
+	&:hover{
+		background: #1EA7FF;
+		color: #fff;
+	}
+}
+.delete-btn{
+	width: 30px;
+	height: 30px;
+	background:transparent;
+	border: 1px solid #FF3030;
+	border-radius: 30px;
+	color: #FF3030;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
+	&:hover{
+		background: #FF3030;
+		color: #fff;
+	}
+}
+.view-btn{
+	width: 30px;
+	height: 30px;
+	background:transparent;
+	border: 1px solid var(--primary);
+	border-radius: 30px;
+	color:  var(--primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 17px;
+	&:hover{
+		background:  var(--primary);
+		color: #fff;
+	}
+}

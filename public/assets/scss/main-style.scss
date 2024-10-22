@@ -1,0 +1,59 @@
+/*-----------------------------------------------------------------------------------
+
+  @version         : 1.0
+  @Template Name   : @admin starter
+  @Template author : @company
+
+-----------------------------------------------------------------------------------*/
+
+// Global SCSS
+  @import "global/mixins";
+  @import "global/variables";
+  @import "global/global";
+  @import "global/button";
+  @import "global/animation";
+  
+
+// Demo Default
+  @import "global/select2";
+
+// layout
+  @import "layout/header";
+  @import "layout/footer";
+  @import "layout/sidebar";
+  @import "layout/hero";
+
+
+// Admin Main design SASS
+
+// CSS Custom file
+  @import "sections/dashboard-card";
+  @import "sections/profile-card.scss";
+  @import "sections/profile";
+  @import "sections/css-file";
+
+// Component
+  @import "components/custom-modal";
+  @import "components/custom-accrodion";
+  @import "components/accordion";
+  @import "components/tab";
+
+  @import "components/table";
+  @import "components/form";
+  @import "components/product";
+  @import "components/pagination";
+  @import "components/invoice";
+  @import "components/tagify";
+  @import "components/loader";
+  @import "components/page-variant";
+
+// Page
+  @import "pages/pos";
+  @import "pages/login";
+  @import "pages/support";
+  @import "pages/notifications";
+  @import "pages/chat-box";
+
+// Dark & RTL Mode
+  @import "global/dark";
+  @import "global/rtl";

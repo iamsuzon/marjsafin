@@ -1,0 +1,64 @@
+
+
+.mw-400{
+    max-width: 400px;
+}
+.mw-500{
+    max-width: 500px;
+}
+.single-notificatins{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .icon-notify{
+        position: relative;
+        &::before {
+            display: block;
+            content: "\EF9A";
+            font-family: var(--remix-icon);
+            font-size: 22px;
+            color: #fff;
+            text-align: center;
+
+            line-height: 44px;
+            border-radius: 500%;
+            background: var(--secondary);
+            height: 44px;
+            width: 44px;
+            -webkit-transition: all 500ms ease-in-out;
+            transition: all 500ms ease-in-out;
+        }
+        &.add-por-notification{
+            &::before {
+                background: var(--primary);
+                content: "\EA13" !important;
+            }
+        }
+        &.offer-notification{
+            &::before {
+                background: #0CAF60;
+            }
+        }
+        &.cancel-notification{
+            &::before {
+                background: #FF6767;
+                content: "\EB99" !important;
+            }
+        }
+        &.alert-notification{
+            &::before {
+                background: #FF9900 !important;
+            }
+        }
+        &.deposit-notification{
+            &::before {
+                background: #666666;
+                content: "\EA92" !important;
+            }
+        }
+    }
+    .time-title{
+        font-size: 12px;
+        color: var(--primary-paragraph);
+    }
+} 

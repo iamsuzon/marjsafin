@@ -1,0 +1,352 @@
+
+// Color Make
+.card-color-one{
+    .icon{
+      color: #534ABA;
+      background-color: rgba(83, 74, 186, .06);
+    }
+}
+.card-color-two{
+    .icon{
+      color: #EF746D;
+      background-color: rgba(239, 116, 109, .06);
+    }
+}
+.card-color-three{
+    .icon{
+      color: #0CAF60;
+      background-color: rgba(12, 175, 96, .06);
+    }
+}
+.card-color-four{
+    .icon{
+      color: #003DD9;
+      background-color: rgba(0, 61, 217 , .06);
+    }
+}
+.card-color-five{
+
+    .icon{
+      color: #FA5F1C;
+      background-color: rgba(255, 193, 7, 0.1);
+    }
+}
+.progress-up{
+    color: #0CAF60 !important;
+}
+.progress-down{
+    color: #FA5F1C !important;
+}
+
+// End-fo color make
+
+
+// Child wise color call
+.dashboard-card{
+    .col-xl-3:nth-child(1) .single-dashboard-card{
+        @extend .card-color-one;
+    }
+    .col-xl-3:nth-child(2) .single-dashboard-card{
+        @extend .card-color-two;
+    }
+    .col-xl-3:nth-child(3) .single-dashboard-card{
+        @extend .card-color-three;
+    }
+    .col-xl-3:nth-child(4) .single-dashboard-card{
+        @extend .card-color-four;
+    }
+    .col-xl-3:nth-child(5) .single-dashboard-card{
+        @extend .card-color-five;
+    }
+}
+
+
+// Single Card Design
+.single-dashboard-card{
+    padding: 24px;
+    transition: .3s;
+    border-radius: 10px;
+    background: var(--white);
+    @media #{$xs}{
+        flex-wrap: wrap;
+    } 
+    @media #{$xl}{
+      padding: 15px;
+    } 
+    @media #{$xxl}{
+      padding: 15px;
+    } 
+    @media #{$xl}{
+      padding: 10px;
+    } 
+    @media #{$lg}{
+      padding: 15px;
+    } 
+    .icon{
+          transition: .4s;
+          background: var(--white);
+          width: 44px;
+          height: 44px;
+          text-align: center;
+          line-height: 44px;
+          border-radius: 6px;
+          font-size: 26px;
+          @media #{$xs-to-sm-max}{
+
+          }
+      }
+    .cat-caption{  
+        .pera{
+              font-size: 16px;
+              margin-bottom: 5px;
+              color: var(--primary-paragraph);
+              @media #{$xxl}{
+                  font-size: 14px;
+              }
+              @media #{$xl}{
+                  font-size: 14px;
+              }
+        }
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            color: var(--primary-title);
+            text-transform: capitalize;
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 42px;
+            margin-bottom: 7px;
+            @media #{$lg}{
+              font-size: 18px;
+            } 
+            @media #{$xs}{
+              font-size: 18px;
+            }
+            @media #{$xxl}{
+              font-size: 14px;
+            }
+            @media #{$xl}{
+              font-size: 14px;
+            }
+        }
+      .progresses{
+          i{
+            font-size: 16px;
+          }
+          span{
+            font-size: 12px;
+            text-transform: capitalize;
+          }
+      }
+    }
+}
+
+
+// Card Syle Two
+.single-card-two{
+    padding: 20px 20px;
+    transition: .3s;
+    border-radius: 10px;
+    background: var(--white);
+    border: 1px solid var(--primary-border);
+    @media #{$xs}{
+        flex-wrap: wrap;
+    } 
+    @media #{$xl}{
+      padding: 15px;
+    } 
+    @media #{$xxl}{
+      padding: 15px;
+    } 
+    @media #{$xl}{
+      padding: 10px;
+    } 
+    @media #{$lg}{
+      padding: 15px;
+    } 
+    .icon{
+          transition: .4s;
+          background: var(--white);
+          width: 44px;
+          height: 44px;
+          text-align: center;
+          line-height: 44px;
+          border-radius: 6px;
+          font-size: 26px;
+      }
+    .cat-caption{  
+      .pera{
+          font-size: 14px;
+          margin-bottom: 5px;
+          color: var(--primary-paragraph);
+          @media #{$xxl}{
+              font-size: 14px;
+          }
+          @media #{$xl}{
+              font-size: 14px;
+          }
+      }
+      .single-counter .counter,
+      .single-counter .currency,
+      .single-counter .amount {
+          text-transform: capitalize;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: 500;
+          font-size: 18px;
+          margin-bottom: 0px;
+          line-height: 1;
+          @media #{$lg}{
+            font-size: 18px;
+          } 
+          @media #{$xs}{
+            font-size: 18px;
+          }
+          @media #{$xxl}{
+            font-size: 14px;
+          }
+          @media #{$xl}{
+            font-size: 14px;
+          }
+      }
+    }
+}
+// Child wise color call
+.payment-card{
+    .col-xxl-6:nth-child(1) .single-card-two,
+    .col-xl-6:nth-child(1) .single-card-two{
+        @extend .card-color-one;
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+          color: var(--primary);
+        }
+    }
+    .col-xxl-6:nth-child(2) .single-card-two,
+    .col-xl-6:nth-child(2) .single-card-two{
+        @extend .card-color-two;
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+          color: #FA5F1C;
+        }
+    }
+    .col-xxl-6:nth-child(3) .single-card-two,
+    .col-xl-6:nth-child(3) .single-card-two{
+        @extend .card-color-three;
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+          color: #0CAF60;
+        }
+    }
+    .col-xxl-6:nth-child(4) .single-card-two,
+    .col-xl-6:nth-child(4) .single-card-two{
+        @extend .card-color-four;
+        @extend .card-color-two;
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+          color: #FA5F1C;
+        }
+    }
+    .col-xxl-6:nth-child(5) .single-card-two,
+    .col-xl-6:nth-child(5) .single-card-two{
+        @extend .card-color-five;
+    }
+}
+
+.cart2{
+  box-shadow: var(--theme-shadow);
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid var(--primary-border);
+}
+
+
+// / card sytle Two
+
+
+// Cart sytle three
+.single-card-three{
+  padding: 20px 20px;
+  transition: .3s;
+  border-radius: 10px;
+  background: var(--white);
+  border: 1px solid var(--primary-border);
+  @media #{$xs}{
+      flex-wrap: wrap;
+  } 
+  @media #{$xl}{
+    padding: 15px;
+  } 
+  @media #{$xxl}{
+    padding: 15px;
+  } 
+  @media #{$xl}{
+    padding: 10px;
+  } 
+  @media #{$lg}{
+    padding: 15px;
+  } 
+  .icon{
+        transition: .4s;
+        background: var(--white);
+        width: 44px;
+        height: 44px;
+        text-align: center;
+        line-height: 44px;
+        border-radius: 6px;
+        font-size: 26px;
+        color: #0CAF60;
+        background-color: rgba(12, 175, 96, .06);
+    }
+  .cat-caption{  
+    .pera{
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: var(--primary-paragraph);
+        @media #{$xxl}{
+            font-size: 14px;
+        }
+        @media #{$xl}{
+            font-size: 14px;
+        }
+    }
+    .single-counter .counter,
+    .single-counter .currency,
+    .single-counter .amount {
+        color: #0CAF60;
+        text-transform: capitalize;
+        display: inline-block;
+        vertical-align: middle;
+        font-weight: 500;
+        font-size: 18px;
+        margin-bottom: 7px;
+        line-height: 42px;
+        @media #{$lg}{
+          font-size: 18px;
+        } 
+        @media #{$xs}{
+          font-size: 18px;
+        }
+        @media #{$xxl}{
+          font-size: 14px;
+        }
+        @media #{$xl}{
+          font-size: 14px;
+        }
+    }
+    .progresses{
+      i{
+        font-size: 16px;
+      }
+      span{
+        font-size: 12px;
+        text-transform: capitalize;
+      }
+  }
+  }
+}

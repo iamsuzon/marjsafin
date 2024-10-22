@@ -1,0 +1,324 @@
+// Color Make
+.profile-card-color-one {
+    .icon {
+        color: #0CAF60;
+        background-color: rgba(12, 175, 96, .06);
+    }
+
+    background-color: rgba(12, 175, 96, .06);
+    border-color:rgba(12, 175, 96, .1);
+}
+
+.profile-card-color-two {
+    .icon {
+        color: #534ABA;
+        background-color: rgba(83, 74, 186, .06);
+    }
+
+    background-color: rgba(83, 74, 186, .06);
+    border-color:rgba(83, 74, 186, .1);
+}
+
+.profile-card-color-three {
+    .icon {
+        color: #EF746D;
+        background-color: rgba(239, 116, 109, .06);
+    }
+
+    background-color: rgba(239, 116, 109, .06);
+    border-color:rgba(239, 116, 109, .1);
+}
+
+.profile-card-color-four {
+    .icon {
+        color: #003DD9;
+        background-color: rgba(0, 61, 217, .06);
+    }
+
+    background-color: rgba(0, 61, 217, .06);
+    border-color:rgba(0, 61, 217, .1);
+}
+
+.profile-card-color-five {
+
+    .icon {
+        color: #FA5F1C;
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color:rgba(255, 193, 7, .1);
+}
+
+.progress-up {
+    color: #0CAF60 !important;
+}
+
+.progress-down {
+    color: #FA5F1C !important;
+}
+
+// End-fo color make
+
+
+// Child wise color call
+.profile-card {
+
+    .col-xxl-3:nth-child(1) .card-style,
+    .col-xxl-4:nth-child(1) .card-style {
+        @extend .profile-card-color-one;
+    }
+
+    .col-xxl-3:nth-child(2) .card-style,
+    .col-xxl-4:nth-child(2) .card-style {
+        @extend .profile-card-color-two;
+    }
+
+    .col-xxl-3:nth-child(3) .card-style,
+    .col-xxl-4:nth-child(3) .card-style {
+        @extend .profile-card-color-three;
+    }
+
+    .col-xxl-3:nth-child(4) .card-style,
+    .col-xxl-4:nth-child(4) .card-style {
+        @extend .profile-card-color-four;
+    }
+
+    .col-xxl-3:nth-child(5) .card-style,
+    .col-xxl-4:nth-child(5) .card-style {
+        @extend .profile-card-color-five;
+    }
+}
+
+
+
+
+// Card Syle Two
+.card-style {
+    padding: 20px 20px;
+    transition: .3s;
+    border-radius: 6px;
+    background: var(--white);
+    border: 1px solid transparent;
+
+    @media #{$xs} {
+        flex-wrap: wrap;
+    }
+
+    @media #{$xl} {
+        padding: 15px;
+    }
+
+    @media #{$xxl} {
+        padding: 15px;
+    }
+
+    @media #{$xl} {
+        padding: 10px;
+    }
+
+    @media #{$lg} {
+        padding: 15px;
+    }
+
+    .icon {
+        transition: .4s;
+        background: var(--white);
+        width: 44px;
+        height: 44px;
+        text-align: center;
+        line-height: 44px;
+        border-radius: 6px;
+        font-size: 25px;
+    }
+
+    .cat-caption {
+        .pera {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--primary-paragraph);
+            line-height: 1;
+        }
+
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            text-transform: capitalize;
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: 500;
+            font-size: 20px;
+            margin-bottom: 0px;
+            line-height: 1;
+
+            @media #{$lg} {
+                font-size: 18px;
+            }
+
+            @media #{$xs} {
+                font-size: 18px;
+            }
+
+            @media #{$xxl} {
+                font-size: 14px;
+            }
+
+            @media #{$xl} {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+// Child wise color call
+.profile-card {
+
+    .col-xxl-3:nth-child(1) .card-style,
+    .col-xxl-4:nth-child(1) .card-style {
+        @extend .card-color-one;
+
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            color: #0CAF60;
+        }
+    }
+
+    .col-xxl-3:nth-child(2) .card-style,
+    .col-xxl-4:nth-child(2) .card-style {
+        @extend .card-color-two;
+
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            color: var(--primary);
+        }
+    }
+
+    .col-xxl-3:nth-child(3) .card-style,
+    .col-xxl-4:nth-child(3) .card-style {
+        @extend .card-color-three;
+
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            color: var(--tertiary);
+        }
+    }
+
+    .col-xxl-3:nth-child(4) .card-style,
+    .col-xxl-4:nth-child(4) .card-style {
+        @extend .card-color-four;
+        @extend .card-color-two;
+
+        .single-counter .counter,
+        .single-counter .currency,
+        .single-counter .amount {
+            color: #FA5F1C;
+        }
+    }
+
+    .col-xxl-3:nth-child(5) .card-style,
+    .col-xxl-4:nth-child(5) .card-style {
+        @extend .card-color-five;
+    }
+}
+
+// / card sytle Two
+
+
+
+.profile-timeline {
+    display: inline-block;
+
+    .single-time-line {
+        margin-left: 85px;
+        min-height: 50px;
+        border-left: 2px dashed var(--secondary);
+        padding: 0 0 5px 30px;
+        position: relative;
+
+        &:last-child {
+            border-left: 2px dashed transparent;
+        }
+
+        &.new-order {
+            &::before {
+                background: var(--secondary);
+            }
+        }
+
+        &.make-deposit {
+            &::before {
+                background: var(--primary);
+            }
+        }
+
+        &.withdraw {
+            &::before {
+                background: var(--tertiary);
+            }
+        }
+
+        &.cancel-order {
+            &::before {
+                content: "\eb99" !important;
+                background: #FF6767 !important;
+            }
+        }
+
+        &.new-product-add {
+            &::before {
+                background: #1EA7FF;
+            }
+        }
+
+        &::before {
+            position: absolute;
+            left: -14px;
+            top: -2px;
+            content: "\eb7b";
+            font-family: var(--remix-icon);
+            color: #fff;
+            text-align: center;
+            line-height: 23px;
+
+            border-radius: 500%;
+            background: var(--secondary);
+            height: 25px;
+            width: 25px;
+            -webkit-transition: all 500ms ease-in-out;
+            transition: all 500ms ease-in-out;
+            border: 2px solid #fff;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.20) 0px 5px 15px;
+            box-shadow: rgba(0, 0, 0, 0.20) 0px 5px 15px
+        }
+
+        .time {
+            color: var(--primary-paragraph);
+            position: absolute;
+            width: 80px;
+            left: -37%;
+            text-align: right;
+            font-size: 12px;
+            top: 3px;
+
+            @media #{$xs} {
+                left: -84%;
+            }
+
+            @media #{$xxl} {
+                left: -51%;
+            }
+        }
+
+        .time-title {
+            font-size: 12px;
+            color: var(--primary-paragraph);
+        }
+    }
+}
+
+.max-height-400 {
+    max-height: 400px;
+}

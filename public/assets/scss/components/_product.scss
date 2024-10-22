@@ -1,0 +1,117 @@
+
+// Card Syle Two
+.single-product{
+    padding: 10px 10px;
+    border-radius: 6px;
+    background: var(--white);
+    border: 1px solid transparent;
+    cursor: pointer;
+    &.selected{
+        border: 1px solid var(--secondary);
+        position: relative;
+        &::before{
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            -webkit-clip-path: polygon(0 0, 100% 0, 0 100%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 0 100%, 0 100%);
+            background: var(--secondary);
+            padding: 12px;
+            border-radius: 4px 0 0 0;
+        }
+    }
+    @media #{$xs}{
+        flex-wrap: wrap;
+    } 
+    @media #{$xl}{
+      padding: 15px;
+    } 
+    @media #{$xxl}{
+      padding: 15px;
+    } 
+    @media #{$xl}{
+      padding: 10px;
+    } 
+    @media #{$lg}{
+      padding: 15px;
+    } 
+    .images{
+        transition: .4s;
+        background: var(--white);
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        border-radius: 0px;
+        padding: 2px;
+      }
+    .cat-caption{  
+      .ttile{
+          font-size: 14px;
+          margin-bottom: 5px;
+          color: var(--primary-paragraph);
+          font-weight: 400;
+          @media #{$xxl}{
+              font-size: 14px;
+          }
+          @media #{$xl}{
+              font-size: 14px;
+          }
+      }
+    }
+}
+
+
+.productCount {
+    width:88px;
+    text-align:center;
+    position:relative;
+    input.qty {
+        width: 100%;
+        text-align: center;
+        border: 1px solid var(--primary-border);
+        padding: 9px 20px;
+        height: 33px;
+        border-radius: 4px;
+        font-weight: 600;
+        color: var(--primary-paragraph);
+        background: none;
+    }
+    .count-plus,
+    .count-minus {
+        border:0px solid transparent;
+        background-color:transparent;
+        color:#8D8F97
+    }
+    .count-plus {
+        position:absolute;
+        right:9px;
+        top:6px
+    }
+    .count-minus {
+        position:absolute;
+        left:9px;
+        top:7px
+    }
+  }
+
+
+  .status {
+    display:inline-block;
+    line-height:0.5;
+    border:0;
+    padding:5px 7px
+  }
+  .status .icon {
+    display:inline-block
+  }
+  .status .icon i {
+    line-height:1
+  }
+  .status .rate {
+    display:inline-block;
+    line-height:1;
+    margin:0
+  }

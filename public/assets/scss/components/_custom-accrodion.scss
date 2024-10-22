@@ -1,0 +1,104 @@
+.custom-accordion {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    list-style: none;
+    padding-left: 30px;
+    @media #{$xs}{
+        padding-left: 0px;
+    }
+    .single-accordion {
+        position: relative;
+        padding: 0px 14px 16px 14px;
+        width: 100%;
+        height: auto;
+        background-color: var(--white);
+        margin: 0 auto 15px auto;
+        border: 1px solid var(--primary-border);
+        border-radius: 5px;
+        cursor: pointer;
+        .course-section-title {
+            color: var(--tertiary-title);
+            font-size: 18px;
+            cursor: pointer;
+            padding-right: 40px;
+            position: relative;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding-top: 14px;
+            &.active{
+                &:after {
+                    transform: rotate(90deg);
+                }
+            }
+            &:after {
+                content: "\EA13";
+                font-family: var(--remix-icon);
+                position: absolute;
+                right: 0px;
+                top: 15px;
+                color: var(--tertiary-title);
+                transition: all 0.3s ease-in-out;
+                font-size: 18px;
+             
+            }
+        }
+        .accordion-body {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            border-top: 1px solid var(--primary-border);
+            padding: 16px 20px;
+            margin-top: 15px;
+            @media #{$xs}{
+                padding-right: 0;
+            }
+            .listing{
+                margin-left: 25px;
+                @media #{$xs}{
+                    margin-left: 0;
+                }
+                .single-list{ 
+                    font-size: 16px;
+                    font-weight: 500;
+                    margin-bottom: 14px;
+                    text-transform: capitalize;
+                    list-style: decimal;
+                    .component{
+                        font-size: 14px;
+                        font-weight: 500;
+                        margin-top: 6px;
+                        text-transform: capitalize;
+                        display: block;
+                        &:first-child{
+                            margin-top: 14px;
+                        }
+                        i{
+                            color: var(--tertiary);
+                            font-size: 16px;
+                            position: relative;
+                            top: 4px;
+                        }
+                    }
+                }
+            }
+            .add-btn{
+                color: var(--primary);
+                font-size: 16px;
+                line-height: 1;
+                padding: 2px;
+                padding-top: 5px;
+                display: block;
+                i{
+                    margin-right: 1px;
+                    position: relative;
+                    top: 3px;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}

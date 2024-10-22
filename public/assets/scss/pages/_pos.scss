@@ -1,0 +1,63 @@
+.grid-container-1{
+	display: grid;
+	grid-template-columns:66.333% 32.490%;
+	gap: 24px;
+    @media #{$lg}{
+        grid-template-columns:60.333% 36.49%;
+    }
+    @media #{$md}{
+        grid-template-columns:55.333% 41.49%;
+    }
+    @media #{$sm}{
+        grid-template-columns: auto;
+    }
+    @media #{$xs}{
+        grid-template-columns: 100%;
+    }
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	gap: 11px;
+
+    @media #{$xl}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$lg}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$md}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$sm}{
+        grid-template-columns: auto auto;
+    }
+
+    @media #{$xs}{
+        grid-template-columns: auto;
+    }
+}
+
+.grid-container-profile {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 24px;
+
+    @media #{$xl}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$lg}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$md}{
+        grid-template-columns: auto auto;
+    }
+    @media #{$sm}{
+        grid-template-columns: auto auto;
+    }
+
+    @media #{$xs}{
+        grid-template-columns: auto;
+    }
+}

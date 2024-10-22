@@ -1,0 +1,517 @@
+:root {
+    --remix-icon: 'remixicon';
+    --poppins: 'Poppins', sans-serif;
+}
+
+/* Default Theme */
+.default-theme {
+
+    --primary: #00715D;
+    --secondary: #090E0D;
+    --tertiary: #F0783C;
+
+    --primary-rgb: 0, 113, 93;
+    --secondary-rgb: 255, 213, 2;
+    --tertiary-rgb: 240, 120, 60;
+
+    --body-bg: #F6F6F6;
+
+    --primary-title: #222222;
+    --secondary-title: #555555;
+    --tertiary-title: #6f767e;
+
+    --primary-paragraph: #666666;
+    --secondary-paragraph: #999999;
+    --tertiary-paragraph: #6f767e;
+
+    // btn
+    --primary-btn: var(--primary);
+    --secondary-btn: var(--secondary);
+    --tertiary-btn: var(--tertiary);
+    --red: #FF3030;
+    --light: #EEEEEE;
+    --dark: #2c323f;
+    --warning: #ff991a;
+
+    /* border color */
+    --primary-border: #EEEEEE;
+    --secondary-border: #f4f4f4;
+
+
+
+    --ratting-color: #FF9B26;
+    --ratting-color-rgb: 255, 193, 7;
+
+    --bg-badge: #e9faf4;
+    --text-badge: #3b3b3b;
+    --date: #262626;
+    --bg-event-date-lightblue: #ecedff;
+    --bg-event-date-green: #d8f8e9;
+    --bg-event-date-orange: #fff1e0;
+
+    --scroll-color-one: #554cbd46;
+    --scroll-color-two: #f3f3f3;
+
+    --white: #fff;
+    --theme-shadow: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
+    --theme-shadow2: 0px 5px 20px 0px rgba(88, 59, 255, 0.3);
+
+    /* background color */
+    --bg-primary: #f0f3f5;
+    --bg-secondary: #ffffff;
+    --bg-secondary-opacity: rgba(255, 255, 255, 0.35);
+    --bg-tertiary: #ffffff;
+    --bg-progress: #e6e6e6;
+
+    /* badge background color */
+    --bg-badge-success: #0CAF60;
+    --bg-badge-danger: #ff6a54;
+    --bg-badge-warning: #fdc400;
+    --bg-badge-primary: #1890ff;
+    --bg-badge-custom: #f1faff;
+
+    /* badge text color */
+    --text-badge-success: #29d697;
+    --text-badge-danger: #ff6a54;
+    --text-badge-warning: #fdc400;
+    --text-badge-primary: #1890ff;
+}
+
+/* Dark Theme */
+.dark-theme {
+    --primary: #00715D;
+    --secondary: #0CAF60;
+    --tertiary: #FA5F1C;
+
+    --primary-rgb: 91, 88, 255;
+    --secondary-rgb: 40, 185, 94;
+    --tertiary-rgb: 240, 120, 60;
+
+    --body-bg: #07080A;
+
+    --primary-title: #EEEEEE;
+    --secondary-title: #BBBBBB;
+    --tertiary-title: #6f767e;
+
+    --primary-paragraph: #BBBBBB;
+    --secondary-paragraph: #999999;
+    --tertiary-paragraph: #6f767e;
+
+    /* border color */
+    --primary-border: #222222;
+    --secondary-border: #222222;
+
+    --primary-btn: var(--primary);
+    --secondary-btn: var(--secondary);
+    --tertiary-btn: var(--tertiary);
+    --red: #FF3030;
+    --light: #EEEEEE;
+    --dark: #2c323f;
+    --warning: #ff991a;
+
+    --red: #FF3030;
+    --ratting-color: #FF9B26;
+    --ratting-color-rgb: 255, 193, 7;
+
+
+    --bg-badge: #e9faf4;
+    --text-badge: #3b3b3b;
+    --date: #262626;
+    --bg-event-date-lightblue: #ecedff;
+    --bg-event-date-green: #d8f8e9;
+    --bg-event-date-orange: #fff1e0;
+
+
+
+    --scroll-color-one: #554cbd46;
+    --scroll-color-two: #f3f3f3;
+
+
+    --white: #100F14;
+    --theme-shadow: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
+    --theme-shadow2: 0px 5px 20px 0px rgba(88, 59, 255, 0.3);
+
+    /* background color */
+    --bg-primary: #f0f3f5;
+    --bg-secondary: #ffffff;
+    --bg-secondary-opacity: rgba(255, 255, 255, 0.35);
+    --bg-tertiary: #ffffff;
+    --bg-progress: #e6e6e6;
+
+
+    /* badge background color */
+    --bg-badge-success: #0CAF60;
+    --bg-badge-danger: #ff6a54;
+    --bg-badge-warning: #fdc400;
+    --bg-badge-primary: #1890ff;
+    --bg-badge-custom: #f1faff;
+
+    /* badge text color */
+    --text-badge-success: #29d697;
+    --text-badge-danger: #ff6a54;
+    --text-badge-warning: #fdc400;
+    --text-badge-primary: #1890ff;
+
+}
+
+// Responsive variable (Bootstrap 0 -1599)
+$xs: '(max-width: 575px)';
+$sm: 'only screen and (min-width: 576px) and (max-width: 767px)';
+$md: 'only screen and (min-width: 768px) and (max-width: 991px)';
+$lg :'only screen and (min-width: 992px) and (max-width: 1199px)';
+$xl: 'only screen and (min-width: 1200px) and (max-width: 1399px)';
+$xxl: 'only screen and (min-width: 1400px) and (max-width: 1599px)';
+
+// Custom ( 1600 - 3000)
+$large1: 'only screen and (min-width: 1600px) and (max-width: 1799px)';
+$large2: 'only screen and (min-width: 1800px) and (max-width: 1999px)';
+$large5: 'only screen and (min-width: 2000px) and (max-width: 2399px)';
+$large6: 'only screen and (min-width: 2400px) and (max-width: 2599px)';
+$large7: 'only screen and (min-width: 2600px) and (max-width: 2799px)';
+$large8: 'only screen and (min-width: 2800px) and (max-width: 2999px)';
+
+// Max - width , Min - width
+$xs-to-sm-max: '(max-width: 767px)';
+$xs-to-sm-min: '(min-width: 575px)';
+
+
+$xs-to-md-max: '(max-width: 991px)';
+$xs-to-md-min: '(min-width: 991px)';
+
+$xs-to-lg-max: '(max-width: 1199px)';
+$xs-to-lg-min: '(min-width: 1199px)';
+
+$xs-to-xl-max: '(max-width: 1399px)';
+$xs-to-xl-min: '(min-width: 1399px)';
+
+$xs-to-xxl-max: '(max-width: 1599px)';
+$xs-to-xxl-min: '(min-width: 1599px)';
+
+// Basic Color
+$white: #ffffff;
+$black: #000000;
+$gray: #f7f7fd;
+
+
+// Social media colors
+$fb: #50598e;
+$facebook: #3b5999;
+$twitter: #55acee;
+$dribbble: #ea4c89;
+$behance: #131418;
+$google-plus: #dd4b39;
+$linkedin: #0077b5;
+$instagram: #e4405f;
+$youtube: #FF0000;
+$pinterest: #c8232c;
+$steam-color: #ddd;
+
+// Bootstrap color
+$primary : #084298;
+$secondary : #41464b;
+$danger: #dc3545;
+$success: #0CAF60;
+$info: #055160;
+$warning: #F3BB1C;
+$error: #F44336;
+$blue: #11cdef;
+$green : #4BD865;
+
+// Others
+$theme-body-font-color: #242934;
+$secondary-color: #ba895d;
+$success-color: #0CAF60;
+$warning-color: #e2c636;
+$danger-color: #d22d3d;
+$light-color : #f4f4f4;
+$light-gray : #e6edef;
+$light-semi-gray :#efefef;
+$dark-color : #2c323f;
+$auth-bg-color: #fafafa;
+$light : #fdfeff;
+$semi-dark :#59667a;
+$light-font: #717171;
+$light-semi-font: $semi-dark;
+$color-fiord: #455a64;
+
+
+.color-effect {
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(45%, var(--primary)), color-stop(55%, var(--primay-title)));
+    background-image: linear-gradient(to right, var(--primary) 45%, var(--primay-title) 55%);
+    background-size: 220% 100%;
+    background-position: 100% 50%;
+    cursor: pointer;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-repeat: no-repeat;
+    -webkit-transition: 0.9s ease-out;
+    transition: 0.9s ease-out;
+
+    &:hover {
+        background-position: 0% 50%;
+    }
+}
+
+
+// Text color Class
+$text-name: primary,
+    secondary,
+    tertiary,
+    success,
+    danger,
+    info,
+    light,
+    dark,
+    white,
+    warning,
+    title,
+    orange,
+    primary-paragraph,
+    secondary-paragraph,
+    tertiary-paragraph;
+
+$text-color: var(--primary),
+    var(--tertiary-title),
+    var(--tertiary),
+    $success-color,
+    $danger-color,
+    $light-font,
+    $light-gray,
+    $dark-color,
+    var(--white),
+    $warning-color,
+    var(--primary-title),
+    orange,
+    var(--primary-paragraph),
+    var(--secondary-paragraph),
+    var(--tertiary-paragraph);
+
+@each $var in $text-name {
+    $i: index($text-name, $var);
+    .text-#{$var} {
+        color: nth($text-color, $i) !important;
+    }
+    .border-color-#{$var} {
+        border-color: nth($text-color, $i) !important;
+    }
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+/*-- padding --*/
+@for $i from 6 through 100 {
+    .p-#{1 * $i} {
+        padding: 1px * $i !important;
+    }
+}
+
+/*-- padding --*/
+@for $i from 10 through 500 {
+    .mw-#{1 * $i} {
+        min-width: 1px * $i !important;
+    }
+}
+
+/*-- padding --*/
+@for $i from 0 through 30 {
+    .top-#{1 * $i} {
+        top: 1px * $i !important;
+    }
+}
+
+/*-- padding PX padding-left & padding-right --*/
+@for $i from 6 through 100 {
+    .px-#{1 * $i} {
+        padding-left: 1px * $i;
+        padding-right: 1px * $i;
+    }
+}
+
+/*-- padding PX padding-left & padding-right --*/@for $i from 6 through 700 {
+    .max-height-#{1 * $i} {
+        max-height: 1px * $i;
+    }
+}
+
+// Fonts weight
+$i: 100, 200, 300, 400, 500, 600, 700, 800, 900;
+
+@each $val in $i {
+    .font-#{$val} {
+        font-weight: $val !important;
+    }
+}
+
+// Fonts weight
+
+@for $i from 1 through 50 {
+    .radius-#{1 * $i} {
+        border-radius: 1px * $i;
+    }
+}
+
+
+
+/*-- Margin Padding --*/
+@for $i from 6 through 200 {
+
+    /*-- Margin To-Bottom-Left-Right --*/
+    .mt-#{1 * $i} {
+        margin-top: 1px * $i;
+    }
+
+    .mb-#{1 * $i} {
+        margin-bottom: 1px * $i;
+    }
+
+    .ml-#{1 *$i} {
+        margin-left: 1px * $i;
+    }
+
+    .mr-#{1 * $i} {
+        margin-right: 1px * $i;
+    }
+
+    /*-- Padding To-Bottom-Left-Right --*/
+    .pt-#{1 * $i} {
+        padding-top: 1px * $i;
+    }
+
+    .pb-#{1 * $i} {
+        padding-bottom: 1px * $i;
+    }
+
+    .pl-#{1 * $i} {
+        padding-left: 1px * $i;
+    }
+
+    .pr-#{1 * $i} {
+        padding-right: 1px * $i;
+    }
+
+}
+
+/*-- Margin Padding  0 --*/
+@for $i from 0 through 0 {
+
+    /*-- Margin To-Bottom-Left-Right --*/
+    .mt-#{0 * $i} {
+        margin-top: 0px * $i !important;
+    }
+
+    .mb-#{0 * $i} {
+        margin-bottom: 0px * $i !important;
+    }
+
+    .ml-#{0 *$i} {
+        margin-left: 0px * $i !important;
+    }
+
+    .mr-#{0 * $i} {
+        margin-right: 0px * $i !important;
+    }
+
+    /*-- Padding To-Bottom-Left-Right --*/
+    .pt-#{0 * $i} {
+        padding-top: 0px * $i !important;
+    }
+
+    .pb-#{0 * $i} {
+        padding-bottom: 0px * $i !important;
+    }
+
+    .pl-#{0 * $i} {
+        padding-left: 0px * $i !important;
+    }
+
+    .pr-#{0 * $i} {
+        padding-right: 0px * $i !important;
+    }
+
+}
+
+
+/*-- Margin Padding PX PY && MX MY --*/
+@for $i from 0 through 30 {
+
+    /*-- Margin Top & Bottom --*/
+    .py-#{1 * $i} {
+        margin-top: 1px * $i !important;
+        margin-bottom: 1px * $i !important;
+    }
+
+    .mx-#{1 * $i} {
+        margin-left: 1px * $i !important;
+        margin-right: 1px * $i !important;
+    }
+
+    /*-- Margin left & Right --*/
+    .py-#{1 * $i} {
+        padding-top: 1px * $i !important;
+        padding-bottom: 1px * $i !important;
+    }
+
+    .px-#{1 * $i} {
+        padding-left: 1px * $i !important;
+        padding-right: 1px * $i !important;
+    }
+}
+
+
+.g-24 {
+    --bs-gutter-y: 24px;
+}
+
+.g-8 {
+    --bs-gutter-y: 8px;
+}
+
+.g-9 {
+    --bs-gutter-y: 9px;
+}
+
+.g-10 {
+    --bs-gutter-y: 10px;
+}
+
+.g-11 {
+    --bs-gutter-y: 11px;
+}
+
+.g-12 {
+    --bs-gutter-y: 12px;
+}
+
+.g-13 {
+    --bs-gutter-y: 13px;
+}
+
+.g-14 {
+    --bs-gutter-y: 14px;
+}
+
+.g-15 {
+    --bs-gutter-y: 15px;
+}
+
+.g-16 {
+    --bs-gutter-y: 16px;
+}
+
+.g-17 {
+    --bs-gutter-y: 18px;
+}
+
+.g-64 {
+    --bs-gutter-y: 64px;
+}
+
+// gutter Y axis
+// @for $i from 1 through 100 {
+//     .g-#{1 * $i}{
+//         --bs-gutter-y: 1px * $i;
+//     }
+// }

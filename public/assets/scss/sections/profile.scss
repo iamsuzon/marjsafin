@@ -1,0 +1,14 @@
+.profile{
+    padding: 20px 20px;
+    border-radius: 6px;
+    background: var(--white);
+    border: 1px solid var(--primary-border);
+    .profile-img{
+        max-width: 150px;
+        min-width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin:0 auto;
+    }
+}
