@@ -17,14 +17,14 @@
             text-align: center;
         }
         .header {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 15px;
             text-transform: capitalize;
         }
         .content {
             text-align: left;
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 15px;
         }
         .content p {
@@ -35,7 +35,7 @@
             margin: 15px 0;
         }
         .footer {
-            font-size: 14px;
+            font-size: 13px;
             text-align: left;
             margin-top: 10px;
         }

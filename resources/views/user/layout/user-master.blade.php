@@ -239,5 +239,7 @@
 <script src="{{asset('assets/js/main.js')}}"></script>
 <!-- Dev Custom JS -->
 <script src="{{asset('assets/js/custom.js')}}"></script>
+
+@yield('scripts')
 </body>
 </html>

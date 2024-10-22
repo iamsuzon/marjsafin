@@ -23,7 +23,7 @@
                                     <div class="contact-form">
                                         <label class="contact-label">Start Date </label>
                                         <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker"
+                                            <input type="text" class="contact-input single-date-picker start_date"
                                                    placeholder="Choose Date">
                                             <span> <b class="caret"></b></span>
                                             <i class="ri-calendar-line"></i>
@@ -36,7 +36,7 @@
                                     <div class="contact-form">
                                         <label class="contact-label">end Date </label>
                                         <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker"
+                                            <input type="text" class="contact-input single-date-picker end_date"
                                                    placeholder="Choose Date">
                                             <span> <b class="caret"></b></span>
                                             <i class="ri-calendar-line"></i>
@@ -52,13 +52,13 @@
                                 <div class="col-md-2">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Number</label>
-                                        <input type="text" class="contact-input" placeholder="Search By Passport Number">
+                                        <input type="text" class="contact-input passport_search" placeholder="Search By Passport Number" name="passport_search">
                                     </div>
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill" type="submit">Search</button>
-                                        <button class="btn-danger-fill" type="reset">Reset</button>
+                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
+                                        <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -129,17 +129,26 @@
 
 @section('scripts')
     <script>
-        $(document).on('click', '#search-form .search_btn', function (e) {
+        $(document).on('click', '.search_btn', function (e) {
             e.preventDefault();
 
-            let start_date = $('.start_date').val();
-            let end_date = $('.end_date').val();
+            let form = $('#search-from');
+            let start_date = form.find('.start_date').val();
+            let end_date = form.find('.end_date').val();
 
             window.location.href = `{{route('user.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
         });
 
         $(document).on('click', '.reset_btn', function () {
             location.href = `{{route('user.application.list')}}`;
+        });
+
+        $(document).on('click', '.search_btn_passport', function (e) {
+            e.preventDefault();
+
+            let passport_search = $('input[name="passport_search"]').val();
+
+            window.location.href = `{{route('user.application.list')}}?passport_search=${passport_search}`;
         });
     </script>
 @endsection

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>{{env('APP_NAME')}}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -203,7 +203,7 @@
                     </li>
 
                     <li class="sidebar-menu-item">
-                        <a href="{{route('logout')}}" class="parent-item-content">
+                        <a href="{{route('admin.logout')}}" class="parent-item-content">
                             <i class="ri-caravan-line"></i>
                             <span class="on-half-expanded">Logout</span>
                         </a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,7 +45,35 @@ class UserAuthController extends Controller
     public function userPanel()
     {
         $user_id = Auth::guard('web')->id();
-        $applicationList = Application::where('user_id', $user_id)->latest()->get();
+
+        if (request()->has('start_date') && request()->has('end_date')) {
+            if (request('start_date') == null || request('end_date') == null) {
+                return back()->with('error', 'Please select both start and end date.');
+            }
+
+            $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
+            $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
+
+            $applicationList = Application::where('user_id', $user_id)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->latest()
+                ->get();
+        }
+        else if(request()->has('passport_search'))
+        {
+            if (request('passport_search') == null) {
+                return back()->with('error', 'Please enter passport number.');
+            }
+
+            $applicationList = Application::where('user_id', $user_id)
+                ->where('passport_number', trim(request('passport_search')))
+                ->latest()
+                ->get();
+        }
+        else {
+            $applicationList = Application::where('user_id', $user_id)->latest()->get();
+        }
+
         return view('user.user-panel', compact('applicationList'));
     }
 

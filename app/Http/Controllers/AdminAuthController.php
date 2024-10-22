@@ -48,7 +48,16 @@ class AdminAuthController extends Controller
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
             $applicationList = Application::whereBetween('created_at', [$start_date, $end_date])->get();
-        } else {
+        }
+        else if(request()->has('passport_search'))
+        {
+            if (request('passport_search') == null) {
+                return back()->with('error', 'Please enter passport number.');
+            }
+
+            $applicationList = Application::where('passport_number', trim(request('passport_search')))->get();
+        }
+        else {
             $applicationList = Application::latest()->get();
         }
 
@@ -106,15 +115,11 @@ class AdminAuthController extends Controller
         return view('admin.user-list', compact('userList'));
     }
 
-    public function searchApplication(Request $request)
+    public function logout()
     {
-        // search by start date and end date
-        $validated = $request->validate([
-            'start_date' => 'required',
-            'end_date' => 'required',
-        ]);
+        Auth::guard('admin')->logout();
+        session()->flush();
 
-        $applicationList = Application::whereBetween('created_at', [$validated['start_date'], $validated['end_date']])->get();
-
+        return redirect()->route('admin.login');
     }
 }

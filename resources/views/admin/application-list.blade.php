@@ -12,7 +12,7 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
-            <div class="card body-height-100vh">
+            <div class="card">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="manage__title">Application List</h2>
@@ -54,12 +54,12 @@
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Number</label>
                                         <input type="text" class="contact-input"
-                                               placeholder="Search By Passport Number">
+                                               placeholder="Search By Passport Number" name="passport_search">
                                     </div>
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill" type="submit">Search</button>
+                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
                                         <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                 <th>Reference</th>
                                 <th>Traveling To</th>
                                 <th>Result</th>
-                                <th>PDF</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -280,6 +280,14 @@
 
             $(document).on('click', '.reset_btn', function () {
                 location.href = `{{route('admin.application.list')}}`;
+            });
+
+            $(document).on('click', '.search_btn_passport', function (e) {
+                e.preventDefault();
+
+                let passport_search = $('input[name="passport_search"]').val();
+
+                window.location.href = `{{route('admin.application.list')}}?passport_search=${passport_search}`;
             });
         })
     </script>
