@@ -24,10 +24,10 @@ class UserAuthController extends Controller
         $validated = $request->validate([
             'username' => 'required|exists:users,username',
             'password' => 'required',
-            'captcha' => 'required|captcha'
+//            'captcha' => 'required|captcha'
         ], [
             'username.exists' => 'User dose not exists.',
-            'captcha.captcha' => 'Invalid captcha code.'
+//            'captcha.captcha' => 'Invalid captcha code.'
         ]);
 
         if (Auth::guard('web')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
@@ -99,7 +99,7 @@ class UserAuthController extends Controller
             'profession' => 'required',
             'nationality' => 'required',
             'date_of_birth' => 'required',
-            'contact_no' => 'required',
+//            'contact_no' => 'required',
             'nid_no' => 'required|numeric',
             'passport_issue_date' => 'required',
             'passport_expiry_date' => 'required',
@@ -108,6 +108,7 @@ class UserAuthController extends Controller
 
         $validated['user_id'] = Auth::guard('web')->id();
         $validated['serial_number'] = now()->format('Ym').'-'.rand(1, 999999);
+        $validated['contact_no'] = 0000;
 
         Application::create($validated);
 

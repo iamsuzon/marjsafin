@@ -133,7 +133,7 @@
                         {{--                            </a>--}}
                         {{--                        </li>--}}
                         <li class="list">
-                            <a class="list-items dropdown-item" href="{{route('logout')}}">
+                            <a class="list-items dropdown-item" href="{{route('admin.logout')}}">
                                 <span>logout</span>
                                 <i class="ri-logout-box-line"></i>
                             </a>
@@ -213,7 +213,7 @@
             <!-- Logo -->
             <div class="sidebar-logo d-flex justify-content-between align-items-start gap-10">
                 <a href="/" class="d-block">
-                    <img class="full-logo" src="./assets/images/logo.png" alt="img">
+                    <img class="full-logo" src="{{asset('assets/images/logo.png')}}" alt="img">
                 </a>
                 <button class="single change-mode border-0 mt-6">
                     <i class="ri-moon-line"></i>

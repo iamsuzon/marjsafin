@@ -117,7 +117,7 @@
                                         ])>{{$item->health_status}}</p>
                                         <p>{{$item->health_status_details}}</p>
                                     </td>
-                                    <td class="text-end px-15">
+                                    <td class="text-end px-15 d-flex gap-10">
                                         <a class="edit-btn" href="javascript:void(0)"
                                            data-id="{{$item->id}}"
                                            data-ems_number="{{$item->ems_number}}"
@@ -125,6 +125,13 @@
                                            data-health_status_details="{{$item->health_status_details}}"
                                            data-bs-toggle="modal" data-bs-target="#edit-modal">
                                             <i class="ri-file-edit-line"></i>
+                                        </a>
+                                        <a class="view-btn" href="{{route('admin.application.edit', $item->id)}}">
+                                            <i class="ri-pencil-fill"></i>
+                                        </a>
+                                        <a class="delete-btn" href="javascript:void(0)"
+                                           data-id="{{$item->id}}">
+                                            <i class="ri-delete-bin-6-line"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -250,7 +257,7 @@
                     return;
                 }
 
-                axios.post(`{{route('admin.application.update')}}?id=${id}`, {
+                axios.post(`{{route('admin.application.result.update')}}?id=${id}`, {
                     _token: '{{csrf_token()}}',
                     ems_number: ems_number,
                     health_status: health_status,
@@ -289,6 +296,21 @@
 
                 window.location.href = `{{route('admin.application.list')}}?passport_search=${passport_search}`;
             });
+
+            $(document).on('click', '.delete-btn', function () {
+                let id = $(this).data('id');
+
+                customSwal({
+                    route: `{{route('admin.application.delete')}}?id=${id}`,
+                    method: 'GET',
+                    successFunction: (res) => {
+                        if (res.status) {
+                            toastSuccess(res.message);
+                            reloadThisPage(1000);
+                        }
+                    }
+                });
+            })
         })
     </script>
 @endsection

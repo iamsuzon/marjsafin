@@ -41,7 +41,12 @@ Route::post('/admin', [AdminAuthController::class, 'loginAction']);
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/application-list', [AdminAuthController::class, 'applicationList'])->name('admin.application.list');
-    Route::post('/admin/application-update', [AdminAuthController::class, 'applicationUpdate'])->name('admin.application.update');
+    Route::post('/admin/application-update-result', [AdminAuthController::class, 'applicationUpdateResult'])->name('admin.application.result.update');
+
+    Route::get('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationEdit'])->name('admin.application.edit');
+    Route::post('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationUpdate']);
+
+    Route::get('/admin/application-delete', [AdminAuthController::class, 'applicationDelete'])->name('admin.application.delete');
 
     Route::get('/admin/new-user', [AdminAuthController::class, 'newUser'])->name('admin.new.user');
     Route::post('/admin/new-user', [AdminAuthController::class, 'newUserCreate']);

@@ -24,8 +24,8 @@ class AdminAuthController extends Controller
         $validated = $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'captcha' => 'required|captcha'
-        ], ['captcha.captcha' => 'Invalid captcha code.']);
+//            'captcha' => 'required|captcha'
+        ]);
 
         if (Auth::guard('admin')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             return redirect()->route('admin.dashboard');
@@ -64,7 +64,7 @@ class AdminAuthController extends Controller
         return view('admin.application-list', ['applicationList' => $applicationList]);
     }
 
-    public function applicationUpdate(Request $request)
+    public function applicationUpdateResult(Request $request)
     {
         $validated = $request->validate([
             'id' => 'required',
@@ -82,6 +82,55 @@ class AdminAuthController extends Controller
         return response()->json([
             'status' => true,
             'success' => 'Application updated successfully.'
+        ]);
+    }
+
+    public function applicationEdit($id)
+    {
+        $application = Application::find($id);
+        return view('admin.application-edit', compact('application'));
+    }
+
+    public function applicationUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'passport_number' => 'required',
+            'gender' => 'required',
+            'traveling_to' => 'required',
+            'marital_status' => 'required',
+            'center_name' => 'required',
+            'surname' => 'required',
+            'given_name' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required',
+            'religion' => 'required',
+            'pp_issue_place' => 'required',
+            'profession' => 'required',
+            'nationality' => 'required',
+            'date_of_birth' => 'required',
+            'nid_no' => 'required|numeric',
+            'passport_issue_date' => 'required',
+            'passport_expiry_date' => 'required',
+            'ref_no' => 'required',
+        ]);
+
+        $application = Application::find($id);
+        $application->update($validated);
+
+        return back()->with('success', 'Application updated successfully.');
+    }
+
+    public function applicationDelete()
+    {
+        $validated = request()->validate([
+            'id' => 'required',
+        ]);
+
+        Application::findOrFail($validated['id'])->delete();
+
+        return response()->json([
+            'status' => true,
+            'success' => 'Application deleted successfully.'
         ]);
     }
 

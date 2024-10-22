@@ -55,6 +55,7 @@ function professionList(): array
         'house_worker' => 'House Worker',
         'cleaner' => 'Cleaner',
         'house_maid' => 'House Maid',
+        'labour' => 'Labour',
     ];
 }
 
@@ -62,11 +63,11 @@ function nationality(): array
 {
     return [
         'bangladeshi' => 'Bangladeshi',
-        'indian' => 'Indian',
-        'pakistani' => 'Pakistani',
-        'nepali' => 'Nepali',
-        'bhutanese' => 'Bhutanese',
-        'srilankan' => 'Srilankan',
+//        'indian' => 'Indian',
+//        'pakistani' => 'Pakistani',
+//        'nepali' => 'Nepali',
+//        'bhutanese' => 'Bhutanese',
+//        'srilankan' => 'Srilankan',
     ];
 }
 

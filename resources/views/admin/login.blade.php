@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>{{env('APP_NAME')}}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -68,12 +68,12 @@
                                 </div>
 
 
-                                <div class="position-relative contact-form mb-24">
-                                    {!! captcha_img() !!}
+{{--                                <div class="position-relative contact-form mb-24">--}}
+{{--                                    {!! captcha_img() !!}--}}
 
-                                    <input class="form-control contact-input mt-15" type="text" name="captcha"
-                                           placeholder="Enter the captcha code">
-                                </div>
+{{--                                    <input class="form-control contact-input mt-15" type="text" name="captcha"--}}
+{{--                                           placeholder="Enter the captcha code">--}}
+{{--                                </div>--}}
 
                                 <button class="btn-primary-fill justify-content-center w-100" type="submit">
                                         <span class="d-flex align-items-center justify-content-center gap-6">
