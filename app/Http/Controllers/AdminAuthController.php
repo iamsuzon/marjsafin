@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,7 @@ class AdminAuthController extends Controller
     public function login()
     {
         if (Auth::guard('admin')->check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }
         return view('admin.login');
     }
@@ -38,7 +39,19 @@ class AdminAuthController extends Controller
 
     public function applicationList()
     {
-        $applicationList = Application::latest()->get();
+        if (request()->has('start_date') && request()->has('end_date')) {
+            if (request('start_date') == null || request('end_date') == null) {
+                return back()->with('error', 'Please select both start and end date.');
+            }
+
+            $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
+            $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
+
+            $applicationList = Application::whereBetween('created_at', [$start_date, $end_date])->get();
+        } else {
+            $applicationList = Application::latest()->get();
+        }
+
         return view('admin.application-list', ['applicationList' => $applicationList]);
     }
 
@@ -91,5 +104,17 @@ class AdminAuthController extends Controller
     {
         $userList = User::latest()->get();
         return view('admin.user-list', compact('userList'));
+    }
+
+    public function searchApplication(Request $request)
+    {
+        // search by start date and end date
+        $validated = $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
+        $applicationList = Application::whereBetween('created_at', [$validated['start_date'], $validated['end_date']])->get();
+
     }
 }

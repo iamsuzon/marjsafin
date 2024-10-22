@@ -17,13 +17,13 @@
                     <div class="col-12">
                         <h2 class="manage__title">Application List</h2>
 
-                        <form action="">
+                        <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
                                 <div class="col-md-2">
                                     <div class="contact-form">
                                         <label class="contact-label">Start Date </label>
                                         <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker"
+                                            <input type="text" class="contact-input single-date-picker start_date"
                                                    placeholder="Choose Date">
                                             <span> <b class="caret"></b></span>
                                             <i class="ri-calendar-line"></i>
@@ -36,7 +36,7 @@
                                     <div class="contact-form">
                                         <label class="contact-label">end Date </label>
                                         <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker"
+                                            <input type="text" class="contact-input single-date-picker end_date"
                                                    placeholder="Choose Date">
                                             <span> <b class="caret"></b></span>
                                             <i class="ri-calendar-line"></i>
@@ -46,9 +46,10 @@
 
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex">
-                                        <button class="btn-primary-fill" type="submit">Search</button>
+                                        <button class="btn-primary-fill search_btn" type="submit">Search</button>
                                     </div>
                                 </div>
+
                                 <div class="col-md-2">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Number</label>
@@ -59,7 +60,7 @@
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
                                         <button class="btn-primary-fill" type="submit">Search</button>
-                                        <button class="btn-danger-fill" type="reset">Reset</button>
+                                        <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -267,6 +268,19 @@
                         console.log(err);
                     })
             })
+
+            $(document).on('click', '#search-form .search_btn', function (e) {
+                e.preventDefault();
+
+                let start_date = $('.start_date').val();
+                let end_date = $('.end_date').val();
+
+                window.location.href = `{{route('admin.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
+            });
+
+            $(document).on('click', '.reset_btn', function () {
+                location.href = `{{route('admin.application.list')}}`;
+            });
         })
     </script>
 @endsection

@@ -21,13 +21,18 @@ class UserAuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required',
+            'username' => 'required|exists:users,username',
             'password' => 'required',
             'captcha' => 'required|captcha'
-        ], ['captcha.captcha' => 'Invalid captcha code.']);
+        ], [
+            'username.exists' => 'User dose not exists.',
+            'captcha.captcha' => 'Invalid captcha code.'
+        ]);
 
         if (Auth::guard('web')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             return redirect()->route('dashboard');
+        } else {
+            return back()->with('error', 'Invalid username or password.');
         }
     }
 

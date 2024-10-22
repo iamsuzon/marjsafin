@@ -12,12 +12,12 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
-            <div class="card body-height-100vh">
+            <div class="card">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="manage__title">Application List</h2>
 
-                        <form action="">
+                        <form id="search-from">
                             <div class="row d-flex justify-content-center mt-25">
                                 <div class="col-md-2">
                                     <div class="contact-form">
@@ -46,7 +46,7 @@
 
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex">
-                                        <button class="btn-primary-fill" type="submit">Search</button>
+                                        <button class="btn-primary-fill search_btn" type="submit">Search</button>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -125,4 +125,21 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).on('click', '#search-form .search_btn', function (e) {
+            e.preventDefault();
+
+            let start_date = $('.start_date').val();
+            let end_date = $('.end_date').val();
+
+            window.location.href = `{{route('user.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
+        });
+
+        $(document).on('click', '.reset_btn', function () {
+            location.href = `{{route('user.application.list')}}`;
+        });
+    </script>
 @endsection

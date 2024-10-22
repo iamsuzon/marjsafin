@@ -48,5 +48,7 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('/admin/user-list', [AdminAuthController::class, 'userList'])->name('admin.user.list');
 
+    Route::get('/admin/application-list/search', [AdminAuthController::class, 'searchApplication'])->name('admin.application.search');
+
     Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 });
