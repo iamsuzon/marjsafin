@@ -60,7 +60,7 @@ class MedicalCenterAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+            $applicationList = $applicationList->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
         }
         else if(request()->has('passport_search'))
         {
@@ -68,7 +68,7 @@ class MedicalCenterAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList->where('passport_number', trim(request('passport_search')))->latest()->get();
+            $applicationList = $applicationList->where('passport_number', trim(request('passport_search')))->latest()->get();
         }
         else {
             $applicationList = $applicationList->latest()->get();

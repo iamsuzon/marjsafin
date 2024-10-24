@@ -202,7 +202,7 @@
 
                     <!-- Single Menu -->
                     <li class="sidebar-menu-item">
-                        <a href="#" class="parent-item-content">
+                        <a href="{{route('admin.change.password')}}" class="parent-item-content">
                             <i class="ri-caravan-line"></i>
                             <span class="on-half-expanded">Password Manage</span>
                         </a>

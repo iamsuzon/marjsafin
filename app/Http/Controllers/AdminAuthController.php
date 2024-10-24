@@ -31,6 +31,8 @@ class AdminAuthController extends Controller
         if (Auth::guard('admin')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             return redirect()->route('admin.dashboard');
         }
+
+        return back()->with('error', 'Invalid username or password');
     }
 
     public function dashboard()
@@ -203,5 +205,29 @@ class AdminAuthController extends Controller
         $medical_center->allocatedMedicalCenter->save();
 
         return back()->with('success', 'Medical Center disapproved successfully.');
+    }
+
+    public function changePassword()
+    {
+        return view('admin.change-password');
+    }
+
+    public function changePasswordAction(Request $request)
+    {
+        $validated = $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        $medical_center = Auth::guard('admin')->user();
+
+        if (!Hash::check($validated['old_password'], $medical_center->password)) {
+            return back()->with('error', 'Old password does not match.');
+        }
+
+        $medical_center->password = Hash::make($validated['password']);
+        $medical_center->save();
+
+        return back()->with('success', 'Password changed successfully.');
     }
 }

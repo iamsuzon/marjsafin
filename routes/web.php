@@ -68,6 +68,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/application-list/allocations/approve/{id}', [AdminAuthController::class, 'allocatedMedicalCenterApprove'])->name('admin.application-list.allocations.approve');
     Route::get('/admin/application-list/allocations/disapprove/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDisapprove'])->name('admin.application-list.allocations.disapprove');
 
+    Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
+    Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
+
     Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
     Route::get('/admin/upgrade-database', [DeveloperSettingsController::class, 'upgradeDatabase'])->name('admin.upgrade.database');
