@@ -85,6 +85,7 @@ class UserAuthController extends Controller
     public function storeUserRegistration(Request $request)
     {
         $validated = $request->validate([
+            'medical_type' => 'required',
             'passport_number' => 'required',
             'gender' => 'required',
             'traveling_to' => 'required',

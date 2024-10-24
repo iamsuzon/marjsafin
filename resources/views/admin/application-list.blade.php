@@ -75,6 +75,7 @@
                             <tr>
                                 <th class="mw-45">#SL</th>
                                 <th>Date</th>
+                                <th>Medical Type</th>
                                 <th>Registration</th>
                                 <th>Passport</th>
                                 <th>Reference</th>
@@ -92,6 +93,7 @@
                                         <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
                                         <p>Crte: {{$item->updated_at->format('d/m/Y')}}</p>
                                     </td>
+                                    <td>{{ucfirst($item->medical_type)}}</td>
                                     <td>
                                         <p>{{$item->serial_number}}</p>
                                         <p>{{$item->ems_number}}</p>
