@@ -61,7 +61,7 @@ class AdminAuthController extends Controller
             $applicationList = Application::where('passport_number', trim(request('passport_search')))->get();
         }
         else {
-            $applicationList = Application::latest()->get();
+            $applicationList = Application::whereDate('created_at', Carbon::today())->latest()->get();
         }
 
         return view('admin.application-list', ['applicationList' => $applicationList]);

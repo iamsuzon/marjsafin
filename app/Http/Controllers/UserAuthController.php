@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\StaticOption;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class UserAuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('welcome');
+        $adText = StaticOption::getOption('ad_text');
+        return view('welcome', ['adText' => $adText]);
     }
 
     public function login(Request $request)
@@ -39,7 +41,8 @@ class UserAuthController extends Controller
 
     public function dashboard()
     {
-        return view('user.dashboard');
+        $adText = StaticOption::getOption('ad_text');
+        return view('user.dashboard', ['adText' => $adText]);
     }
 
     public function userPanel()
@@ -71,7 +74,9 @@ class UserAuthController extends Controller
                 ->get();
         }
         else {
-            $applicationList = Application::where('user_id', $user_id)->latest()->get();
+            $applicationList = Application::where('user_id', $user_id)
+                ->whereDate('created_at', Carbon::today())
+                ->latest()->get();
         }
 
         return view('user.user-panel', compact('applicationList'));

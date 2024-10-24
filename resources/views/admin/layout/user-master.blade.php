@@ -193,18 +193,17 @@
                     </li>
 
                     <!-- Single Menu -->
-{{--                    <li class="sidebar-menu-item">--}}
-{{--                        <a href="campaign_categories.html" class="parent-item-content">--}}
-{{--                            <i class="ri-caravan-line"></i>--}}
-{{--                            <span class="on-half-expanded">New User</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-
-                    <!-- Single Menu -->
-                    <li class="sidebar-menu-item">
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.change.password')}}">
                         <a href="{{route('admin.change.password')}}" class="parent-item-content">
                             <i class="ri-caravan-line"></i>
                             <span class="on-half-expanded">Password Manage</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-menu-item">
+                        <a href="{{route('admin.general.settings')}}" class="parent-item-content">
+                            <i class="ri-caravan-line"></i>
+                            <span class="on-half-expanded">General Settings</span>
                         </a>
                     </li>
 
@@ -212,7 +211,7 @@
                         <li class="sidebar-menu-item">
                             <a href="{{route('admin.upgrade.database')}}" class="parent-item-content">
                                 <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">Database Upgrade</span>
+                                <span class="on-half-expanded">Database Upgrade <sup class="text-danger">Dev</sup></span>
                             </a>
                         </li>
                     @endif

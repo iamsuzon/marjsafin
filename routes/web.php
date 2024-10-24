@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\DeveloperSettingsController;
+use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\MedicalCenterAuthController;
 use App\Http\Controllers\MedicalCenterManageController;
 use App\Http\Controllers\UserAuthController;
@@ -72,6 +73,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
 
     Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    Route::get('/admin/general-settings', [GeneralSettingsController::class, 'generalSettings'])->name('admin.general.settings');
+    Route::post('/admin/general-settings', [GeneralSettingsController::class, 'generalSettingsUpdate']);
 
     Route::get('/admin/upgrade-database', [DeveloperSettingsController::class, 'upgradeDatabase'])->name('admin.upgrade.database');
 });

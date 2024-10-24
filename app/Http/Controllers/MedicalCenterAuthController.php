@@ -71,7 +71,7 @@ class MedicalCenterAuthController extends Controller
             $applicationList = $applicationList->where('passport_number', trim(request('passport_search')))->latest()->get();
         }
         else {
-            $applicationList = $applicationList->latest()->get();
+            $applicationList = $applicationList->whereDate('created_at', Carbon::today())->latest()->get();
         }
 
 

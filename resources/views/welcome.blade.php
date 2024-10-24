@@ -99,7 +99,7 @@
                 <div class="row justify-content-lg-end justify-content-sm-center mt-100">
                     <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">
                         <marquee style="color: red" width="100%" direction="left" height="100px">
-                            মেডিকেল করার ১৫ দিনের মধ্যে wafid  স্লিপ তুলতে হবে। স্লিপ জমা দেওয়ার দ্বিতীয় দিন অনলাইন আপডেট পাওয়ার চান্স ৯৯% (যদি সার্ভার সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর নেট  পাবেন।
+                            {{$adText ?? ''}}
                         </marquee>
                     </div>
                 </div>

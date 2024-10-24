@@ -222,6 +222,10 @@
 
 {{--                </div>--}}
                 <!--/ Table -->
-
+                @auth('web')
+                    <marquee class="dashboard-marquee" style="color: red" width="100%" direction="left">
+                        {{$adText ?? ''}}
+                    </marquee>
+                @endauth
             </div>
 @endsection

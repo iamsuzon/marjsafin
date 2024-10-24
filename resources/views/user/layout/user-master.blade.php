@@ -210,16 +210,6 @@
                         </li>
                     @endauth
 
-                    <!-- Single Menu -->
-                    {{--                    <li class="sidebar-menu-item">--}}
-                    {{--                        <a href="campaign_categories.html" class="parent-item-content">--}}
-                    {{--                            <i class="ri-caravan-line"></i>--}}
-                    {{--                            <span class="on-half-expanded">New User</span>--}}
-                    {{--                        </a>--}}
-                    {{--                    </li>--}}
-
-                    <!-- Single Menu -->
-
                     <li class="sidebar-menu-item">
                         <a href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}"
                            class="parent-item-content">
