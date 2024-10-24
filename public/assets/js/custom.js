@@ -19,6 +19,7 @@ const customSwal = ({
                         method = 'post',
                         data = {},
                         successFunction = null,
+                        errorFunction = null,
                         type = 'delete',
                         title = 'Are you sure?',
                         text = "You won't be able to revert this!",
@@ -40,15 +41,11 @@ const customSwal = ({
             if (method === 'post') {
                 axios.post(route, data)
                     .then(successFunction)
-                    .catch(error => {
-                        generateErrorElements(error);
-                    });
+                    .catch(errorFunction);
             } else {
                 axios.get(route)
                     .then(successFunction)
-                    .catch(error => {
-                        generateErrorElements(error);
-                    });
+                    .catch(errorFunction);
             }
         }
     });

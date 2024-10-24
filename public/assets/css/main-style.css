@@ -19414,8 +19414,8 @@ input[type=number] {
   color: var(--primary);
 }
 
-/* -------------------------------  
-    Footer 
+/* -------------------------------
+    Footer
 ------------------------------- */
 .footer {
   border-top: 0;
@@ -19506,7 +19506,7 @@ input[type=number] {
    End-of Body layout
 --------------------------------- */
 /* ---------------------------------
-    Sidebar  
+    Sidebar
 --------------------------------- */
 .sidebar {
   position: fixed;
@@ -44036,4 +44036,11 @@ body[dir=rtl] .card_scroll_active {
   .rtl-offset-lg-1 {
     margin-right: 8.33333333%;
   }
+}
+
+
+
+/*Dev changes*/
+marquee {
+    font-weight: 800;
 }

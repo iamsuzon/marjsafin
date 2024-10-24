@@ -15,7 +15,12 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title mb-25">Registration Edit</h2>
+                        <div class="d-flex justify-content-between mb-20">
+                            <h2>Registration Edit</h2>
+                            <a href="{{route('admin.application.list')}}" class="btn-primary-fill">
+                                <i class="ri-arrow-left-line"></i>
+                            </a>
+                        </div>
 
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">

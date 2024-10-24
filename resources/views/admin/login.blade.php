@@ -10,31 +10,37 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-5.3.1.min.css')}}">
+    <link rel="stylesheet" href="{{customAsset('assets/css/bootstrap-5.3.1.min.css')}}">
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
         rel="stylesheet"
     />
     <!-- Plugin -->
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/plugin.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/chart/apexcharts.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/main-style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/plugin.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/chart/apexcharts.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/toastr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/main-style.css')}}">
 </head>
 <body>
+<style>
+    .login-bg::before {
+        background: none;
+    }
+</style>
+
 <div id="layout-wrapper">
     <main>
         <!-- Login area S t a r t  -->
         <div class="login-area login-bg">
             <div class="container-fluid">
-                <div class="row justify-content-lg-end justify-content-sm-center">
+                <div class="row justify-content-sm-center">
                     <div class="offset-lg-1 rtl-offset-lg-1 col-xxl-3 col-xl-5 col-lg-6 col-md-8 col-sm-10">
                         <div class="login-card">
 
                             <!-- Logo -->
                             <div class="logo logo-large mb-40">
                                 <h1 class="font-600 text-center">Admin</h1>
-                                <h4 class="text-18 font-600 text-center">Login to Marjsafin System</h4>
+                                <h4 class="text-18 font-600 text-center">Login to Medical Provide System</h4>
                             </div>
 
                             @if ($errors->any())
@@ -91,20 +97,20 @@
     </main>
 </div>
 
-<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
-<script src="{{asset('assets/js/popper.min.js')}}"></script>
+<script src="{{customAsset('assets/js/jquery-3.7.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/popper.min.js')}}"></script>
 <!-- Plugin -->
-<script src="{{asset('assets/js/plugin.js')}}"></script>
-<script src="{{asset('assets/js/chart/apexcharts.js')}}"></script>
-<script src="{{asset('assets/js/chart/chart-custom.js')}}"></script>
+<script src="{{customAsset('assets/js/plugin.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/apexcharts.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/chart-custom.js')}}"></script>
 <!-- Axios JS -->
-<script src="{{asset('assets/js/toastr.min.js')}}"></script>
-<script src="{{asset('assets/js/sweetalert2.js')}}"></script>
-<script src="{{asset('assets/js/axios.min.js')}}"></script>
+<script src="{{customAsset('assets/js/toastr.min.js')}}"></script>
+<script src="{{customAsset('assets/js/sweetalert2.js')}}"></script>
+<script src="{{customAsset('assets/js/axios.min.js')}}"></script>
 <!-- Main Custom JS -->
-<script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{customAsset('assets/js/main.js')}}"></script>
 <!-- Dev Custom JS -->
-<script src="{{asset('assets/js/custom.js')}}"></script>
+<script src="{{customAsset('assets/js/custom.js')}}"></script>
 </body>
 </html>

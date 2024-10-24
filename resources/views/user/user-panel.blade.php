@@ -3,7 +3,7 @@
 @section('styles')
     <style>
         .manage__title {
-                border-bottom: 2px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
             padding-bottom: 10px;
         }
     </style>
@@ -52,12 +52,14 @@
                                 <div class="col-md-2">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Number</label>
-                                        <input type="text" class="contact-input passport_search" placeholder="Search By Passport Number" name="passport_search">
+                                        <input type="text" class="contact-input passport_search"
+                                               placeholder="Search By Passport Number" name="passport_search">
                                     </div>
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
+                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search
+                                        </button>
                                         <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
@@ -118,13 +120,15 @@
                                         <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
                                     <td>
-                                        <p @class([
-                                            'text-capitalize',
-                                            'text-success' => $item->health_status == 'fit',
-                                            'text-danger' => $item->health_status == 'unfit',
-                                            'text-warning' => $item->health_status == 'held-up',
-                                        ])>{{$item->health_status}}</p>
-                                        <p>{{$item->health_status_details}}</p>
+                                        @if($item->allocatedMedicalCenter?->status)
+                                                <p @class([
+                                                'text-capitalize',
+                                                'text-success' => $item->health_status == 'fit',
+                                                'text-danger' => $item->health_status == 'unfit',
+                                                'text-warning' => $item->health_status == 'held-up',
+                                            ])>{{$item->health_status}}</p>
+                                                <p>{{$item->health_status_details}}</p>
+                                        @endif
                                     </td>
                                     <td class="text-end px-15">
                                         <a class="view-btn" href="{{route('user.generate.pdf', $item->id)}}">
@@ -132,10 +136,10 @@
                                         </a>
                                     </td>
                                 </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center">No Data Found</td>
-                                    </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">No Data Found</td>
+                                </tr>
                             @endforelse
                             </tbody>
                         </table>

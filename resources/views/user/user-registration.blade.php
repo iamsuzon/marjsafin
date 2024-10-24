@@ -41,6 +41,17 @@
                             <div class="row g-16">
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
+                                        <label class="contact-label">Medical Type<span class="fillable mx-1">*</span></label>
+                                        <select class="select2" name="medical_type">
+                                            <option value="" selected disabled>Select an option</option>
+                                            @foreach(medicalType() ?? [] as $index => $country)
+                                                <option {{old('medical_type') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $country }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                                    <div class="contact-form">
                                         <label class="contact-label">Passport Number <span class="fillable mx-1">*</span></label>
                                         <input class="form-control input" type="text" name="passport_number" placeholder="Passport Number" value="{{old('passport_number')}}">
                                     </div>
@@ -182,6 +193,7 @@
                                         <input class="form-control input" type="number" name="nid_no" placeholder="NID Number" value="{{old('nid_no')}}">
                                     </div>
                                 </div>
+
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Issue Date</label>

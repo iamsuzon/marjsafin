@@ -19,8 +19,8 @@
     <div class="page-content">
         <div class="card">
             <div class="d-flex justify-content-between">
-                <h2>Create New User</h2>
-                <a href="{{route('admin.user.list')}}" class="btn-primary-fill">
+                <h2>Create New Medical Center</h2>
+                <a href="{{route('admin.medical-center.list')}}" class="btn-primary-fill">
                     <i class="ri-arrow-left-line"></i>
                 </a>
             </div>
@@ -43,7 +43,7 @@
                 </div>
             @endif
 
-            <form action="{{route('admin.new.user')}}" method="POST" id="registration-form">
+            <form action="{{route('admin.new.medical-center')}}" method="POST" id="registration-form">
                 @csrf
 
                 <div class="row g-16 mt-25">
@@ -68,6 +68,12 @@
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <div class="contact-form">
+                            <label class="contact-label">Address</label>
+                            <input class="form-control input" type="text" name="address" placeholder="Address" value="{{old('address')}}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <div class="contact-form">
                             <label class="contact-label">Password <span class="fillable mx-1">*</span></label>
                             <input class="form-control input" type="text" name="password" placeholder="Password" value="{{old('password')}}">
                         </div>
@@ -87,6 +93,18 @@
 @section('scripts')
     <script>
         $(document).ready(function(){
+            $(document).on('submit', '#registration-form', function(){
+                // Check if the username input has a space
+                if ($('input[name=username]').val().indexOf(' ') >= 0) {
+                    $('input[name=username]').addClass('input-error'); // Add red border and background
+                    $('.error').show(); // Show the error message
+                    return false; // Prevent form submission
+                }else {
+                    $('input[name=username]').removeClass('input-error'); // Remove red border if not a space
+                    $('.error').hide(); // Hide the error message if no space is present
+                }
+            });
+
             $('input[name=username]').on('keypress', function(e){
                 if (e.which === 32) { // Detect spacebar key
                     $(this).addClass('input-error'); // Add red border and background

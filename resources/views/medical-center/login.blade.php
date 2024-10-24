@@ -28,14 +28,6 @@
         <div class="login-area login-bg">
             <div class="container-fluid">
                 <div class="row justify-content-lg-end justify-content-sm-center">
-                    <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">
-                        <marquee style="color: red" width="100%" direction="left" height="100px">
-                            মেডিকেল ডাটা সঠিক ভাবে সাবমিট করলে ৩য় দিন রিপোর্ট  প্রদান করার চান্স 99% (যদি সার্ভার সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর রিপোর্ট  পাবেন।
-                        </marquee>
-                    </div>
-                </div>
-
-                <div class="row justify-content-lg-end justify-content-sm-center">
                     <div class="offset-lg-1 rtl-offset-lg-1 col-xxl-3 col-xl-5 col-lg-6 col-md-8 col-sm-10">
                         <div class="login-card">
 
@@ -44,6 +36,7 @@
                                 <a href="{{url('/')}}" class="mb-30 d-block">
                                     <img style="width: 60px" src="{{customAsset('assets/images/logo.png')}}" alt="logo">
                                 </a>
+                                <h3 class="text-center font-800">Medical Center</h3>
                                 <h4 class="text-18 font-600 text-center">Login to Medical Provide System</h4>
                             </div>
 
@@ -58,7 +51,7 @@
                             @endif
 
                             <!-- Form -->
-                            <form action="{{route('home')}}" method="POST">
+                            <form action="{{route('medical.login')}}" method="POST">
                                 @csrf
 
                                 <div class="position-relative contact-form mb-24">

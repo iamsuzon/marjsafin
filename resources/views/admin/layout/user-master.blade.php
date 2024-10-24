@@ -10,16 +10,16 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-5.3.1.min.css')}}">
+    <link rel="stylesheet" href="{{customAsset('assets/css/bootstrap-5.3.1.min.css')}}">
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
         rel="stylesheet"
     />
     <!-- Plugin -->
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/plugin.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/chart/apexcharts.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/main-style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/plugin.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/chart/apexcharts.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/toastr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/main-style.css')}}">
 
     @yield('styles')
 </head>
@@ -101,7 +101,7 @@
                 <div class="user-info dropdown-toggle toggle-arro-hidden" data-bs-toggle="dropdown"
                      aria-expanded="false" role="button">
                     <div class="user-img">
-                        <img src="{{asset('assets/images/profile.png')}}" class="img-cover" alt="img">
+                        <img src="{{customAsset('assets/images/profile.png')}}" class="img-cover" alt="img">
                     </div>
                 </div>
                 <!-- Profile List -->
@@ -163,10 +163,17 @@
                     </li>
 
                     <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.new.user')}}">
-                        <a href="{{route('admin.new.user')}}" class="parent-item-content">
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application.list')}}">
+                        <a href="{{route('admin.application.list')}}" class="parent-item-content">
                             <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">New Customer</span>
+                            <span class="on-half-expanded">Application List</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application-list.allocations')}}">
+                        <a href="{{route('admin.application-list.allocations')}}" class="parent-item-content">
+                            <i class="ri-hand-heart-line"></i>
+                            <span class="on-half-expanded">Medical Center Allocations</span>
                         </a>
                     </li>
 
@@ -178,11 +185,10 @@
                         </a>
                     </li>
 
-                    <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application.list')}}">
-                        <a href="{{route('admin.application.list')}}" class="parent-item-content">
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}}">
+                        <a href="{{route('admin.medical-center.list')}}" class="parent-item-content">
                             <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Application List</span>
+                            <span class="on-half-expanded">Medical Center List</span>
                         </a>
                     </li>
 
@@ -202,6 +208,15 @@
                         </a>
                     </li>
 
+                    @if(app()->hasDebugModeEnabled())
+                        <li class="sidebar-menu-item">
+                            <a href="{{route('admin.upgrade.database')}}" class="parent-item-content">
+                                <i class="ri-caravan-line"></i>
+                                <span class="on-half-expanded">Database Upgrade</span>
+                            </a>
+                        </li>
+                    @endif
+
                     <li class="sidebar-menu-item">
                         <a href="{{route('admin.logout')}}" class="parent-item-content">
                             <i class="ri-caravan-line"></i>
@@ -213,7 +228,7 @@
             <!-- Logo -->
             <div class="sidebar-logo d-flex justify-content-between align-items-start gap-10">
                 <a href="/" class="d-block">
-                    <img class="full-logo" src="{{asset('assets/images/logo.png')}}" alt="img">
+                    <img class="full-logo" src="{{customAsset('assets/images/logo.png')}}" alt="img">
                 </a>
                 <button class="single change-mode border-0 mt-6">
                     <i class="ri-moon-line"></i>
@@ -232,21 +247,21 @@
     </main>
 </div>
 
-<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
-<script src="{{asset('assets/js/popper.min.js')}}"></script>
+<script src="{{customAsset('assets/js/jquery-3.7.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/popper.min.js')}}"></script>
 <!-- Plugin -->
-<script src="{{asset('assets/js/plugin.js')}}"></script>
-<script src="{{asset('assets/js/chart/apexcharts.js')}}"></script>
-<script src="{{asset('assets/js/chart/chart-custom.js')}}"></script>
+<script src="{{customAsset('assets/js/plugin.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/apexcharts.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/chart-custom.js')}}"></script>
 <!-- Axios JS -->
-<script src="{{asset('assets/js/toastr.min.js')}}"></script>
-<script src="{{asset('assets/js/sweetalert2.js')}}"></script>
-<script src="{{asset('assets/js/axios.min.js')}}"></script>
+<script src="{{customAsset('assets/js/toastr.min.js')}}"></script>
+<script src="{{customAsset('assets/js/sweetalert2.js')}}"></script>
+<script src="{{customAsset('assets/js/axios.min.js')}}"></script>
 <!-- Main Custom JS -->
-<script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{customAsset('assets/js/main.js')}}"></script>
 <!-- Dev Custom JS -->
-<script src="{{asset('assets/js/custom.js')}}"></script>
+<script src="{{customAsset('assets/js/custom.js')}}"></script>
 
 @yield('scripts')
 </body>

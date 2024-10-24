@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\DeveloperSettingsController;
+use App\Http\Controllers\MedicalCenterAuthController;
+use App\Http\Controllers\MedicalCenterManageController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,10 +53,37 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('/admin/new-user', [AdminAuthController::class, 'newUser'])->name('admin.new.user');
     Route::post('/admin/new-user', [AdminAuthController::class, 'newUserCreate']);
-
     Route::get('/admin/user-list', [AdminAuthController::class, 'userList'])->name('admin.user.list');
 
-    Route::get('/admin/application-list/search', [AdminAuthController::class, 'searchApplication'])->name('admin.application.search');
+    Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])->name('admin.new.medical-center');
+    Route::post('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenterCreate']);
+    Route::get('/admin/medical-center-list', [MedicalCenterManageController::class, 'MedicalCenterList'])->name('admin.medical-center.list');
+
+    Route::post('/admin/medical-center/change-password', [MedicalCenterManageController::class, 'MedicalCenterChangePassword'])->name('admin.medical-center.change.password');
+    Route::post('/admin/medical-center/update', [MedicalCenterManageController::class, 'MedicalCenterUpdate'])->name('admin.medical-center.update');
+    Route::get('/admin/medical-center/delete', [MedicalCenterManageController::class, 'MedicalCenterDelete'])->name('admin.medical-center.delete');
+
+    Route::get('/admin/application-list/allocations', [AdminAuthController::class, 'allocatedMedicalCenterList'])->name('admin.application-list.allocations');
+    Route::get('/admin/application-list/allocations/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDetails'])->name('admin.application-list.allocations.details');
+    Route::get('/admin/application-list/allocations/approve/{id}', [AdminAuthController::class, 'allocatedMedicalCenterApprove'])->name('admin.application-list.allocations.approve');
+    Route::get('/admin/application-list/allocations/disapprove/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDisapprove'])->name('admin.application-list.allocations.disapprove');
 
     Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+    Route::get('/admin/upgrade-database', [DeveloperSettingsController::class, 'upgradeDatabase'])->name('admin.upgrade.database');
+});
+
+
+Route::get('/medical', [MedicalCenterAuthController::class, 'login'])->name('medical.login');
+Route::post('/medical', [MedicalCenterAuthController::class, 'loginAction']);
+
+Route::middleware('auth:medical_center')->prefix('medical')->group(function () {
+    Route::get('/dashboard', [MedicalCenterAuthController::class, 'dashboard'])->name('medical.dashboard');
+    Route::get('/application-list', [MedicalCenterAuthController::class, 'applicationList'])->name('medical.application.list');
+
+    Route::post('/application-update-result', [MedicalCenterAuthController::class, 'applicationUpdateResult'])->name('medical.application.result.update');
+
+    Route::get('/application-list/search', [MedicalCenterAuthController::class, 'searchApplication'])->name('medical.application.search');
+
+    Route::get('/logout', [MedicalCenterAuthController::class, 'logout'])->name('medical.logout');
 });

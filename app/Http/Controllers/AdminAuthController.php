@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\MedicalCenter;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -170,5 +171,37 @@ class AdminAuthController extends Controller
         session()->flush();
 
         return redirect()->route('admin.login');
+    }
+
+    public function allocatedMedicalCenterList()
+    {
+        $medicalCenterList = MedicalCenter::withCount('allocatedMedicalCenter')->latest()->get();
+        return view('admin.allocation-list', compact('medicalCenterList'));
+    }
+
+    public function allocatedMedicalCenterDetails($id)
+    {
+        $medical_center_details = MedicalCenter::with('allocatedMedicalCenter')->findOrFail($id);
+        $applications = Application::where('center_name', $medical_center_details->username)->latest()->get();
+
+        return view('admin.allocation-medical-center-details', compact('medical_center_details', 'applications'));
+    }
+
+    public function allocatedMedicalCenterApprove($id)
+    {
+        $medical_center = Application::findOrFail($id);
+        $medical_center->allocatedMedicalCenter->status = true;
+        $medical_center->allocatedMedicalCenter->save();
+
+        return back()->with('success', 'Medical Center approved successfully.');
+    }
+
+    public function allocatedMedicalCenterDisapprove($id)
+    {
+        $medical_center = Application::findOrFail($id);
+        $medical_center->allocatedMedicalCenter->status = false;
+        $medical_center->allocatedMedicalCenter->save();
+
+        return back()->with('success', 'Medical Center disapproved successfully.');
     }
 }

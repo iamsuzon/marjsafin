@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Application extends Model
 {
@@ -45,5 +46,15 @@ class Application extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function medicalCenter(): BelongsTo
+    {
+        return $this->belongsTo(MedicalCenter::class, 'center_name', 'username');
+    }
+
+    public function allocatedMedicalCenter(): HasOne
+    {
+        return $this->hasOne(AllocateMedicalCenter::class, 'application_id', 'id');
     }
 }

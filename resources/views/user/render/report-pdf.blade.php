@@ -70,9 +70,6 @@
         <p><strong>Passport Expire Date:</strong> {{ $passport_expiry_date->format('d/m/Y') }}</p>
     </div>
     <div class="divider"></div>
-    <div class="footer">
-        <p>Notes: Passengers are advised to contact Agent only for Medical Test Report and all other official procedures, Not at the Medical Center. Thanks</p>
-    </div>
 </div>
 </body>
 </html>

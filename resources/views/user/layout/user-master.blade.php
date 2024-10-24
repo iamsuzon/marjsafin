@@ -10,16 +10,16 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-5.3.1.min.css')}}">
+    <link rel="stylesheet" href="{{customAsset('assets/css/bootstrap-5.3.1.min.css')}}">
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
         rel="stylesheet"
     />
     <!-- Plugin -->
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/plugin.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/chart/apexcharts.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/main-style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/plugin.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/chart/apexcharts.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/toastr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{customAsset('assets/css/main-style.css')}}">
 
     @yield('styles')
 </head>
@@ -29,12 +29,19 @@
     <header class="header">
         <!-- Header Left -->
         <div class="left-content d-flex flex-wrap gap-10">
-            <div class="header-search">
-                <div class="search-icon">
-                    <i class="ri-search-line"></i>
-                </div>
-                <input class="search-field" type="text" placeholder="Search...">
-            </div>
+            {{--            <div class="header-search">--}}
+            {{--                <div class="search-icon">--}}
+            {{--                    <i class="ri-search-line"></i>--}}
+            {{--                </div>--}}
+            {{--                <input class="search-field" type="text" placeholder="Search...">--}}
+            {{--            </div>--}}
+
+            @auth('web')
+                <marquee style="color: red" width="100%" direction="left">
+                    মেডিকেল ডাটা সঠিক ভাবে সাবমিট করে মেডিকেল করলে ৩য় দিন রিপোর্ট প্রদান করার চান্স 99% (যদি সার্ভার
+                    সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর রিপোর্ট পাবেন।
+                </marquee>
+            @endauth
         </div>
         <!-- / Left -->
 
@@ -101,7 +108,7 @@
                 <div class="user-info dropdown-toggle toggle-arro-hidden" data-bs-toggle="dropdown"
                      aria-expanded="false" role="button">
                     <div class="user-img">
-                        <img src="{{asset('assets/images/profile.png')}}" class="img-cover" alt="img">
+                        <img src="{{customAsset('assets/images/profile.png')}}" class="img-cover" alt="img">
                     </div>
                 </div>
                 <!-- Profile List -->
@@ -110,8 +117,8 @@
                         <!-- User info -->
                         <a href="#" class="user-sub-info">
                             <div class="user-details">
-                                <span class="name">{{auth('web')->user()->username}}</span>
-                                <p class="pera">{{auth('web')->user()->email}}</p>
+                                <span class="name">{{auth()->user()->username}}</span>
+                                <p class="pera">{{auth()->user()->email}}</p>
                             </div>
                         </a>
                         {{--                        <li class="list">--}}
@@ -133,7 +140,8 @@
                         {{--                            </a>--}}
                         {{--                        </li>--}}
                         <li class="list">
-                            <a class="list-items dropdown-item" href="{{route('logout')}}">
+                            <a class="list-items dropdown-item"
+                               href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}">
                                 <span>logout</span>
                                 <i class="ri-logout-box-line"></i>
                             </a>
@@ -154,37 +162,54 @@
                         </a>
                     </li>
 
-                    <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('dashboard')}}">
-                        <a href="{{route('dashboard')}}" class="parent-item-content">
-                            <i class="ri-dashboard-line"></i>
-                            <span class="on-half-expanded">Dashboard</span>
-                        </a>
-                    </li>
+                    @auth('web')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('dashboard')}}">
+                            <a href="{{route('dashboard')}}" class="parent-item-content">
+                                <i class="ri-dashboard-line"></i>
+                                <span class="on-half-expanded">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <!-- Single Menu -->
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.registration')}}">
+                            <a href="{{route('user.registration')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Registration</span>
+                            </a>
+                        </li>
+
+                        <!-- Single Menu -->
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.application.list')}}">
+                            <a href="{{route('user.application.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Application List</span>
+                            </a>
+                        </li>
+                    @endauth
+
+                    @auth('medical_center')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('dashboard')}}">
+                            <a href="{{route('medical.dashboard')}}" class="parent-item-content">
+                                <i class="ri-dashboard-line"></i>
+                                <span class="on-half-expanded">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('medical.application.list')}}">
+                            <a href="{{route('medical.application.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Application List</span>
+                            </a>
+                        </li>
+                    @endauth
 
                     <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.registration')}}">
-                        <a href="{{route('user.registration')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Registration</span>
-                        </a>
-                    </li>
-
-                    <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.application.list')}}">
-                        <a href="{{route('user.application.list')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Application List</span>
-                        </a>
-                    </li>
-
-                    <!-- Single Menu -->
-{{--                    <li class="sidebar-menu-item">--}}
-{{--                        <a href="campaign_categories.html" class="parent-item-content">--}}
-{{--                            <i class="ri-caravan-line"></i>--}}
-{{--                            <span class="on-half-expanded">New User</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+                    {{--                    <li class="sidebar-menu-item">--}}
+                    {{--                        <a href="campaign_categories.html" class="parent-item-content">--}}
+                    {{--                            <i class="ri-caravan-line"></i>--}}
+                    {{--                            <span class="on-half-expanded">New User</span>--}}
+                    {{--                        </a>--}}
+                    {{--                    </li>--}}
 
                     <!-- Single Menu -->
                     <li class="sidebar-menu-item">
@@ -195,7 +220,8 @@
                     </li>
 
                     <li class="sidebar-menu-item">
-                        <a href="{{route('logout')}}" class="parent-item-content">
+                        <a href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}"
+                           class="parent-item-content">
                             <i class="ri-caravan-line"></i>
                             <span class="on-half-expanded">Logout</span>
                         </a>
@@ -205,7 +231,7 @@
             <!-- Logo -->
             <div class="sidebar-logo d-flex justify-content-between align-items-start gap-10">
                 <a href="/" class="d-block">
-                    <img class="full-logo" src="./assets/images/logo.png" alt="img">
+                    <img class="full-logo" src="{{customAsset('assets/images/logo.png')}}" alt="img">
                 </a>
                 <button class="single change-mode border-0 mt-6">
                     <i class="ri-moon-line"></i>
@@ -224,21 +250,21 @@
     </main>
 </div>
 
-<script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
-<script src="{{asset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
-<script src="{{asset('assets/js/popper.min.js')}}"></script>
+<script src="{{customAsset('assets/js/jquery-3.7.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/bootstrap-5.3.1.min.js')}}"></script>
+<script src="{{customAsset('assets/js/popper.min.js')}}"></script>
 <!-- Plugin -->
-<script src="{{asset('assets/js/plugin.js')}}"></script>
-<script src="{{asset('assets/js/chart/apexcharts.js')}}"></script>
-<script src="{{asset('assets/js/chart/chart-custom.js')}}"></script>
+<script src="{{customAsset('assets/js/plugin.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/apexcharts.js')}}"></script>
+<script src="{{customAsset('assets/js/chart/chart-custom.js')}}"></script>
 <!-- Axios JS -->
-<script src="{{asset('assets/js/toastr.min.js')}}"></script>
-<script src="{{asset('assets/js/sweetalert2.js')}}"></script>
-<script src="{{asset('assets/js/axios.min.js')}}"></script>
+<script src="{{customAsset('assets/js/toastr.min.js')}}"></script>
+<script src="{{customAsset('assets/js/sweetalert2.js')}}"></script>
+<script src="{{customAsset('assets/js/axios.min.js')}}"></script>
 <!-- Main Custom JS -->
-<script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{customAsset('assets/js/main.js')}}"></script>
 <!-- Dev Custom JS -->
-<script src="{{asset('assets/js/custom.js')}}"></script>
+<script src="{{customAsset('assets/js/custom.js')}}"></script>
 
 @yield('scripts')
 </body>

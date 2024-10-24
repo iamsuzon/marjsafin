@@ -3,7 +3,10 @@
 @section('contents')
     <div class="page-content">
         <div class="card">
-            <h2>Create New User</h2>
+            <div class="d-flex justify-content-between">
+                <h2>User List</h2>
+                <a href="{{route('admin.new.user')}}" class="btn-primary-fill">Create New User</a>
+            </div>
 
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
