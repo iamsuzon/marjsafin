@@ -85,5 +85,8 @@ Route::middleware('auth:medical_center')->prefix('medical')->group(function () {
 
     Route::get('/application-list/search', [MedicalCenterAuthController::class, 'searchApplication'])->name('medical.application.search');
 
+    Route::get('/change-password', [MedicalCenterAuthController::class, 'changePassword'])->name('medical.change.password');
+    Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
+
     Route::get('/logout', [MedicalCenterAuthController::class, 'logout'])->name('medical.logout');
 });

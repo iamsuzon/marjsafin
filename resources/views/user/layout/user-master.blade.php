@@ -201,6 +201,13 @@
                                 <span class="on-half-expanded">Application List</span>
                             </a>
                         </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('medical.change.password')}}">
+                            <a href="{{route('medical.change.password')}}" class="parent-item-content">
+                                <i class="ri-caravan-line"></i>
+                                <span class="on-half-expanded">Password Manage</span>
+                            </a>
+                        </li>
                     @endauth
 
                     <!-- Single Menu -->
@@ -212,12 +219,6 @@
                     {{--                    </li>--}}
 
                     <!-- Single Menu -->
-                    <li class="sidebar-menu-item">
-                        <a href="#" class="parent-item-content">
-                            <i class="ri-caravan-line"></i>
-                            <span class="on-half-expanded">Password Manage</span>
-                        </a>
-                    </li>
 
                     <li class="sidebar-menu-item">
                         <a href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}"

@@ -115,8 +115,27 @@ class MedicalCenterAuthController extends Controller
         ]);
     }
 
-    public function searchApplication()
+    public function changePassword()
     {
+        return view('medical-center.change-password');
+    }
 
+    public function changePasswordAction(Request $request)
+    {
+        $validated = $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        $medical_center = Auth::guard('medical_center')->user();
+
+        if (!Hash::check($validated['old_password'], $medical_center->password)) {
+            return back()->with('error', 'Old password does not match.');
+        }
+
+        $medical_center->password = Hash::make($validated['password']);
+        $medical_center->save();
+
+        return back()->with('success', 'Password changed successfully.');
     }
 }
