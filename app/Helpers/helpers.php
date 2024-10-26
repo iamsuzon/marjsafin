@@ -126,3 +126,20 @@ function customAsset($path): string
 {
     return app()->environment('local') ? asset($path) : asset('public/' . $path);
 }
+
+function generatePdfCode($location): string
+{
+    $locationPrefix = ucfirst($location[0]);
+
+    // Define the code prefix with IMS and the location letter
+    $prefix = "IMS-{$locationPrefix}-";
+
+    // Count how many entries already exist with this location prefix
+    $count = Application::where('center_name', $location)->count();
+
+    // Increment count for the new entry, and pad with leading zeros
+    $newNumber = str_pad($count + 1, 2, '0', STR_PAD_LEFT);
+
+    // Return the full code
+    return $prefix . $newNumber;
+}

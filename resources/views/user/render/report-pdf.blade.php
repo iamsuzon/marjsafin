@@ -50,7 +50,7 @@
 
 <div class="receipt-container">
     <div class="receipt-header">
-        <div>IMS-{{$center_name_first_letter}} - {{$id}}</div>
+        <div>{{$pdf_code}}</div>
         <h1>Money Receipt</h1>
     </div>
 

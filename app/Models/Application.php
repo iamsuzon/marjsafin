@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Application extends Model
 {
     protected $fillable = [
+        'pdf_code',
         'medical_type',
         'user_id',
         'ref_ledger',

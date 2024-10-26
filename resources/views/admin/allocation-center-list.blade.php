@@ -2,7 +2,7 @@
 
 @section('styles')
     <style>
-        .swal2-icon.swal2-info, .swal2-icon.swal2-question, .swal2-icon.swal2-warning{
+        .swal2-icon.swal2-info, .swal2-icon.swal2-question, .swal2-icon.swal2-warning {
             font-size: 15px !important;
         }
     </style>
@@ -13,7 +13,12 @@
         <div class="card">
             <div class="d-flex justify-content-between">
                 <h2>Allocate Center List</h2>
-                <button type="button" class="btn-primary-fill" data-bs-toggle="modal" data-bs-target="#create-modal">Create New Allocate Center</button>
+
+                @hasanyrole('super-admin|admin')
+                <button type="button" class="btn-primary-fill" data-bs-toggle="modal" data-bs-target="#create-modal">
+                    Create New Allocate Center
+                </button>
+                @endhasanyrole
             </div>
 
             @if(session('success'))
@@ -40,7 +45,9 @@
                     <tr>
                         <th>#SL</th>
                         <th>Name</th>
+                        @hasanyrole('super-admin|admin')
                         <th>Action</th>
+                        @endhasanyrole
                     </tr>
                     </thead>
                     <tbody>
@@ -48,6 +55,8 @@
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
+
+                            @hasanyrole('super-admin|admin')
                             <td class="text-end px-15 d-flex gap-10">
                                 <a class="edit-btn" href="javascript:void(0)"
                                    data-bs-toggle="modal" data-bs-target="#edit-modal"
@@ -55,10 +64,11 @@
                                     <i class="ri-edit-line"></i>
                                 </a>
 
-{{--                                <a class="delete-btn" href="javascript:void(0)" data-id="{{$item->id}}">--}}
-{{--                                    <i class="ri-delete-bin-6-line"></i>--}}
-{{--                                </a>--}}
+                                {{--                                <a class="delete-btn" href="javascript:void(0)" data-id="{{$item->id}}">--}}
+                                {{--                                    <i class="ri-delete-bin-6-line"></i>--}}
+                                {{--                                </a>--}}
                             </td>
+                            @endhasanyrole
                         </tr>
                     @empty
                         <tr>
@@ -244,7 +254,7 @@
                         })
                     });
 
-                    $(document).on('click' ,'.delete-btn', function (e) {
+                    $(document).on('click', '.delete-btn', function (e) {
                         e.preventDefault();
 
                         let id = $(this).data('id');

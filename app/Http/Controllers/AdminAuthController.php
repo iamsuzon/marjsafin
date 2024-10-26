@@ -71,9 +71,9 @@ class AdminAuthController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'ems_number' => 'required',
-            'health_status' => 'required',
-            'health_condition' => 'required',
+            'ems_number' => 'nullable',
+            'health_status' => 'nullable',
+            'health_condition' => 'nullable',
         ]);
 
         $application = Application::find($validated['id']);
@@ -100,20 +100,20 @@ class AdminAuthController extends Controller
             'passport_number' => 'required',
             'gender' => 'required',
             'traveling_to' => 'required',
-            'marital_status' => 'required',
+            'marital_status' => 'nullable',
             'center_name' => 'required',
             'surname' => 'required',
             'given_name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
+            'father_name' => 'nullable',
+            'mother_name' => 'nullable',
             'religion' => 'required',
-            'pp_issue_place' => 'required',
+            'pp_issue_place' => 'nullable',
             'profession' => 'required',
             'nationality' => 'required',
-            'date_of_birth' => 'required',
-            'nid_no' => 'required|numeric',
-            'passport_issue_date' => 'required',
-            'passport_expiry_date' => 'required',
+            'date_of_birth' => 'nullable',
+            'nid_no' => 'nullable|numeric',
+            'passport_issue_date' => 'nullable',
+            'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',
         ]);
 
@@ -219,14 +219,14 @@ class AdminAuthController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        $medical_center = Auth::guard('admin')->user();
+        $admin = Auth::guard('admin')->user();
 
-        if (!Hash::check($validated['old_password'], $medical_center->password)) {
+        if (!Hash::check($validated['old_password'], $admin->password)) {
             return back()->with('error', 'Old password does not match.');
         }
 
-        $medical_center->password = Hash::make($validated['password']);
-        $medical_center->save();
+        $admin->password = Hash::make($validated['password']);
+        $admin->save();
 
         return back()->with('success', 'Password changed successfully.');
     }

@@ -43,7 +43,10 @@
                             <th>Result</th>
                             <th>Allocated Center</th>
                             <th>Status</th>
+
+                            @hasanyrole('super-admin|admin')
                             <th>Action</th>
+                            @endhasanyrole
                         </tr>
                         </thead>
                         <tbody>
@@ -95,14 +98,19 @@
                                 </td>
                                 <td>
                                     @php
-                                        $approve_class = $item->allocatedMedicalCenter->status ? 'text-success' : 'text-danger';
+                                        $approve_class = $item->allocatedMedicalCenter?->status ? 'text-success' : 'text-danger';
                                     @endphp
-                                    <p class="{{$approve_class}}">{{$item->allocatedMedicalCenter->status ? 'Approved' : 'Not Approved'}}</p>
+                                    <p class="{{$approve_class}}">{{$item->allocatedMedicalCenter?->status ? 'Approved' : 'Not Approved'}}</p>
                                 </td>
-                                <td>
-                                    <a href="{{route('admin.application-list.allocations.approve', $item->id)}}" class="approve-btn btn-primary-fill" data-id="{{$item->id}}">Approve</a>
-                                    <a href="{{route('admin.application-list.allocations.disapprove', $item->id)}}" class="approve-btn btn-danger-fill" data-id="{{$item->id}}">Disapprove</a>
-                                </td>
+
+                                @hasanyrole('super-admin|admin')
+                                    <td>
+                                        <a href="{{route('admin.application-list.allocations.approve', $item->id)}}"
+                                           class="approve-btn btn-primary-fill" data-id="{{$item->id}}">Approve</a>
+                                        <a href="{{route('admin.application-list.allocations.disapprove', $item->id)}}"
+                                           class="approve-btn btn-danger-fill" data-id="{{$item->id}}">Disapprove</a>
+                                    </td>
+                                @endhasanyrole
                             </tr>
                         @empty
                             <tr>
@@ -113,5 +121,5 @@
                     </table>
                 </div>
             </div>
-    </div>
+        </div>
 @endsection

@@ -59,7 +59,8 @@
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
+                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search
+                                        </button>
                                         <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
@@ -82,7 +83,10 @@
                                 <th>Traveling To</th>
                                 <th>Center</th>
                                 <th>Result</th>
-                                <th>Action</th>
+
+                                @hasanyrole('super-admin|admin')
+                                    <th>Action</th>
+                                @endhasanyrole
                             </tr>
                             </thead>
                             <tbody>
@@ -130,23 +134,34 @@
                                         ])>{{$item->health_status}}</p>
                                         <p>{{$item->health_status_details}}</p>
                                     </td>
+
+                                    @hasanyrole('super-admin|admin')
                                     <td class="text-end px-15 d-flex gap-10">
-                                        <a class="edit-btn" href="javascript:void(0)"
-                                           data-id="{{$item->id}}"
-                                           data-ems_number="{{$item->ems_number}}"
-                                           data-health_status="{{$item->health_status}}"
-                                           data-health_status_details="{{$item->health_status_details}}"
-                                           data-bs-toggle="modal" data-bs-target="#edit-modal">
-                                            <i class="ri-file-edit-line"></i>
-                                        </a>
-                                        <a class="view-btn" href="{{route('admin.application.edit', $item->id)}}">
-                                            <i class="ri-pencil-fill"></i>
-                                        </a>
-                                        <a class="delete-btn" href="javascript:void(0)"
-                                           data-id="{{$item->id}}">
-                                            <i class="ri-delete-bin-6-line"></i>
-                                        </a>
+                                        @can('modify-application')
+                                            <a class="edit-btn" href="javascript:void(0)"
+                                               data-id="{{$item->id}}"
+                                               data-ems_number="{{$item->ems_number}}"
+                                               data-health_status="{{$item->health_status}}"
+                                               data-health_status_details="{{$item->health_status_details}}"
+                                               data-bs-toggle="modal" data-bs-target="#edit-modal">
+                                                <i class="ri-file-edit-line"></i>
+                                            </a>
+                                        @endcan
+
+                                        @can('update-application')
+                                            <a class="view-btn" href="{{route('admin.application.edit', $item->id)}}">
+                                                <i class="ri-pencil-fill"></i>
+                                            </a>
+                                        @endcan
+
+                                        @can('delete-application')
+                                            <a class="delete-btn" href="javascript:void(0)"
+                                               data-id="{{$item->id}}">
+                                                <i class="ri-delete-bin-6-line"></i>
+                                            </a>
+                                        @endcan
                                     </td>
+                                    @endhasanyrole
                                 </tr>
                             @empty
                                 <tr>
@@ -265,7 +280,7 @@
                 let health_status = form.find(`select[name="health_status"]`).val();
                 let health_condition = form.find(`textarea[name="health_condition"]`).val();
 
-                if (!ems_number || !health_status || !health_condition) {
+                if (!id) {
                     toastError('All fields are required');
                     return;
                 }

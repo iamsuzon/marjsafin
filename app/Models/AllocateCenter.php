@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AllocateCenter extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'name',
         'slug',

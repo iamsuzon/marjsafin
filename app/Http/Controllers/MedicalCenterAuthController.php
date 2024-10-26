@@ -82,9 +82,9 @@ class MedicalCenterAuthController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'ems_number' => 'required',
-            'health_status' => 'required',
-            'health_condition' => 'required',
+            'ems_number' => 'nullable',
+            'health_status' => 'nullable',
+            'health_condition' => 'nullable',
             'allocated_medical_center' => 'nullable',
         ]);
 

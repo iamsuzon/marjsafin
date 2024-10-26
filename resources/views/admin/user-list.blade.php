@@ -5,7 +5,10 @@
         <div class="card">
             <div class="d-flex justify-content-between">
                 <h2>User List</h2>
-                <a href="{{route('admin.new.user')}}" class="btn-primary-fill">Create New User</a>
+
+                @hasanyrole('super-admin|admin')
+                    <a href="{{route('admin.new.user')}}" class="btn-primary-fill">Create New User</a>
+                @endhasanyrole
             </div>
 
             @if(session('success'))

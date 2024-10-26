@@ -207,18 +207,21 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-menu-item">
-                        <a href="{{route('admin.general.settings')}}" class="parent-item-content">
-                            <i class="ri-caravan-line"></i>
-                            <span class="on-half-expanded">General Settings</span>
-                        </a>
-                    </li>
+                    @hasanyrole('super-admin|admin')
+                        <li class="sidebar-menu-item">
+                            <a href="{{route('admin.general.settings')}}" class="parent-item-content">
+                                <i class="ri-caravan-line"></i>
+                                <span class="on-half-expanded">General Settings</span>
+                            </a>
+                        </li>
+                    @endhasanyrole
 
                     @if(app()->hasDebugModeEnabled())
                         <li class="sidebar-menu-item">
                             <a href="{{route('admin.upgrade.database')}}" class="parent-item-content">
                                 <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">Database Upgrade <sup class="text-danger">Dev</sup></span>
+                                <span class="on-half-expanded">Database Upgrade <sup
+                                        class="text-danger">Dev</sup></span>
                             </a>
                         </li>
                     @endif

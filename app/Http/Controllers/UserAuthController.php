@@ -100,26 +100,26 @@ class UserAuthController extends Controller
             'passport_number' => 'required',
             'gender' => 'required',
             'traveling_to' => 'required',
-            'marital_status' => 'required',
+            'marital_status' => 'nullable',
             'center_name' => 'required',
             'surname' => 'required',
             'given_name' => 'required',
-            'father_name' => 'required',
-            'mother_name' => 'required',
+            'father_name' => 'nullable',
+            'mother_name' => 'nullable',
             'religion' => 'required',
-            'pp_issue_place' => 'required',
+            'pp_issue_place' => 'nullable',
             'profession' => 'required',
             'nationality' => 'required',
-            'date_of_birth' => 'required',
-//            'contact_no' => 'required',
-            'nid_no' => 'required|numeric',
-            'passport_issue_date' => 'required',
-            'passport_expiry_date' => 'required',
+            'date_of_birth' => 'nullable',
+            'nid_no' => 'nullable|numeric',
+            'passport_issue_date' => 'nullable',
+            'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',
         ]);
 
         $validated['user_id'] = Auth::guard('web')->id();
         $validated['serial_number'] = now()->format('Ym').'-'.rand(1, 999999);
+        $validated['pdf_code'] = generatePdfCode($validated['center_name']);
         $validated['contact_no'] = 0000;
 
         Application::create($validated);
@@ -131,12 +131,9 @@ class UserAuthController extends Controller
     {
         $application = Application::findOrFail($id);
 
-        $center_name = $application->center_name;
-        $center_name_first_letter = ucfirst($center_name[0]);
-
         $data = [
             'id' => $application->id,
-            'center_name_first_letter' => $center_name_first_letter,
+            'pdf_code' => $application->pdf_code,
             'passport_no' => $application->passport_number,
             'passenger' => $application->given_name,
             'country' => travelingToName($application->traveling_to),

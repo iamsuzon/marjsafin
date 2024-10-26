@@ -2,7 +2,7 @@
 
 @section('styles')
     <style>
-        .swal2-icon.swal2-info, .swal2-icon.swal2-question, .swal2-icon.swal2-warning{
+        .swal2-icon.swal2-info, .swal2-icon.swal2-question, .swal2-icon.swal2-warning {
             font-size: 15px !important;
         }
     </style>
@@ -13,7 +13,10 @@
         <div class="card">
             <div class="d-flex justify-content-between">
                 <h2>Medical Center List</h2>
-                <a href="{{route('admin.new.medical-center')}}" class="btn-primary-fill">Create New Medical Center</a>
+
+                @hasanyrole('super-admin|admin')
+                    <a href="{{route('admin.new.medical-center')}}" class="btn-primary-fill">Create New Medical Center</a>
+                @endhasanyrole
             </div>
 
             @if(session('success'))
@@ -43,7 +46,9 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Address</th>
+                        @hasanyrole('super-admin|admin')
                         <th>Action</th>
+                        @endhasanyrole
                     </tr>
                     </thead>
                     <tbody>
@@ -54,12 +59,14 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->address }}</td>
+
+                            @hasanyrole('super-admin|admin')
                             <td class="text-end px-15 d-flex gap-10">
-{{--                                <a class="edit-btn view-password-btn" href="javascript:void(0)"--}}
-{{--                                   data-bs-toggle="modal" data-bs-target="#view-password-modal" data-name="{{$user->username}}">--}}
-{{--                                    <i class="ri-eye-line" data-bs-toggle="tooltip" data-bs-placement="top"--}}
-{{--                                       title="View Password"></i>--}}
-{{--                                </a>--}}
+                                {{--                                <a class="edit-btn view-password-btn" href="javascript:void(0)"--}}
+                                {{--                                   data-bs-toggle="modal" data-bs-target="#view-password-modal" data-name="{{$user->username}}">--}}
+                                {{--                                    <i class="ri-eye-line" data-bs-toggle="tooltip" data-bs-placement="top"--}}
+                                {{--                                       title="View Password"></i>--}}
+                                {{--                                </a>--}}
                                 <a class="view-btn change-password-btn" href="javascript:void(0)"
                                    data-bs-toggle="modal" data-bs-target="#change-password-modal"
                                    data-id="{{$user->id}}">
@@ -78,6 +85,7 @@
                                     <i class="ri-delete-bin-6-line"></i>
                                 </a>
                             </td>
+                            @endhasanyrole
                         </tr>
                     @empty
                         <tr>
@@ -107,35 +115,37 @@
 
                     <div class="modal-body p-0">
                         <div class="row g-10">
-                                <div class="col-md-12">
-                                    <input type="hidden" name="confirm_password_id">
+                            <div class="col-md-12">
+                                <input type="hidden" name="confirm_password_id">
 
-                                    <div class="contact-form">
-                                        <label for="password">Password</label>
-                                        <input type="password" class="form-control input" id="password" name="password" required>
-                                    </div>
-                                    <div class="contact-form mt-15">
-                                        <label for="password_confirmation">Confirm Password</label>
-                                        <input type="password" class="form-control input" id="password_confirmation" name="password_confirmation" required>
-                                    </div>
+                                <div class="contact-form">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control input" id="password" name="password"
+                                           required>
+                                </div>
+                                <div class="contact-form mt-15">
+                                    <label for="password_confirmation">Confirm Password</label>
+                                    <input type="password" class="form-control input" id="password_confirmation"
+                                           name="password_confirmation" required>
                                 </div>
                             </div>
+                        </div>
 
                         <!-- Submit button -->
                         <div class="d-flex align-items-center gap-16 flex-wrap mt-18">
-                                <button class="btn-primary-fill confirm-password-btn" type="submit">
+                            <button class="btn-primary-fill confirm-password-btn" type="submit">
                                 <span class="d-flex align-items-center gap-6">
                                     <i class="las la-check-circle"></i>
                                     <span>Confirm</span>
                                 </span>
-                                </button>
-                                <button class="btn-cancel-fill" type="reset" data-bs-dismiss="modal">
+                            </button>
+                            <button class="btn-cancel-fill" type="reset" data-bs-dismiss="modal">
                                 <span class="d-flex align-items-center gap-6">
                                     <i class="ri-close-line"></i>
                                     <span>Discard</span>
                                 </span>
-                                </button>
-                            </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,7 +178,8 @@
 
                                 <div class="contact-form mt-15">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control input" id="username" name="username" required>
+                                    <input type="text" class="form-control input" id="username" name="username"
+                                           required>
                                 </div>
 
                                 <div class="contact-form mt-15">
@@ -202,144 +213,144 @@
                 </div>
             </div>
         </div>
-@endsection
+        @endsection
 
-@section('scripts')
-    <script>
-        $(document).ready(function () {
-            $('input[name=username]').on('keypress', function(e){
-                if (e.which === 32) { // Detect spacebar key
-                    $(this).addClass('input-error'); // Add red border and background
-                    $('.error').show(); // Show the error message
-                    return false; // Prevent space from being added
-                } else {
-                    $(this).removeClass('input-error'); // Remove red border if not a space
-                    $('.error').hide(); // Hide the error message if no space is pressed
-                }
-            });
-
-            $(document).on('click', '.edit-btn', function (e) {
-                e.preventDefault();
-
-                let id = $(this).data('id');
-                let name = $(this).data('name');
-                let username = $(this).data('username');
-                let email = $(this).data('email');
-                let address = $(this).data('address');
-
-                $('input[name=medical_center_id]').val(id);
-                $('#edit-modal input[name=name]').val(name);
-                $('#edit-modal input[name=username]').val(username);
-                $('#edit-modal input[name=email]').val(email);
-                $('#edit-modal input[name=address]').val(address);
-            });
-
-            $(document).on('click', '.update-btn', function (e) {
-                e.preventDefault();
-
-                let id = $('input[name=medical_center_id]').val();
-                let name = $('#name').val();
-                let username = $('#username').val();
-                let email = $('#email').val();
-                let address = $('#address').val();
-
-                customSwal({
-                    route: `{{route('admin.medical-center.update')}}`,
-                    data: {
-                        id: id,
-                        name: name,
-                        username: username,
-                        email: email,
-                        address: address
-                    },
-                    title: 'Update Medical Center',
-                    text: 'Are you sure you want to update this medical center?',
-                    confirmButtonText: 'Yes, Update',
-                    cancelButtonText: 'No, Cancel',
-                    successMessage: 'Medical center updated successfully',
-                    successFunction: function (response) {
-                        let responseData = response.data;
-
-                        if (responseData.status) {
-                            $('#edit-modal').modal('hide');
-                            toastSuccess(responseData.message);
-                            reloadThisPage(1000);
+        @section('scripts')
+            <script>
+                $(document).ready(function () {
+                    $('input[name=username]').on('keypress', function (e) {
+                        if (e.which === 32) { // Detect spacebar key
+                            $(this).addClass('input-error'); // Add red border and background
+                            $('.error').show(); // Show the error message
+                            return false; // Prevent space from being added
+                        } else {
+                            $(this).removeClass('input-error'); // Remove red border if not a space
+                            $('.error').hide(); // Hide the error message if no space is pressed
                         }
-                    },
-                    errorFunction: function (error) {
-                        let errorMsg = error.response.data.message;
-                        toastError(errorMsg);
-                    }
-                })
-            });
+                    });
 
-            $(document).on('click', '.change-password-btn', function (e) {
-                e.preventDefault();
+                    $(document).on('click', '.edit-btn', function (e) {
+                        e.preventDefault();
 
-                let id = $(this).data('id');
-                $('input[name=confirm_password_id]').val(id);
-            });
+                        let id = $(this).data('id');
+                        let name = $(this).data('name');
+                        let username = $(this).data('username');
+                        let email = $(this).data('email');
+                        let address = $(this).data('address');
 
-            $(document).on('click', '.confirm-password-btn', function (e) {
-                e.preventDefault();
+                        $('input[name=medical_center_id]').val(id);
+                        $('#edit-modal input[name=name]').val(name);
+                        $('#edit-modal input[name=username]').val(username);
+                        $('#edit-modal input[name=email]').val(email);
+                        $('#edit-modal input[name=address]').val(address);
+                    });
 
-                let id = $('input[name=confirm_password_id]').val();
-                let password = $('#password').val();
-                let password_confirmation = $('#password_confirmation').val();
+                    $(document).on('click', '.update-btn', function (e) {
+                        e.preventDefault();
 
-                customSwal({
-                    route: `{{route('admin.medical-center.change.password')}}`,
-                    data: {
-                        id: id,
-                        password: password,
-                        password_confirmation: password_confirmation
-                    },
-                    title: 'Change Password',
-                    text: 'Are you sure you want to change the password of this medical center?',
-                    confirmButtonText: 'Yes, Change Password',
-                    cancelButtonText: 'No, Cancel',
-                    successMessage: 'Password changed successfully',
-                    successFunction: function (response) {
-                        let responseData = response.data;
+                        let id = $('input[name=medical_center_id]').val();
+                        let name = $('#name').val();
+                        let username = $('#username').val();
+                        let email = $('#email').val();
+                        let address = $('#address').val();
 
-                        if (responseData.status) {
-                            $('#change-password-modal').modal('hide');
-                            toastSuccess(responseData.message);
-                        }
-                    },
-                    errorFunction: function (error) {
-                        let errorMsg = error.response.data.message;
-                        toastError(errorMsg);
-                    }
-                })
-            });
+                        customSwal({
+                            route: `{{route('admin.medical-center.update')}}`,
+                            data: {
+                                id: id,
+                                name: name,
+                                username: username,
+                                email: email,
+                                address: address
+                            },
+                            title: 'Update Medical Center',
+                            text: 'Are you sure you want to update this medical center?',
+                            confirmButtonText: 'Yes, Update',
+                            cancelButtonText: 'No, Cancel',
+                            successMessage: 'Medical center updated successfully',
+                            successFunction: function (response) {
+                                let responseData = response.data;
 
-            $(document).on('click' ,'.delete-btn', function (e) {
-                e.preventDefault();
+                                if (responseData.status) {
+                                    $('#edit-modal').modal('hide');
+                                    toastSuccess(responseData.message);
+                                    reloadThisPage(1000);
+                                }
+                            },
+                            errorFunction: function (error) {
+                                let errorMsg = error.response.data.message;
+                                toastError(errorMsg);
+                            }
+                        })
+                    });
 
-                let id = $(this).data('id');
-                customSwal({
-                    route: `{{route('admin.medical-center.delete')}}?id=${id}`,
-                    method: 'GET',
-                    title: 'Delete Medical Center',
-                    text: 'Are you sure you want to delete this medical center?',
-                    confirmButtonText: 'Yes, Delete',
-                    cancelButtonText: 'No, Cancel',
-                    successMessage: 'Medical center deleted successfully',
-                    successFunction: function (response) {
-                        let responseData = response.data;
+                    $(document).on('click', '.change-password-btn', function (e) {
+                        e.preventDefault();
 
-                        if (responseData.status) {
-                            toastSuccess(responseData.message);
-                            reloadThisPage(1000);
-                        }
-                    },
-                    errorFunction: function (error) {
-                        let errorMsg = error.response.data.message;
-                        toastError(errorMsg);
-                    }
-                })
-            });
-        });
-    </script>
+                        let id = $(this).data('id');
+                        $('input[name=confirm_password_id]').val(id);
+                    });
+
+                    $(document).on('click', '.confirm-password-btn', function (e) {
+                        e.preventDefault();
+
+                        let id = $('input[name=confirm_password_id]').val();
+                        let password = $('#password').val();
+                        let password_confirmation = $('#password_confirmation').val();
+
+                        customSwal({
+                            route: `{{route('admin.medical-center.change.password')}}`,
+                            data: {
+                                id: id,
+                                password: password,
+                                password_confirmation: password_confirmation
+                            },
+                            title: 'Change Password',
+                            text: 'Are you sure you want to change the password of this medical center?',
+                            confirmButtonText: 'Yes, Change Password',
+                            cancelButtonText: 'No, Cancel',
+                            successMessage: 'Password changed successfully',
+                            successFunction: function (response) {
+                                let responseData = response.data;
+
+                                if (responseData.status) {
+                                    $('#change-password-modal').modal('hide');
+                                    toastSuccess(responseData.message);
+                                }
+                            },
+                            errorFunction: function (error) {
+                                let errorMsg = error.response.data.message;
+                                toastError(errorMsg);
+                            }
+                        })
+                    });
+
+                    $(document).on('click', '.delete-btn', function (e) {
+                        e.preventDefault();
+
+                        let id = $(this).data('id');
+                        customSwal({
+                            route: `{{route('admin.medical-center.delete')}}?id=${id}`,
+                            method: 'GET',
+                            title: 'Delete Medical Center',
+                            text: 'Are you sure you want to delete this medical center?',
+                            confirmButtonText: 'Yes, Delete',
+                            cancelButtonText: 'No, Cancel',
+                            successMessage: 'Medical center deleted successfully',
+                            successFunction: function (response) {
+                                let responseData = response.data;
+
+                                if (responseData.status) {
+                                    toastSuccess(responseData.message);
+                                    reloadThisPage(1000);
+                                }
+                            },
+                            errorFunction: function (error) {
+                                let errorMsg = error.response.data.message;
+                                toastError(errorMsg);
+                            }
+                        })
+                    });
+                });
+            </script>
 @endsection

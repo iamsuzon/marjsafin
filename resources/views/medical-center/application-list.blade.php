@@ -274,7 +274,7 @@
                 let health_condition = form.find(`textarea[name="health_condition"]`).val();
                 let allocated_medical_center = form.find(`select[name="allocated_medical_center"]`).val();
 
-                if (!ems_number || !health_status || !health_condition || !allocated_medical_center) {
+                if (!id) {
                     toastError('All fields are required');
                     return;
                 }
