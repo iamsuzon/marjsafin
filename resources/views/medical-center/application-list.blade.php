@@ -211,8 +211,8 @@
                                     <label class="contact-label">Allocate Medical Center <span
                                             class="fillable mx-1">*</span></label>
                                     <select class="select2-modal allocated_medical_center" name="allocated_medical_center">
-                                        @foreach(allocateMedicalCenter() as $center)
-                                            <option value="{{$center}}">{{$center}}</option>
+                                        @foreach(allocateMedicalCenter() as $key => $center)
+                                            <option value="{{$key}}">{{$center}}</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllocateCenter;
 use App\Models\MedicalCenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Str;
 
 class MedicalCenterManageController extends Controller
 {
@@ -38,6 +40,55 @@ class MedicalCenterManageController extends Controller
     {
         $medicalCenterList = MedicalCenter::all();
         return view('admin.medical-center-list', compact('medicalCenterList'));
+    }
+
+    public function AllocateCenterList()
+    {
+        $allocationCenterList = AllocateCenter::all();
+        return view('admin.allocation-center-list', compact('allocationCenterList'));
+    }
+
+    public function newAllocateCenter(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $slug = Str::slug($validated['name']);
+        $allocateCenter = AllocateCenter::where('slug', $slug)->first();
+        if ($allocateCenter) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Allocate center already exists.'
+            ]);
+        }
+
+        AllocateCenter::create([
+            'name' => $validated['name'],
+            'slug' => $slug
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Allocate center created successfully.'
+        ]);
+    }
+
+    public function updateAllocateCenter(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'name' => 'required',
+        ]);
+
+        $allocateCenter = AllocateCenter::find($validated['id']);
+        $allocateCenter->name = $validated['name'];
+        $allocateCenter->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Allocate center updated successfully.'
+        ]);
     }
 
     public function MedicalCenterChangePassword(Request $request)

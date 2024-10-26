@@ -7,7 +7,9 @@ use App\Models\StaticOption;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class UserAuthController extends Controller
 {
@@ -17,7 +19,11 @@ class UserAuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $adText = StaticOption::getOption('ad_text');
+//        if (Schema::hasTable('static_options') == false) {
+//            Artisan::call('migrate', ['--force' => true]);
+//        }
+
+        $adText = StaticOption::getOption('ad_text') ?? '';
         return view('welcome', ['adText' => $adText]);
     }
 
@@ -125,20 +131,21 @@ class UserAuthController extends Controller
     {
         $application = Application::findOrFail($id);
 
+        $center_name = $application->center_name;
+        $center_name_first_letter = ucfirst($center_name[0]);
+
         $data = [
-            'agent' => 'Raju',
+            'id' => $application->id,
+            'center_name_first_letter' => $center_name_first_letter,
             'passport_no' => $application->passport_number,
-            'nid_no' => $application->nid_no,
             'passenger' => $application->given_name,
             'country' => travelingToName($application->traveling_to),
-            'created_by' => $application->user->username,
-            'for' => $application->user->username,
             'center_name' => centerName($application->center_name),
-            'date_of_birth' => $application->date_of_birth,
-            'passport_expiry_date' => $application->passport_expiry_date,
+            'created_at' => $application->created_at,
+            'delivery_date' => $application->created_at->addDays(3),
         ];
 
-        $pdf = PDF::loadView('user.render.report-pdf', $data)->setPaper([0, 0, 650, 380]);
+        $pdf = PDF::loadView('user.render.report-pdf', $data)->setPaper([0, 0, 650, 450]);
 
         return $pdf->download('application.pdf');
     }

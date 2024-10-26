@@ -192,6 +192,13 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">
+                        <a href="{{route('admin.allocate-center.list')}}" class="parent-item-content">
+                            <i class="ri-hand-heart-line"></i>
+                            <span class="on-half-expanded">Allocate Center List</span>
+                        </a>
+                    </li>
+
                     <!-- Single Menu -->
                     <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.change.password')}}">
                         <a href="{{route('admin.change.password')}}" class="parent-item-content">

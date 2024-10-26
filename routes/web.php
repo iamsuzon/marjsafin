@@ -60,6 +60,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenterCreate']);
     Route::get('/admin/medical-center-list', [MedicalCenterManageController::class, 'MedicalCenterList'])->name('admin.medical-center.list');
 
+    Route::get('/admin/allocate-center-list', [MedicalCenterManageController::class, 'AllocateCenterList'])->name('admin.allocate-center.list');
+    Route::post('/admin/allocate-center-list/new', [MedicalCenterManageController::class, 'newAllocateCenter'])->name('admin.allocate-center.new');
+    Route::post('/admin/allocate-center-list/update', [MedicalCenterManageController::class, 'updateAllocateCenter'])->name('admin.allocate-center.update');
+
     Route::post('/admin/medical-center/change-password', [MedicalCenterManageController::class, 'MedicalCenterChangePassword'])->name('admin.medical-center.change.password');
     Route::post('/admin/medical-center/update', [MedicalCenterManageController::class, 'MedicalCenterUpdate'])->name('admin.medical-center.update');
     Route::get('/admin/medical-center/delete', [MedicalCenterManageController::class, 'MedicalCenterDelete'])->name('admin.medical-center.delete');

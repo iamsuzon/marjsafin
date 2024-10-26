@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AllocateCenter;
 use App\Models\Application;
 use App\Models\MedicalCenter;
 use Illuminate\Support\Facades\Route;
@@ -85,9 +86,20 @@ function medicalType(): array
 
 function allocateMedicalCenter(): array
 {
-    return [
-        'barishal' => 'Barishal',
-    ];
+//    return [
+//        'barishal' => 'Barishal',
+//        'reda_hamza' => 'Reda Hamza',
+//        'chemon_health_care' => 'Chemon Health Care',
+//    ];
+
+    $centerList = AllocateCenter::all();
+
+    $centerListArray = [];
+    foreach ($centerList as $center) {
+        $centerListArray[$center->slug] = $center->name;
+    }
+
+    return $centerListArray;
 }
 
 function getAllocatedMedicalCenterName(Application $item): string
