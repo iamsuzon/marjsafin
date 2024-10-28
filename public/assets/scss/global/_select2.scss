@@ -1,8 +1,8 @@
 .select2-selection{
     border-color: var(--primary-border) !important;
-    border-radius: 8px !important;
+    border-radius: 4px !important;
     margin-bottom:5px;
-    min-height: 49px !important;
+    min-height: 40px !important;
     padding: 11px 14px 15px 14px;
     .select2-container{
       .select2-selection__choice {
@@ -64,7 +64,7 @@
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     right: 13px;
     height: auto;
-    top: 22px;
+    top: 17px;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -131,7 +131,7 @@
 }
 
 .select2-selection.select2-selection--multiple {
-	height: 49px;
+	 height: 40px;
 }
 
 .select2-container .select2-selection--multiple {

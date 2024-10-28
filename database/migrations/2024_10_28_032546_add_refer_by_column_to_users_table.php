@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('applications', function (Blueprint $table) {
-            $table->string('pdf_code')->nullable()->after('id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('refer_by')->after('remember_token')->nullable();
         });
     }
 

@@ -1,0 +1,18 @@
+
+.vc-chrome {
+	position: absolute;
+	top: 35px;
+	right: 0;
+	z-index: 9;
+}
+.current-color {
+	width: 46px;
+	height: 32px;
+	cursor: pointer;
+	background-color: var(--primary);
+	display: block;
+	border-radius: 4px;
+	position: absolute;
+	top: 4px;
+	right: 5px;
+}

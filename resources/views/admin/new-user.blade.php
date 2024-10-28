@@ -72,6 +72,12 @@
                             <input class="form-control input" type="text" name="password" placeholder="Password" value="{{old('password')}}">
                         </div>
                     </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <div class="contact-form">
+                            <label class="contact-label">Refer <span class="fillable mx-1">*</span></label>
+                            <input class="form-control input" type="text" name="refer" placeholder="Refer By" value="{{old('refer')}}">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row mt-25">

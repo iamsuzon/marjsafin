@@ -30,11 +30,11 @@ class AdminSeeder extends Seeder
 
         $adminTwo = Admin::updateOrCreate(
             [
-                'username' => 'admin',
+                'username' => 'medical_admin',
             ],
             [
                 'name' => 'Admin',
-                'username' => 'admin',
+                'username' => 'medical_admin',
                 'email' => 'admin@admin.com',
                 'password' => Hash::make(12345678),
                 'role' => 'analyst',

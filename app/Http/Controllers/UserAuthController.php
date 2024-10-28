@@ -106,7 +106,7 @@ class UserAuthController extends Controller
             'given_name' => 'required',
             'father_name' => 'nullable',
             'mother_name' => 'nullable',
-            'religion' => 'required',
+            'religion' => 'nullable',
             'pp_issue_place' => 'nullable',
             'profession' => 'required',
             'nationality' => 'required',

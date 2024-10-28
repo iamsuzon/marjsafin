@@ -1,6 +1,9 @@
-.dark-theme{
+[data-theme="dark"] {
     // Default
     background: var(--body-bg);
+    body{
+        background: var(--body-bg);
+    }
 
     .white-bg {
         background: var(--dark-bg1);
@@ -63,7 +66,7 @@
         color:var(--primary-paragraph);
     }
 
-    .ot_fileUploader input.form-control::placeholder {
+    .fileUploader input.form-control::placeholder {
         color:var(--primary-paragraph);
     }
     .btn-primary-outline:hover {
@@ -271,10 +274,6 @@
         }
     }
 
-    .table-content .table-toolbar .dropdown-export .dropdown-menu,
-    .dropdown-menu.show {
-        box-shadow: var(--theme-shadow);
-    }
 
     .form-control:focus-visible,
     .form-control:focus,
@@ -282,12 +281,6 @@
         box-shadow: none !important;
         outline: none;
     }
-
-    .profile-border {
-        padding-bottom: 20px;
-        border-bottom: 2px solid var(--primary-border);
-    }
-
 
     .theme-switch .switch-field {
         background-color: var(--bg-primary);
@@ -331,15 +324,6 @@
         border-color: var(--primary-border);
     }
 
-    .table-content.table-basic .table .thead tr th,
-    .client_box .client_para_text {
-        color: var(--primary-title);
-    }
-
-    .table.table-bordered tbody tr,
-    .table-content.table-basic .table .thead tr {
-        border-bottom-color: var(--primary-border);
-    }
 
     .client_box .client_title {
         color: var(--primary-title);
@@ -349,18 +333,7 @@
         background-color: #141518;
     }
 
- 
-    .theme_dropdown .btn {
-        border-color: var(--border_3);
-        color: var(--primary-title);
-        transition: 0.3s;
-    }
 
-    .theme_dropdown .btn:hover {
-        color: var(--white);
-    }
-
-    
         .single-select
         > .select2-container.language-select-container
         .select2-selection--single {
@@ -407,10 +380,6 @@
         .select2-selection--single
         .select2-selection__rendered {
         color: var(--primary-title);
-    }
-
-    .theme_dropdown .theme_list {
-        background: transparent;
     }
 
     .dropdown-menu.show {
@@ -492,7 +461,7 @@
         background: var(---white);
         background: var(--primary-border);
         padding: 10px;
-        border-radius: 8px;
+        border-radius: 4px;
     }
 
     .daterangepicker td.in-range {
@@ -535,14 +504,6 @@
     .client_box .client_title:hover {
         color: var(--primary);
     }
-
-    .header_square_box {
-        border-color: var(--border_3) !important;
-    }
-    .header_square_box:hover,
-    .theme_dropdown .btn:hover {
-        color: #fff;
-    }
     .mce-panel {
         border: 0 solid var(--input_bg);
         border: 0 solid var(--input_bg);
@@ -557,7 +518,7 @@
 
     .input::placeholder,
     .form-control::placeholder,
-    .ot_fileUploader::placeholder {
+    .fileUploader::placeholder {
         color: rgba(172, 180, 203, 0.4) !important;
     }
 
@@ -589,12 +550,6 @@
     .page-header {
         background-color: var(--white) !important;
     }
-
-
-
-    .options__button {
-        background-color: #2b2d35;
-    }
     .nicescroll-cursors {
         background: #eeeeee !important;
     }
@@ -624,11 +579,6 @@
     }
     .file_upload {
         border-color: var(--primary-border) !important;
-    }
-
-    .card,
-    .table-content.table-basic .card {
-        background-color: var(--white) !important;
     }
 
     .wave-animated.cart-two {
@@ -702,19 +652,8 @@
     .in-active {
         border: 1px solid var(--primary-border) !important;
     }
-    .table-content
-    .table-toolbar
-    .dropdown-action
-    .dropdown-menu::after {
-        background: var(---white);
-    }
 
-    .table-content
-        .table-toolbar
-        .dropdown-action
-        .dropdown-item:hover {
-        background: transparent;
-    }
+
     .chat-box-area
     .chat-list-wrapper
     .chat-list
@@ -766,7 +705,7 @@
         border: 1px solid var(--white);
         background-color: var(--white);
     }
-    .btn-uplode {
+    .btn-upload {
         background: rgba(246, 246, 246, 0.06);
     }
     .btn-dropdown {

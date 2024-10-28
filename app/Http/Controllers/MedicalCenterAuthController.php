@@ -138,4 +138,38 @@ class MedicalCenterAuthController extends Controller
 
         return back()->with('success', 'Password changed successfully.');
     }
+
+    public function applicationEdit($id)
+    {
+        $application = Application::findOrFail($id);
+        return view('medical-center.application-edit', compact('application'));
+    }
+
+    public function applicationUpdate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'passport_number' => 'required',
+            'gender' => 'required',
+            'traveling_to' => 'required',
+            'marital_status' => 'nullable',
+            'center_name' => 'required',
+            'surname' => 'required',
+            'given_name' => 'required',
+            'father_name' => 'nullable',
+            'mother_name' => 'nullable',
+            'religion' => 'nullable',
+            'pp_issue_place' => 'nullable',
+            'profession' => 'required',
+            'nationality' => 'required',
+            'date_of_birth' => 'nullable',
+            'nid_no' => 'nullable|numeric',
+            'passport_issue_date' => 'nullable',
+            'passport_expiry_date' => 'nullable',
+        ]);
+
+        $application = Application::find($id);
+        $application->update($validated);
+
+        return back()->with('success', 'Application updated successfully.');
+    }
 }

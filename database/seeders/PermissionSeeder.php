@@ -134,10 +134,14 @@ class PermissionSeeder extends Seeder
         $analyst = Role::where('name', 'analyst')->first();
         $analyst->givePermissionTo([
             'view-allocation-center-details',
-            'view-customer',
+
             'view-medical-center',
-            'view-allocation',
+            'update-medical-center',
+            'change-password-medical-center',
+
             'view-application',
+            'modify-application',
+            'update-application',
         ]);
     }
 }

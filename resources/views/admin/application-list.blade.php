@@ -79,12 +79,16 @@
                                 <th>Medical Type</th>
                                 <th>Registration</th>
                                 <th>Passport</th>
+
+                                @hasrole('super-admin')
                                 <th>Reference</th>
+                                @endhasrole
+
                                 <th>Traveling To</th>
                                 <th>Center</th>
                                 <th>Result</th>
 
-                                @hasanyrole('super-admin|admin')
+                                @hasanyrole('super-admin|admin|analyst')
                                     <th>Action</th>
                                 @endhasanyrole
                             </tr>
@@ -107,10 +111,12 @@
                                         <p>{{$item->given_name}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
                                     </td>
-                                    <td>
-                                        <p>{{$item->ref_ledger}}</p>
-                                        <p>User: {{$item->user->username}}, Ref: {{$item->ref_no}}</p>
-                                    </td>
+                                    @hasrole('super-admin')
+                                        <td>
+                                            <p>{{$item->ref_ledger}}</p>
+                                            <p>User: {{$item->user->username}}, Ref: {{$item->ref_no}}</p>
+                                        </td>
+                                    @endhasrole
                                     <td>
                                         <p class="text-capitalize">{{$item->gender}}</p>
                                         <p>{{travelingToName($item->traveling_to)}}</p>
@@ -135,7 +141,7 @@
                                         <p>{{$item->health_status_details}}</p>
                                     </td>
 
-                                    @hasanyrole('super-admin|admin')
+                                    @hasanyrole('super-admin|admin|analyst')
                                     <td class="text-end px-15 d-flex gap-10">
                                         @can('modify-application')
                                             <a class="edit-btn" href="javascript:void(0)"

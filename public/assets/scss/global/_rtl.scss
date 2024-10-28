@@ -284,49 +284,6 @@ body.rtl .main-content {
     margin-right: 0px !important;
 }
 
-
-.rtl
-    .profile-table-content
-    .table-toolbar
-    .dropdown-export
-    .dropdown-item
-    .icon {
-    margin-left: 8px;
-}
-
-
-.rtl
-    .profile-table-content
-    .table-toolbar
-    .dropdown-action
-    .dropdown-item
-    .icon {
-    margin-left: 8px;
-}
-
-.rtl .profile-table-content .table .dropdown-action .dropdown-item .icon {
-    margin-left: 8px;
-}
-
-.profile-table-content .table .dropdown-action .dropdown-item:hover {
-    background-color: var(--bg-secondary);
-    color: var(--primary-title);
-}
-.rtl .profile-content .profile-menu-head .body {
-    margin-left: unset;
-    margin-right: 12px;
-}
-
-.rtl .profile-table-content .table-toolbar .dropdown-export .dropdown-item {
-    text-align: right;
-}
-.rtl .profile-table-content .table-toolbar .dropdown-action .dropdown-item {
-    text-align: right;
-}
-.rtl .profile-table-content .table .dropdown-action .dropdown-item {
-    text-align: right;
-}
-
 .rtl .timeline-basic .timeline-item {
     padding-right: 40px;
 }
@@ -410,18 +367,11 @@ body.rtl
     margin-left: 0px !important;
     margin-right: 10px !important;
 }
-*[dir="rtl"] .basic-table tbody td,
-*[dir="rtl"] .table-bg tbody td,
-*[dir="rtl"] .table-color-col tbody td {
-    padding-left: 0px;
-    padding-right: 20px;
-}
+
 *[dir="rtl"] .datepicker--nav-action svg {
     transform: rotate(180deg);
 }
-*[dir="rtl"] .table-content.table-basic .table .thead tr th {
-    padding: 16px 16px 16px 32px;
-}
+
 *[dir="rtl"] .profile-content .profile-menu {
     border-right: 0;
     border-left: 1px solid var(--primary-border);
@@ -446,13 +396,7 @@ body.rtl
     padding-left: 0;
     padding-right: 10px;
 }
-*[dir="rtl"] .table-content.table-basic .table .sorting_asc::before,
-*[dir="rtl"] .table-content.table-basic .table .sorting_desc::before,
-*[dir="rtl"] .table-content.table-basic .table .sorting_asc::after,
-*[dir="rtl"] .table-content.table-basic .table .sorting_desc::after {
-    right: auto;
-    left: 16px;
-}
+
 *[dir="rtl"] .ml-20 {
     margin-left: 0px !important;
     margin-right: 20px !important;
@@ -532,9 +476,6 @@ body.rtl
     }
 }
 
-.rtl .options__button {
-    margin-right: 0.5rem;
-}
 
 .rtl .header .header-search {
     right: 10px;
@@ -648,11 +589,6 @@ body[dir="rtl"]
     right: auto;
     left: 25px;
 }
-
-body[dir="rtl"] .profile-border {
-    width: 100%;
-}
-
 body[dir="rtl"] .header .header-search .search-icon {
     left: auto;
     right: 30px;

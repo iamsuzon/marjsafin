@@ -1,0 +1,111 @@
+
+.related-blog {
+    .empty-box {
+        height: 70px;
+        border-radius: 15px;
+        border: 1px solid var(--primary-border);
+        margin-top: 30px;
+    }
+
+    .pera {
+        color: var(--primary-title);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 16px;
+        margin-bottom: 30px;
+
+        @media #{$xs-to-sm-max} {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .single-blog {
+        border-radius: 15px;
+        border: 1px solid var(--primary-border);
+        display: flex;
+        gap: 30px;
+
+        .blog-img {
+            @media #{$xs-to-sm-max} {
+                display: none;
+            }
+
+            img {
+                border-top-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+                min-width: 200px;
+                max-width: 260px;
+            }
+        }
+
+        .blog-info {
+            height: 100%;
+            padding-top: 35px;
+            padding-bottom: 30px;
+            padding-right: 20px;
+
+            @media #{$xs-to-sm-max} {
+                padding-top: 20px;
+                padding-bottom: 20px;
+                padding-right: 10px;
+                padding-left: 20px;
+            }
+
+            .blog-info-title {
+                margin-top: 0px;
+
+                color: var(--primary-title);
+
+                i {
+                    color: var(--primary);
+                    font-size: 19px;
+                }
+
+                .info {
+                    color: var(--primary-title);
+                    font-size: 16px;
+                    text-transform: capitalize;
+                }
+
+                .title {
+                    font-size: 18px;
+                    line-height: 1.5;
+                    font-weight: 500;
+                    color: var(--primary-title);
+                    margin-bottom: 15px;
+
+                    @media #{$xs-to-sm-max} {
+                        font-size: 16px;
+                        margin-bottom: 5px;
+                        display: -webkit-box;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                    }
+                }
+
+                .subtitle {
+                    font-size: 16px;
+                    line-height: 1.5;
+                    font-weight: 400;
+                    margin-bottom: 30px;
+                    color: var(--tertiary-title);
+
+                    @media #{$xs-to-sm-max} {
+                        font-size: 14px;
+                        margin-bottom: 20px;
+                        display: -webkit-box;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                    }
+                }
+            }
+        }
+    }
+}

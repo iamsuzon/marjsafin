@@ -89,7 +89,7 @@
           height: 44px;
           text-align: center;
           line-height: 44px;
-          border-radius: 6px;
+          border-radius: 4px;
           font-size: 26px;
           @media #{$xs-to-sm-max}{
 
@@ -173,7 +173,7 @@
           height: 44px;
           text-align: center;
           line-height: 44px;
-          border-radius: 6px;
+          border-radius: 4px;
           font-size: 26px;
       }
     .cat-caption{  
@@ -260,7 +260,7 @@
 
 .cart2{
   box-shadow: var(--theme-shadow);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 20px;
   border: 1px solid var(--primary-border);
 }
@@ -298,7 +298,7 @@
         height: 44px;
         text-align: center;
         line-height: 44px;
-        border-radius: 6px;
+        border-radius: 4px;
         font-size: 26px;
         color: #0CAF60;
         background-color: rgba(12, 175, 96, .06);

@@ -37,6 +37,7 @@
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Refer</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,6 +47,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
+                            <td>{{ $user->refer_by }}</td>
                         </tr>
                     @endforeach
                     </tbody>

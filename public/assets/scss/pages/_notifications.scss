@@ -16,15 +16,15 @@
             display: block;
             content: "\EF9A";
             font-family: var(--remix-icon);
-            font-size: 22px;
+            font-size: 16px;
             color: #fff;
             text-align: center;
 
-            line-height: 44px;
+            line-height: 30px;
             border-radius: 500%;
             background: var(--secondary);
-            height: 44px;
-            width: 44px;
+            height: 30px;
+            width: 30px;
             -webkit-transition: all 500ms ease-in-out;
             transition: all 500ms ease-in-out;
         }

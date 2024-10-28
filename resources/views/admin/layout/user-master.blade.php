@@ -29,6 +29,16 @@
     <header class="header">
         <!-- Header Left -->
         <div class="left-content d-flex flex-wrap gap-10">
+            <!-- Dashboard -->
+            <a href="{{route('admin.dashboard')}}" class="btn-primary-fill btn-sm small-btna bg-primary text-white">
+                <i class="ri-dashboard-line"></i>
+            </a>
+
+            <!-- Sidebar Toggle Button -->
+            <button class="half-expand-toggle sidebar-toggle">
+                <i class="ri-arrow-left-right-fill"></i>
+            </button>
+
             <div class="header-search">
                 <div class="search-icon">
                     <i class="ri-search-line"></i>
@@ -40,59 +50,85 @@
 
         <!-- Header Right -->
         <ul class="header-right">
+
+            <!-- Reports -->
+{{--            <li class="cart-list position-relative d-none d-md-block">--}}
+{{--                <a href="#" class="cart-items btn-light-outline btn-sm text-14 d-flex gap-10 align-items-center">--}}
+{{--                    <div class="icon">--}}
+{{--                        <i class="ri-download-cloud-2-line"></i>--}}
+{{--                    </div>--}}
+{{--                    <span>Download dali Reports</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+
+            <!-- create -->
+{{--            <li class="cart-list position-relative d-none d-md-block">--}}
+{{--                <a href="create_campaign.html" class="cart-items btn-primary-fill btn-sm text-14">--}}
+{{--                    <div class="icon">--}}
+{{--                        <i class="ri-add-line"></i>--}}
+{{--                    </div>--}}
+{{--                    <span>create Campaign </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+
             <!-- Notification -->
             <li class="cart-list notification dropdown">
-                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
-                    {{--                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">--}}
-                    {{--                        <h6>Notifications</h6>--}}
-                    {{--                        <button class="clear-notification">clear</button>--}}
-                    {{--                    </div>--}}
-                    {{--                    <ul class="notification-listing scroll-active p-0">--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                    </ul>--}}
-                    {{--                    <a href="notification.html" class="see-all-notification border-0">see all notification</a>--}}
-                </div>
+                <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="ri-notification-2-line p-0"></i>
+{{--                    <span class="count">12</span>--}}
+                </a>
+{{--                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">--}}
+{{--                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">--}}
+{{--                        <h6>Notifications</h6>--}}
+{{--                        <button class="clear-notification">clear</button>--}}
+{{--                    </div>--}}
+{{--                    <ul class="notification-listing scroll-active p-0">--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        <li class="list">--}}
+{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
+{{--                                <i class="ri-notification-3-line"></i>--}}
+{{--                                <p class="line-clamp-2">Payment success</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    </ul>--}}
+{{--                    <a href="notification.html" class="see-all-notification border-0">see all notification <i class="ri-arrow-right-up-line"></i></a>--}}
+{{--                </div>--}}
             </li>
 
             <!-- Login User -->
@@ -108,30 +144,12 @@
                 <div class="dropdown-menu dropdown-list-style dropdown-menu-end white-bg with-248">
                     <ul class="profileListing">
                         <!-- User info -->
-                        <a href="#" class="user-sub-info">
+                        <a href="javascript:void(0)" class="user-sub-info">
                             <div class="user-details">
                                 <span class="name">{{auth('admin')->user()->username}}</span>
                                 <p class="pera">{{auth('admin')->user()->email}}</p>
                             </div>
                         </a>
-                        {{--                        <li class="list">--}}
-                        {{--                            <a class="list-items dropdown-item" href="#">--}}
-                        {{--                                <span>Profile</span>--}}
-                        {{--                                <i class="ri-user-line"></i>--}}
-                        {{--                            </a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="list">--}}
-                        {{--                            <a class="list-items dropdown-item" href="#">--}}
-                        {{--                                <span>updated password</span>--}}
-                        {{--                                <i class="ri-key-2-line"></i>--}}
-                        {{--                            </a>--}}
-                        {{--                        </li>--}}
-                        {{--                        <li class="list">--}}
-                        {{--                            <a class="list-items dropdown-item" href="#">--}}
-                        {{--                                <span>settings</span>--}}
-                        {{--                                <i class="ri-settings-2-line"></i>--}}
-                        {{--                            </a>--}}
-                        {{--                        </li>--}}
                         <li class="list">
                             <a class="list-items dropdown-item" href="{{route('admin.logout')}}">
                                 <span>logout</span>
@@ -144,6 +162,7 @@
         </ul>
         <!-- / Header Right -->
     </header>
+
     <aside class="sidebar">
         <div class="sidebar-menu">
             <div class="sidebar-menu scroll-hide">
@@ -178,12 +197,14 @@
                     </li>
 
                     <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.user.list')}}">
-                        <a href="{{route('admin.user.list')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Customer List</span>
-                        </a>
-                    </li>
+                    @hasrole('super-admin')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.user.list')}}">
+                            <a href="{{route('admin.user.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Customer List</span>
+                            </a>
+                        </li>
+                    @endhasrole
 
                     <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}}">
                         <a href="{{route('admin.medical-center.list')}}" class="parent-item-content">
@@ -192,12 +213,14 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">
-                        <a href="{{route('admin.allocate-center.list')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Allocate Center List</span>
-                        </a>
-                    </li>
+                    @hasrole('super-admin')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">
+                            <a href="{{route('admin.allocate-center.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Allocate Center List</span>
+                            </a>
+                        </li>
+                    @endhasrole
 
                     <!-- Single Menu -->
                     <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.change.password')}}">

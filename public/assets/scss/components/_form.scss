@@ -64,15 +64,14 @@
 /* Custom Input field */
 .input {
     line-height: 16px !important;
-    height: 46px !important;
+    height: 40px !important;
     width: 100%;
     font-size: 14px;
     font-weight: 400;
-    padding: 16px 18px !important;
+    padding: 7px 18px !important;
     background: none;
     border-radius: 6px !important;
     border: 1px solid var(--primary-border);
-
     &:focus {
         background-color: none;
     }
@@ -108,12 +107,12 @@ label {
 
 .contact-form .contact-input {
     color: var(--primary-title);
-    height: 49px;
+    height: 40px;
     width: 100%;
     font-size: 16px;
     padding: 11px 14px 11px 14px;
     position: relative;
-    border-radius: 8px;
+    border-radius: 4px;
     background: none;
     border: 1px solid var(--primary-border);
     text-transform: none;
@@ -164,7 +163,7 @@ label {
         font-size: 16px;
         padding: 15px 14px;
         position: relative;
-        border-radius: 8px;
+        border-radius: 4px;
         background: none;
         border: 1px solid var(--primary-border);
         &.theme-border{
@@ -307,12 +306,12 @@ label {
 
 // File uploder
 
-.ot_fileUploader {
+.fileUploader {
     display: flex;
     align-items: center;
     border: 1px solid var(--primary-border);
     height: 48px;
-    border-radius: 8px;
+    border-radius: 4px;
     &.theme-border{
         border-color: rgba(var(--primary-rgb), 0.3);
         &:focus {
@@ -321,7 +320,7 @@ label {
     }
 }
 
-.ot_fileUploader input.form-control {
+.fileUploader input.form-control {
     border: 0 !important;
     border-radius: 3px;
     border: 0;
@@ -332,16 +331,16 @@ label {
     color: var(--primary-paragraph);
 }
 
-.ot_fileUploader input::placeholder {
+.fileUploader input::placeholder {
     font-size: 14px;
     color: var(--primary-paragraph);
 }
 
-.ot_fileUploader button {
+.fileUploader button {
     background: transparent;
 }
 
-.ot_fileUploader .btn-primary {
+.fileUploader .btn-primary {
     padding: 10px 20px;
 }
 
@@ -350,13 +349,8 @@ label {
     cursor: pointer;
 }
 
-/* / Modal Close Button */
 
-.card-title {
-    margin-bottom: 0;
-    font-size: 18px;
-    color: var(--primary-title);
-}
+
 
 // Box design 0
 .switch-box-style {

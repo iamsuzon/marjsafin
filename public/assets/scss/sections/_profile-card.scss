@@ -97,7 +97,7 @@
 .card-style {
     padding: 20px 20px;
     transition: .3s;
-    border-radius: 6px;
+    border-radius: 4px;
     background: var(--white);
     border: 1px solid transparent;
 
@@ -128,7 +128,7 @@
         height: 44px;
         text-align: center;
         line-height: 44px;
-        border-radius: 6px;
+        border-radius: 4px;
         font-size: 25px;
     }
 
@@ -322,3 +322,4 @@
 .max-height-400 {
     max-height: 400px;
 }
+

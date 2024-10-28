@@ -60,30 +60,36 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->address }}</td>
 
-                            @hasanyrole('super-admin|admin')
+                            @hasanyrole('super-admin|admin|analyst')
                             <td class="text-end px-15 d-flex gap-10">
                                 {{--                                <a class="edit-btn view-password-btn" href="javascript:void(0)"--}}
                                 {{--                                   data-bs-toggle="modal" data-bs-target="#view-password-modal" data-name="{{$user->username}}">--}}
                                 {{--                                    <i class="ri-eye-line" data-bs-toggle="tooltip" data-bs-placement="top"--}}
                                 {{--                                       title="View Password"></i>--}}
                                 {{--                                </a>--}}
-                                <a class="view-btn change-password-btn" href="javascript:void(0)"
-                                   data-bs-toggle="modal" data-bs-target="#change-password-modal"
-                                   data-id="{{$user->id}}">
-                                    <i class="ri-lock-line"></i>
-                                </a>
+                                @can('change-password-medical-center')
+                                    <a class="view-btn change-password-btn" href="javascript:void(0)"
+                                       data-bs-toggle="modal" data-bs-target="#change-password-modal"
+                                       data-id="{{$user->id}}">
+                                        <i class="ri-lock-line"></i>
+                                    </a>
+                                @endcan
 
-                                <a class="edit-btn" href="javascript:void(0)"
-                                   data-bs-toggle="modal" data-bs-target="#edit-modal"
-                                   data-id="{{$user->id}}" data-name="{{$user->name}}"
-                                   data-username="{{$user->username}}" data-email="{{$user->email}}"
-                                   data-address="{{$user->address}}">
-                                    <i class="ri-edit-line"></i>
-                                </a>
+                                @can('update-medical-center')
+                                    <a class="edit-btn" href="javascript:void(0)"
+                                       data-bs-toggle="modal" data-bs-target="#edit-modal"
+                                       data-id="{{$user->id}}" data-name="{{$user->name}}"
+                                       data-username="{{$user->username}}" data-email="{{$user->email}}"
+                                       data-address="{{$user->address}}">
+                                        <i class="ri-edit-line"></i>
+                                    </a>
+                                @endcan
 
-                                <a class="delete-btn" href="javascript:void(0)" data-id="{{$user->id}}">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                </a>
+                                @can('delete-medical-center')
+                                    <a class="delete-btn" href="javascript:void(0)" data-id="{{$user->id}}">
+                                        <i class="ri-delete-bin-6-line"></i>
+                                    </a>
+                                @endcan
                             </td>
                             @endhasanyrole
                         </tr>

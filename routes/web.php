@@ -50,28 +50,56 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationEdit'])->name('admin.application.edit');
     Route::post('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationUpdate']);
 
-    Route::get('/admin/application-delete', [AdminAuthController::class, 'applicationDelete'])->name('admin.application.delete');
+    Route::get('/admin/application-delete', [AdminAuthController::class, 'applicationDelete'])
+        ->name('admin.application.delete')
+        ->can('delete-application');
 
-    Route::get('/admin/new-user', [AdminAuthController::class, 'newUser'])->name('admin.new.user');
-    Route::post('/admin/new-user', [AdminAuthController::class, 'newUserCreate']);
-    Route::get('/admin/user-list', [AdminAuthController::class, 'userList'])->name('admin.user.list');
+    Route::get('/admin/new-user', [AdminAuthController::class, 'newUser'])
+        ->name('admin.new.user')
+        ->can('create-customer');
+    Route::post('/admin/new-user', [AdminAuthController::class, 'newUserCreate'])
+        ->can('create-customer');
+    Route::get('/admin/user-list', [AdminAuthController::class, 'userList'])
+        ->name('admin.user.list')
+        ->can('view-customer');
 
-    Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])->name('admin.new.medical-center');
-    Route::post('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenterCreate']);
-    Route::get('/admin/medical-center-list', [MedicalCenterManageController::class, 'MedicalCenterList'])->name('admin.medical-center.list');
+    Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
+        ->name('admin.new.medical-center')
+        ->can('create-medical-center');
+    Route::post('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenterCreate'])
+        ->can('create-medical-center');
+    Route::get('/admin/medical-center-list', [MedicalCenterManageController::class, 'MedicalCenterList'])
+        ->name('admin.medical-center.list')
+        ->can('view-medical-center');
 
-    Route::get('/admin/allocate-center-list', [MedicalCenterManageController::class, 'AllocateCenterList'])->name('admin.allocate-center.list');
-    Route::post('/admin/allocate-center-list/new', [MedicalCenterManageController::class, 'newAllocateCenter'])->name('admin.allocate-center.new');
-    Route::post('/admin/allocate-center-list/update', [MedicalCenterManageController::class, 'updateAllocateCenter'])->name('admin.allocate-center.update');
+    Route::get('/admin/allocate-center-list', [MedicalCenterManageController::class, 'AllocateCenterList'])
+        ->name('admin.allocate-center.list')
+        ->can('view-allocation');
+    Route::post('/admin/allocate-center-list/new', [MedicalCenterManageController::class, 'newAllocateCenter'])
+        ->name('admin.allocate-center.new')
+        ->can('create-allocation');
+    Route::post('/admin/allocate-center-list/update', [MedicalCenterManageController::class, 'updateAllocateCenter'])
+        ->name('admin.allocate-center.update')
+        ->can('update-allocation');
 
-    Route::post('/admin/medical-center/change-password', [MedicalCenterManageController::class, 'MedicalCenterChangePassword'])->name('admin.medical-center.change.password');
-    Route::post('/admin/medical-center/update', [MedicalCenterManageController::class, 'MedicalCenterUpdate'])->name('admin.medical-center.update');
-    Route::get('/admin/medical-center/delete', [MedicalCenterManageController::class, 'MedicalCenterDelete'])->name('admin.medical-center.delete');
+    Route::post('/admin/medical-center/change-password', [MedicalCenterManageController::class, 'MedicalCenterChangePassword'])
+        ->name('admin.medical-center.change.password')
+        ->can('change-password-medical-center');
+    Route::post('/admin/medical-center/update', [MedicalCenterManageController::class, 'MedicalCenterUpdate'])
+        ->name('admin.medical-center.update')
+        ->can('update-medical-center');
+    Route::get('/admin/medical-center/delete', [MedicalCenterManageController::class, 'MedicalCenterDelete'])
+        ->name('admin.medical-center.delete')
+        ->can('delete-medical-center');
 
     Route::get('/admin/application-list/allocations', [AdminAuthController::class, 'allocatedMedicalCenterList'])->name('admin.application-list.allocations');
     Route::get('/admin/application-list/allocations/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDetails'])->name('admin.application-list.allocations.details');
-    Route::get('/admin/application-list/allocations/approve/{id}', [AdminAuthController::class, 'allocatedMedicalCenterApprove'])->name('admin.application-list.allocations.approve');
-    Route::get('/admin/application-list/allocations/disapprove/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDisapprove'])->name('admin.application-list.allocations.disapprove');
+    Route::get('/admin/application-list/allocations/approve/{id}', [AdminAuthController::class, 'allocatedMedicalCenterApprove'])
+        ->name('admin.application-list.allocations.approve')
+        ->can('update-allocation');
+    Route::get('/admin/application-list/allocations/disapprove/{id}', [AdminAuthController::class, 'allocatedMedicalCenterDisapprove'])
+        ->name('admin.application-list.allocations.disapprove')
+        ->can('update-allocation');
 
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
@@ -91,6 +119,9 @@ Route::post('/medical', [MedicalCenterAuthController::class, 'loginAction']);
 Route::middleware('auth:medical_center')->prefix('medical')->group(function () {
     Route::get('/dashboard', [MedicalCenterAuthController::class, 'dashboard'])->name('medical.dashboard');
     Route::get('/application-list', [MedicalCenterAuthController::class, 'applicationList'])->name('medical.application.list');
+
+    Route::get('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationEdit'])->name('medical.application.edit');
+    Route::post('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationUpdate']);
 
     Route::post('/application-update-result', [MedicalCenterAuthController::class, 'applicationUpdateResult'])->name('medical.application.result.update');
 

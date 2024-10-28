@@ -141,6 +141,10 @@
                                            data-bs-toggle="modal" data-bs-target="#edit-modal">
                                             <i class="ri-file-edit-line"></i>
                                         </a>
+
+                                        <a class="view-btn" href="{{route('medical.application.edit', $item->id)}}">
+                                            <i class="ri-pencil-fill"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             @empty

@@ -1,10 +1,9 @@
 :root {
-    --remix-icon: 'remixicon';
-    --poppins: 'Poppins', sans-serif;
-}
-
-/* Default Theme */
-.default-theme {
+    --white: #fff;
+    --dark: #2c323f;
+    --red: #ff7272;
+    --light: #EEEEEE;
+    --warning: #ff991a;
 
     --primary: #00715D;
     --secondary: #090E0D;
@@ -14,13 +13,13 @@
     --secondary-rgb: 255, 213, 2;
     --tertiary-rgb: 240, 120, 60;
 
-    --body-bg: #F6F6F6;
+    --body-bg: #f5f7f9;
 
-    --primary-title: #222222;
+    --primary-title: #091419;
     --secondary-title: #555555;
     --tertiary-title: #6f767e;
 
-    --primary-paragraph: #666666;
+    --primary-paragraph: #292f36;
     --secondary-paragraph: #999999;
     --tertiary-paragraph: #6f767e;
 
@@ -28,16 +27,11 @@
     --primary-btn: var(--primary);
     --secondary-btn: var(--secondary);
     --tertiary-btn: var(--tertiary);
-    --red: #FF3030;
-    --light: #EEEEEE;
-    --dark: #2c323f;
-    --warning: #ff991a;
 
     /* border color */
     --primary-border: #EEEEEE;
+    --primary-border: #dee3e7;
     --secondary-border: #f4f4f4;
-
-
 
     --ratting-color: #FF9B26;
     --ratting-color-rgb: 255, 193, 7;
@@ -51,8 +45,6 @@
 
     --scroll-color-one: #554cbd46;
     --scroll-color-two: #f3f3f3;
-
-    --white: #fff;
     --theme-shadow: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
     --theme-shadow2: 0px 5px 20px 0px rgba(88, 59, 255, 0.3);
 
@@ -75,10 +67,13 @@
     --text-badge-danger: #ff6a54;
     --text-badge-warning: #fdc400;
     --text-badge-primary: #1890ff;
+
+    --remix-icon: 'remixicon';
+    --poppins: 'Poppins', sans-serif;
 }
 
 /* Dark Theme */
-.dark-theme {
+[data-theme="dark"] {
     --primary: #00715D;
     --secondary: #0CAF60;
     --tertiary: #FA5F1C;
@@ -104,12 +99,10 @@
     --primary-btn: var(--primary);
     --secondary-btn: var(--secondary);
     --tertiary-btn: var(--tertiary);
-    --red: #FF3030;
-    --light: #EEEEEE;
+    --red: #F2613F;
+    --light: #222222;
     --dark: #2c323f;
     --warning: #ff991a;
-
-    --red: #FF3030;
     --ratting-color: #FF9B26;
     --ratting-color-rgb: 255, 193, 7;
 
@@ -265,7 +258,7 @@ $text-name: primary,
     dark,
     white,
     warning,
-    title,
+    warning,
     orange,
     primary-paragraph,
     secondary-paragraph,
@@ -308,10 +301,17 @@ $text-color: var(--primary),
     }
 }
 
-/*-- padding --*/
+/*-- min-width --*/
 @for $i from 10 through 500 {
-    .mw-#{1 * $i} {
+    .min-w-#{1 * $i} {
         min-width: 1px * $i !important;
+    }
+}
+
+/*-- max-width --*/
+@for $i from 10 through 500 {
+    .max-w-#{1 * $i} {
+        max-width: 1px * $i !important;
     }
 }
 
@@ -330,7 +330,8 @@ $text-color: var(--primary),
     }
 }
 
-/*-- padding PX padding-left & padding-right --*/@for $i from 6 through 700 {
+/*-- padding PX padding-left & padding-right --*/
+@for $i from 6 through 700 {
     .max-height-#{1 * $i} {
         max-height: 1px * $i;
     }
@@ -345,7 +346,7 @@ $i: 100, 200, 300, 400, 500, 600, 700, 800, 900;
     }
 }
 
-// Fonts weight
+// border radius
 
 @for $i from 1 through 50 {
     .radius-#{1 * $i} {
@@ -356,7 +357,7 @@ $i: 100, 200, 300, 400, 500, 600, 700, 800, 900;
 
 
 /*-- Margin Padding --*/
-@for $i from 6 through 200 {
+@for $i from 6 through 100 {
 
     /*-- Margin To-Bottom-Left-Right --*/
     .mt-#{1 * $i} {
@@ -515,3 +516,15 @@ $i: 100, 200, 300, 400, 500, 600, 700, 800, 900;
 //         --bs-gutter-y: 1px * $i;
 //     }
 // }
+
+// Table Image Weight
+@for $i from 3 through 10 {
+	.table-img-#{10 * $i} {
+	  width: 10px * $i;
+	  height: 10px * $i;
+	  object-fit: cover;
+	  object-position: center;
+	  border-radius: 4px;
+	  overflow: hidden;
+	}
+  }

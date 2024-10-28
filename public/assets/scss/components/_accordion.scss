@@ -8,7 +8,7 @@
             border: 0;
             margin-bottom: 20px;
             border: 1px solid var(--primary-border);
-            border-radius: 8px;
+            border-radius: 4px;
     
         }
         .accordion:last-child {
@@ -85,7 +85,7 @@
         .accordion-item {
             border: 0;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: 4px;
             background: var(--bg-primary);
             position: relative;
             z-index: 0;
@@ -207,7 +207,7 @@
                     color: var(--white);
                     right: 18px;
                     font-weight: 400;
-                    content: "\EA4E";
+                    content: "\f1af";
                     font-family: var(--remix-icon);
                     background-image: none;
                     outline: 0;
@@ -222,7 +222,7 @@
                     background: var(--bg-primary);
                     border: 0;
                     &::after {
-                        content: "\EA78";
+                        content: "\ea13";
                         font-weight: 400;
                         color: var(--primary-text);
                     }

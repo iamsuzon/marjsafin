@@ -37,7 +37,9 @@
                             <th>Date</th>
                             <th>Registration</th>
                             <th>Passport</th>
+                            @hasrole('super-admin')
                             <th>Reference</th>
+                            @endhasrole
                             <th>Traveling To</th>
                             <th>Center</th>
                             <th>Result</th>
@@ -66,10 +68,12 @@
                                     <p>{{$item->given_name}}</p>
                                     <p>NID: {{$item->nid_no}}</p>
                                 </td>
+                                @hasrole('super-admin')
                                 <td>
                                     <p>{{$item->ref_ledger}}</p>
                                     <p>User: {{$item->user->username}}, Ref: {{$item->ref_no}}</p>
                                 </td>
+                                @endhasrole
                                 <td>
                                     <p class="text-capitalize">{{$item->gender}}</p>
                                     <p>{{travelingToName($item->traveling_to)}}</p>

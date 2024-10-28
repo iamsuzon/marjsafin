@@ -106,7 +106,7 @@ class AdminAuthController extends Controller
             'given_name' => 'required',
             'father_name' => 'nullable',
             'mother_name' => 'nullable',
-            'religion' => 'required',
+            'religion' => 'nullable',
             'pp_issue_place' => 'nullable',
             'profession' => 'required',
             'nationality' => 'required',
@@ -149,6 +149,7 @@ class AdminAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
+            'refer' => 'nullable',
         ]);
 
         User::create([
@@ -156,6 +157,7 @@ class AdminAuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'refer_by' => $validated['refer'],
         ]);
 
         return back()->with('success', 'User created successfully.');
