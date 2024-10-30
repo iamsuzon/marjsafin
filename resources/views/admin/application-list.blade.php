@@ -86,6 +86,11 @@
 
                                 <th>Traveling To</th>
                                 <th>Center</th>
+
+                                @hasrole('super-admin')
+                                    <th>Status (BDT)</th>
+                                @endhasrole
+
                                 <th>Result</th>
 
                                 @hasanyrole('super-admin|admin|analyst')
@@ -131,6 +136,21 @@
                                         <p class="text-capitalize">{{$center_name}}</p>
                                         <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
+                                    @hasrole('super-admin')
+                                        @php
+                                            $center_amount = $item->applicationPayment?->center_amount ? $item->applicationPayment->center_amount : '';
+                                            $admin_amount = $item->applicationPayment?->admin_amount ? $item->applicationPayment->admin_amount : '';
+                                        @endphp
+                                        <td>
+                                            @if($center_amount)
+                                                <p>C: {{$center_amount}}</p>
+                                            @endif
+
+                                            @if($admin_amount)
+                                                <p>A: {{$admin_amount}}</p>
+                                            @endif
+                                        </td>
+                                    @endhasrole
                                     <td>
                                         <p @class([
                                             'text-capitalize',
@@ -149,6 +169,8 @@
                                                data-ems_number="{{$item->ems_number}}"
                                                data-health_status="{{$item->health_status}}"
                                                data-health_status_details="{{$item->health_status_details}}"
+                                               data-application_center_payment="{{$item->applicationPayment?->center_amount}}"
+                                               data-application_admin_payment="{{$item->applicationPayment?->admin_amount}}"
                                                data-bs-toggle="modal" data-bs-target="#edit-modal">
                                                 <i class="ri-file-edit-line"></i>
                                             </a>
@@ -232,6 +254,18 @@
                                               placeholder="health condition"></textarea>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="contact-form">
+                                    <label class="contact-label">Center Status</label>
+                                    <input class="form-control input" type="text" name="application_center_payment" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="contact-form">
+                                    <label class="contact-label">Admin Status</label>
+                                    <input class="form-control input" type="text" name="application_admin_payment">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Submit button -->
@@ -266,12 +300,33 @@
                 let ems_number = el.data('ems_number');
                 let health_status = el.data('health_status');
                 let health_status_details = el.data('health_status_details');
+                let application_center_payment = el.data('application_center_payment');
+                let application_admin_payment = el.data('application_admin_payment');
+
+                let allNull = [ems_number, health_status, health_status_details, application_center_payment].every(item => item === '');
 
                 let from = $('#edit-form');
 
-                from.find('input[name="ems_number"]').val(ems_number);
-                from.find('select[name="health_status"]').val(health_status);
-                from.find('textarea[name="health_condition"]').val(health_status_details);
+                if (allNull)
+                {
+                    from.find('input[name="ems_number"]').attr('disabled', true);
+                    from.find('select[name="health_status"]').attr('disabled', true);
+                    from.find('textarea[name="health_condition"]').attr('disabled', true);
+                    from.find('input[name="application_admin_payment"]').attr('disabled', true);
+                    from.find('button[type="submit"]').addClass('btn-dark-fill').attr('disabled', true);
+                } else {
+                    from.find('input[name="ems_number"]').attr('disabled', false);
+                    from.find('select[name="health_status"]').attr('disabled', false);
+                    from.find('textarea[name="health_condition"]').attr('disabled', false);
+                    from.find('input[name="application_admin_payment"]').attr('disabled', false);
+                    from.find('button[type="submit"]').removeClass('btn-dark-fill').attr('disabled', false);
+
+                    from.find('input[name="ems_number"]').val(ems_number);
+                    from.find('select[name="health_status"]').val(health_status).trigger('change');
+                    from.find('textarea[name="health_condition"]').val(health_status_details);
+                    from.find('input[name="application_center_payment"]').val(application_center_payment);
+                    from.find('input[name="application_admin_payment"]').val(application_admin_payment);
+                }
 
                 $('#edit-form input[name="id"]').val(id);
             })
@@ -285,6 +340,7 @@
                 let ems_number = form.find(`input[name="ems_number"]`).val();
                 let health_status = form.find(`select[name="health_status"]`).val();
                 let health_condition = form.find(`textarea[name="health_condition"]`).val();
+                let application_payment = form.find(`input[name="application_admin_payment"]`).val();
 
                 if (!id) {
                     toastError('All fields are required');
@@ -295,7 +351,8 @@
                     _token: '{{csrf_token()}}',
                     ems_number: ems_number,
                     health_status: health_status,
-                    health_condition: health_condition
+                    health_condition: health_condition,
+                    application_payment: application_payment
                 })
                     .then(res => {
                         let data = res.data;

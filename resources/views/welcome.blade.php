@@ -57,6 +57,12 @@
                                 </div>
                             @endif
 
+                            @if(session('error'))
+                                <div class="alert alert-danger">
+                                    {{session('error')}}
+                                </div>
+                            @endif
+
                             <!-- Form -->
                             <form action="{{route('home')}}" method="POST">
                                 @csrf
@@ -96,13 +102,13 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-lg-end justify-content-sm-center mt-100">
-                    <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">
-                        <marquee style="color: red" width="100%" direction="left" height="100px">
-                            {{$adText ?? ''}}
-                        </marquee>
-                    </div>
-                </div>
+{{--                <div class="row justify-content-lg-end justify-content-sm-center mt-100">--}}
+{{--                    <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">--}}
+{{--                        <marquee style="color: red" width="100%" direction="left" height="100px">--}}
+{{--                            {{$adText ?? ''}}--}}
+{{--                        </marquee>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
         </div>
         <!-- / Login -->

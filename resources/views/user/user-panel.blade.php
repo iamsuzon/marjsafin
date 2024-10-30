@@ -69,6 +69,30 @@
                 </div>
 
                 <div class="row mt-50">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Unsuccessful!</strong> {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <div class="table-responsives max-height-100vh scroll-active">
                         <table class="table-color-col table-head-border table-td-border">
                             <thead>
@@ -81,6 +105,7 @@
                                 <th>Reference</th>
                                 <th>Traveling To</th>
                                 <th>Center</th>
+                                <th>Status</th>
                                 <th>Result</th>
                                 <th>PDF</th>
                             </tr>
@@ -104,8 +129,7 @@
                                         <p>NID: {{$item->nid_no}}</p>
                                     </td>
                                     <td>
-                                        <p>{{$item->ref_ledger}}</p>
-                                        <p>User: {{$item->user->username}}, Ref: {{$item->ref_no}}</p>
+                                        <p>{{$item->ref_no}}</p>
                                     </td>
                                     <td>
                                         <p class="text-capitalize">{{$item->gender}}</p>
@@ -120,6 +144,27 @@
 
                                         <p class="text-capitalize">{{$center_name}}</p>
                                         <p class="text-capitalize">{{$center_address}}</p>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $payment_status = $item->applicationPayment?->admin_amount;
+                                        @endphp
+
+                                        @if($payment_status)
+                                            <p class="mb-10">{{amountWithCurrency($payment_status)}}</p>
+
+                                            @if(auth('web')->user()->balance > 0)
+                                                @if(empty($item->paymentLog))
+                                                    <a href="javascript:void(0)" class="pay-bill-btn btn-primary-fill btn-sm" data-id="{{$item->id}}">
+                                                        <i class="ri-money-dollar-circle-line"></i> Pay Bill
+                                                    </a>
+                                                @else
+                                                    <p class="badge bg-success">PAID</p>
+                                                @endif
+                                            @else
+                                                <a href="{{route('user.deposit.index')}}" class="btn-primary-fill btn-sm" style="background: #ffc107; color: #000">No Balance</a>
+                                            @endif
+                                        @endif
                                     </td>
                                     <td>
                                         @if($item->allocatedMedicalCenter?->status)
@@ -154,26 +199,46 @@
 
 @section('scripts')
     <script>
-        $(document).on('click', '.search_btn', function (e) {
-            e.preventDefault();
+        $(document).ready(function() {
+            $(document).on('click', '.search_btn', function (e) {
+                e.preventDefault();
 
-            let form = $('#search-from');
-            let start_date = form.find('.start_date').val();
-            let end_date = form.find('.end_date').val();
+                let form = $('#search-from');
+                let start_date = form.find('.start_date').val();
+                let end_date = form.find('.end_date').val();
 
-            window.location.href = `{{route('user.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
-        });
+                window.location.href = `{{route('user.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
+            });
 
-        $(document).on('click', '.reset_btn', function () {
-            location.href = `{{route('user.application.list')}}`;
-        });
+            $(document).on('click', '.reset_btn', function () {
+                location.href = `{{route('user.application.list')}}`;
+            });
 
-        $(document).on('click', '.search_btn_passport', function (e) {
-            e.preventDefault();
+            $(document).on('click', '.search_btn_passport', function (e) {
+                e.preventDefault();
 
-            let passport_search = $('input[name="passport_search"]').val();
+                let passport_search = $('input[name="passport_search"]').val();
 
-            window.location.href = `{{route('user.application.list')}}?passport_search=${passport_search}`;
+                window.location.href = `{{route('user.application.list')}}?passport_search=${passport_search}`;
+            });
+
+            $(document).on('click', '.pay-bill-btn', function () {
+                let el = $(this);
+                let id = el.data('id');
+
+                Swal.fire({
+                    title: 'Payment Confirmation',
+                    text: 'Are you sure you want to pay the bill?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Pay Now',
+                    cancelButtonText: 'No, Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `{{route('user.pay-bill')}}?application_id=${id}`;
+                    }
+                })
+            });
         });
     </script>
 @endsection

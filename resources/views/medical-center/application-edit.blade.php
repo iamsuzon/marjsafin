@@ -20,7 +20,7 @@
                     <div class="col-12">
                         <div class="d-flex justify-content-between mb-20">
                             <h2>Registration Edit</h2>
-                            <a href="{{route('admin.application.list')}}" class="btn-primary-fill">
+                            <a href="{{route('medical.application.list')}}" class="btn-primary-fill">
                                 <i class="ri-arrow-left-line"></i>
                             </a>
                         </div>
@@ -172,7 +172,7 @@
                                     <div class="contact-form">
                                         <label class="contact-label">Date of Birth</label>
                                         <div class="d-flex justify-content-between">
-                                            <input type="date" class="contact-input" name="date_of_birth" value="{{$application->date_of_birth->format('Y-m-d')}}">
+                                            <input type="date" class="contact-input" name="date_of_birth" value="{{$application->date_of_birth?->format('Y-m-d')}}">
                                             <span> <b class="caret"></b></span>
                                         </div>
                                     </div>

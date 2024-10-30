@@ -27,7 +27,7 @@ class DeveloperSettingsController extends Controller
 //            Application::create($application);
 //        }
 
-        Artisan::call('db:seed', ['--force' => true]);
+//        Artisan::call('db:seed', ['--force' => true]);
 
         return back()->with('success', 'Database upgraded successfully.');
     }

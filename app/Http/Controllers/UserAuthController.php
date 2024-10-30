@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\StaticOption;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,10 +19,6 @@ class UserAuthController extends Controller
         if (Auth::guard('web')->check()) {
             return redirect()->route('dashboard');
         }
-
-//        if (Schema::hasTable('static_options') == false) {
-//            Artisan::call('migrate', ['--force' => true]);
-//        }
 
         $adText = StaticOption::getOption('ad_text') ?? '';
         return view('welcome', ['adText' => $adText]);
@@ -38,6 +35,15 @@ class UserAuthController extends Controller
 //            'captcha.captcha' => 'Invalid captcha code.'
         ]);
 
+        $user = User::where('username', $validated['username'])->first();
+        if ($user)
+        {
+            if ($user->banned)
+            {
+                return back()->with('error', 'Your account has been banned. Contact with admin for details.');
+            }
+        }
+
         if (Auth::guard('web')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             return redirect()->route('dashboard');
         } else {
@@ -48,7 +54,14 @@ class UserAuthController extends Controller
     public function dashboard()
     {
         $adText = StaticOption::getOption('ad_text');
-        return view('user.dashboard', ['adText' => $adText]);
+        $showNotice = (bool) StaticOption::getOption('show_notice');
+        $noticeText = StaticOption::getOption('notice_text') ?? '';
+
+        return view('user.dashboard', [
+            'adText' => $adText,
+            'showNotice' => $showNotice,
+            'noticeText' => fixNoticeText($noticeText),
+        ]);
     }
 
     public function userPanel()
@@ -63,7 +76,7 @@ class UserAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList = Application::where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
                 ->whereBetween('created_at', [$start_date, $end_date])
                 ->latest()
                 ->get();
@@ -74,13 +87,13 @@ class UserAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList = Application::where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
                 ->where('passport_number', trim(request('passport_search')))
                 ->latest()
                 ->get();
         }
         else {
-            $applicationList = Application::where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
                 ->whereDate('created_at', Carbon::today())
                 ->latest()->get();
         }
@@ -90,7 +103,13 @@ class UserAuthController extends Controller
 
     public function userRegistration()
     {
-        return view('user.user-registration');
+        $showNotice = (bool) StaticOption::getOption('show_notice');
+        $noticeText = StaticOption::getOption('notice_text') ?? '';
+
+        return view('user.user-registration', [
+            'showNotice' => $showNotice,
+            'noticeText' => fixNoticeText($noticeText),
+        ]);
     }
 
     public function storeUserRegistration(Request $request)
@@ -115,12 +134,15 @@ class UserAuthController extends Controller
             'passport_issue_date' => 'nullable',
             'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',
+            'problem' => 'nullable'
         ]);
 
         $validated['user_id'] = Auth::guard('web')->id();
         $validated['serial_number'] = now()->format('Ym').'-'.rand(1, 999999);
         $validated['pdf_code'] = generatePdfCode($validated['center_name']);
         $validated['contact_no'] = 0000;
+        $validated['religion'] = 'none';
+//        $validated['problem'] = json_encode($validated['problem']);
 
         Application::create($validated);
 
@@ -149,7 +171,7 @@ class UserAuthController extends Controller
 
     public function logout()
     {
-        Auth::guard('web')->logout();
+        Auth::logout();
         return redirect()->route('home');
     }
 }

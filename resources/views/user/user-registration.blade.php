@@ -238,6 +238,16 @@
                                         </div>
                                     </div>
                                 </div>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Problems<span class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="multiple-select"  multiple="multiple" name="problem[]">--}}
+{{--                                            @foreach(problemList() ?? [] as $index => $problem)--}}
+{{--                                                <option {{old('problem') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $problem }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Ref No<span class="fillable mx-1">*</span></label>
@@ -279,15 +289,7 @@
                     <div class="row g-10">
                         <div class="col-lg-12">
                             <h4 class="notice-title mb-25 bg-danger text-white p-3 fw-bold">Important Notice</h4>
-                            <p class="lh-lg">আসসালামু আলাইকুম,
-                                <br><br>
-                                সম্মানিত গ্রাহকদের জানানো যাচ্ছে যে, <br>
-                                রিসিপ্ট দ্রুত টাইপ করার সুবিধার্থে,
-                                স্টারছাড়া অপশন যেমন ( Marital Status, Father Name, Mother Name, PP Issue Place, Date of Birth, NID No, Passport Issue Date, Passport Expiry Date, Religion)
-                                <br><br>
-                                টাইপ করা ছাড়া সাবমিট দিতে পারবেন।সাবমিট দিয়ে সাকসেসফুল লেখা দেখলে , এপ্লিকেশন অপশন এ গিয়ে আপনার সাবমিট করা ডাটার শেষ অপশন এর PDF অপশন এর নিচ এ প্রিন্টার চিন্ন ক্লিক দিবেন এতে যে রিসিপ্ত টা হবে তা আপনার মেডিকেল কেন্ডিডেট এর কাছে দিয়ে দিবেন।এ রিসিপ্ত টাতে কোনো প্রকার কলমের দাগ ও দেওয়া যাবে না। ধন্যবাদ।
-                                <br><br>
-                                [বি:দ্র: স্লিপ সাবমিট দেওয়ার আগে অবশ্যই মেডিকেল না করানোর সম্ভাবনা হলে।  সাবমিট দিবেন না। শুধু মাত্র যে জাবে তার টাই দিবেন।এতে করে কাজ এ এলো মেলো হবে না। ]</p>
+                            <p class="lh-lg">{!! $noticeText !!}</p>
                         </div>
                     </div>
                 </div>
@@ -320,7 +322,7 @@
         $(document).ready(function() {
             // Define function to show modal
             function showNoticeModal() {
-                $('#notice-modal').show(); // Show the modal
+                // $('#notice-modal').show(); // Show the modal
                 localStorage.setItem('lastShownTime', new Date().getTime()); // Update last shown time
             }
 
@@ -333,7 +335,11 @@
 
             // Initialize and show modal if needed
             if (shouldShowModal()) {
-                showNoticeModal();
+                let showNotice = `{{$showNotice}}`;
+
+                if (showNotice) {
+                    showNoticeModal();
+                }
             }
 
             // Hide modal when close button is clicked or clicked outside of the modal

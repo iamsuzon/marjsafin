@@ -102,6 +102,12 @@
                 </div>
             </li>
 
+            @auth('web')
+                <li>
+                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;" href="javascript:void(0)">{{amountWithCurrency(auth('web')->user()->balance)}}</a>
+                </li>
+            @endauth
+
             <!-- Login User -->
             <li class="cart-list dropdown">
                 <!-- User Profile -->
@@ -181,8 +187,15 @@
                         <!-- Single Menu -->
                         <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.application.list')}}">
                             <a href="{{route('user.application.list')}}" class="parent-item-content">
-                                <i class="ri-hand-heart-line"></i>
+                                <i class="ri-file-list-2-line"></i>
                                 <span class="on-half-expanded">Application List</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.index')}}">
+                            <a href="{{route('user.deposit.index')}}" class="parent-item-content">
+                                <i class="ri-wallet-3-line"></i>
+                                <span class="on-half-expanded">Deposit Request</span>
                             </a>
                         </li>
                     @endauth

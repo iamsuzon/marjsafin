@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDepositRequestHistoryController;
+use App\Http\Controllers\BanUserManageController;
 use App\Http\Controllers\DeveloperSettingsController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\MedicalCenterAuthController;
 use App\Http\Controllers\MedicalCenterManageController;
+use App\Http\Controllers\PaymentLogController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +38,11 @@ Route::middleware('auth:web')->group(function () {
 
     Route::get('/customer-application-list', [UserAuthController::class, 'userPanel'])->name('user.application.list');
 
+    Route::get('/customer-deposit-request', [PaymentLogController::class, 'index'])->name('user.deposit.index');
+    Route::post('/customer-deposit-request', [PaymentLogController::class, 'deposit']);
+
+    Route::get('/customer/pay-bil', [PaymentLogController::class, 'payBill'])->name('user.pay-bill');
+
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
 
@@ -62,6 +70,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/user-list', [AdminAuthController::class, 'userList'])
         ->name('admin.user.list')
         ->can('view-customer');
+    Route::get('/admin/user-ban/{id}', [BanUserManageController::class, 'banUser'])
+        ->name('admin.user.ban');
+
 
     Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
         ->name('admin.new.medical-center')
@@ -101,15 +112,22 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.application-list.allocations.disapprove')
         ->can('update-allocation');
 
+    Route::get('/admin/deposit-request-history', [AdminDepositRequestHistoryController::class, 'depositRequestHistory'])
+        ->name('admin.deposit-request-history');
+    Route::get('/admin/deposit-request-history/change-status', [AdminDepositRequestHistoryController::class, 'changePaymentStatus'])
+        ->name('admin.deposit-request-history.change-status');
+
+    Route::get('admin/transaction-history', [AdminDepositRequestHistoryController::class, 'transactionHistory'])
+        ->name('admin.transaction-history');
+
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
-
-    Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
     Route::get('/admin/general-settings', [GeneralSettingsController::class, 'generalSettings'])->name('admin.general.settings');
     Route::post('/admin/general-settings', [GeneralSettingsController::class, 'generalSettingsUpdate']);
 
     Route::get('/admin/upgrade-database', [DeveloperSettingsController::class, 'upgradeDatabase'])->name('admin.upgrade.database');
+    Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 });
 
 

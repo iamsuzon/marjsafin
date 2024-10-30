@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List</h2>
+                        <h2 class="manage__title">Application List ({{$applicationList->count()}})</h2>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -74,6 +74,7 @@
                             <thead>
                             <tr>
                                 <th class="mw-45">#SL</th>
+                                <th>ID</th>
                                 <th>Date</th>
                                 <th>Registration</th>
                                 <th>Passport</th>
@@ -82,13 +83,15 @@
                                 <th>Center</th>
                                 <th>Result</th>
                                 <th>Allocate Center</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @forelse($applicationList ?? [] as $item)
                                 <tr>
-                                    <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
+                                    <td class="align-items-center">{{$loop->iteration}}</td>
+                                    <td>{{$item->pdf_code}}</td>
                                     <td>
                                         <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
                                         <p>Crte: {{$item->updated_at->format('d/m/Y')}}</p>
@@ -131,6 +134,9 @@
                                     <td>
                                         <p>{{getAllocatedMedicalCenterName($item) ?? ''}}</p>
                                     </td>
+                                    <td>
+                                        <p class="text-capitalize">{{$item->applicationPayment ? amountWithCurrency($item->applicationPayment?->center_amount) : ''}}</p>
+                                    </td>
                                     <td class="text-end px-15 d-flex gap-10">
                                         <a class="edit-btn" href="javascript:void(0)"
                                            data-id="{{$item->id}}"
@@ -138,6 +144,7 @@
                                            data-health_status="{{$item->health_status}}"
                                            data-health_status_details="{{$item->health_status_details}}"
                                            data-allocated_medical_center="{{strtolower(getAllocatedMedicalCenterName($item))}}"
+                                           data-application_payment="{{$item->applicationPayment?->center_amount}}"
                                            data-bs-toggle="modal" data-bs-target="#edit-modal">
                                             <i class="ri-file-edit-line"></i>
                                         </a>
@@ -183,16 +190,14 @@
                         <div class="row g-10">
                             <div class="col-md-12">
                                 <div class="contact-form">
-                                    <label class="contact-label">Serial Number<span
-                                            class="fillable mx-1">*</span></label>
+                                    <label class="contact-label">Serial Number</label>
                                     <input class="form-control input" type="text" name="ems_number"
                                            placeholder="ems number">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="contact-form">
-                                    <label class="contact-label">Health Status <span
-                                            class="fillable mx-1">*</span></label>
+                                    <label class="contact-label">Health Status</label>
                                     <select class="select2-modal" name="health_status">
                                         <option value="" selected disabled>Select an option</option>
                                         <option value="fit">Fit</option>
@@ -204,21 +209,26 @@
                             <div class="col-md-12">
                                 <!-- Date Picker -->
                                 <div class="contact-form">
-                                    <label class="contact-label">Health Condition<span
-                                            class="fillable mx-1">*</span></label>
+                                    <label class="contact-label">Health Condition</label>
                                     <textarea class="form-control input" name="health_condition"
                                               placeholder="health condition"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="contact-form">
-                                    <label class="contact-label">Allocate Medical Center <span
-                                            class="fillable mx-1">*</span></label>
+                                    <label class="contact-label">Allocate Medical Center</label>
                                     <select class="select2-modal allocated_medical_center" name="allocated_medical_center">
                                         @foreach(allocateMedicalCenter() as $key => $center)
                                             <option value="{{$key}}">{{$center}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="contact-form">
+                                    <label class="contact-label">Status</label>
+                                    <input class="form-control input" type="number" name="application_payment"
+                                           placeholder="exp: 1500">
                                 </div>
                             </div>
                         </div>
@@ -228,7 +238,7 @@
                             <button class="btn-primary-fill" type="submit">
                                 <span class="d-flex align-items-center gap-6">
                                     <i class="las la-check-circle"></i>
-                                    <span>Confirm</span>
+                                    <span>Update</span>
                                 </span>
                             </button>
                             <button class="btn-cancel-fill" type="reset" data-bs-dismiss="modal">
@@ -256,13 +266,15 @@
                 let health_status = el.data('health_status');
                 let health_status_details = el.data('health_status_details');
                 let allocated_medical_center = el.data('allocated_medical_center');
+                let application_payment = el.data('application_payment');
 
                 let from = $('#edit-form');
 
                 from.find('input[name=ems_number]').val(ems_number);
                 from.find('select[name=health_status]').val([health_status]).trigger('change');
                 from.find('textarea[name=health_condition]').val(health_status_details);
-                from.find(`select[name=allocated_medical_center]`).val([allocated_medical_center]).trigger('cahnage');
+                from.find(`select[name=allocated_medical_center]`).val([allocated_medical_center]).trigger('change');
+                from.find(`input[name=application_payment]`).val(application_payment);
 
                 $('#edit-form input[name="id"]').val(id);
             })
@@ -277,6 +289,7 @@
                 let health_status = form.find(`select[name="health_status"]`).val();
                 let health_condition = form.find(`textarea[name="health_condition"]`).val();
                 let allocated_medical_center = form.find(`select[name="allocated_medical_center"]`).val();
+                let application_payment = form.find(`input[name="application_payment"]`).val();
 
                 if (!id) {
                     toastError('All fields are required');
@@ -289,6 +302,7 @@
                     health_status: health_status,
                     health_condition: health_condition,
                     allocated_medical_center: allocated_medical_center,
+                    application_payment: application_payment,
                 })
                     .then(res => {
                         let data = res.data;

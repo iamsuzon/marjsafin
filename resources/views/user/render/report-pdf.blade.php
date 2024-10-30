@@ -29,6 +29,9 @@
         }
         .receipt-info div {
             margin-bottom: 10px;
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
         }
         .receipt-details {
             width: 100%;
@@ -56,18 +59,19 @@
 
     <div class="receipt-info">
         <div>
-            <strong>Country:</strong> {{$country}}<br>
-            <strong>Date:</strong> {{$created_at->format('d/m/Y')}}
+            <span>Country:</span> <span>{{$country}}</span>
         </div>
         <div>
-            <strong>Delivery Date:</strong> {{$delivery_date->format('d/m/Y')}}<br>
+            <span>Date:</span> <span>{{$created_at->format('d/m/Y')}}</span>
         </div>
-    </div>
-
-    <div class="receipt-info">
         <div>
-            <strong>Name:</strong> {{$passenger}}<br>
-            <strong>Passport No:</strong> {{$passport_no}}
+            <span>Delivery Date:</span> <span>{{$delivery_date->format('d/m/Y')}}</span>
+        </div>
+        <div>
+            <span>Name:</span> <span>{{$passenger}}</span>
+        </div>
+        <div>
+            <span>Passport No:</span> <span>{{$passport_no}}</span>
         </div>
     </div>
 

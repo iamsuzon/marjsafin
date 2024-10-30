@@ -4,7 +4,7 @@
     <div class="page-content">
         <div class="card">
             <div class="d-flex justify-content-between">
-                <h2>{{$medical_center_details->name}} - Allocated Medical Centers List</h2>
+                <h2>{{$medical_center_details->name}} - Allocated Medical Centers List ({{$applications->count()}})</h2>
                 <a href="{{route('admin.application-list.allocations')}}" class="btn-primary-fill">
                     <i class="ri-arrow-left-line"></i>
                 </a>
@@ -54,7 +54,7 @@
                         <tbody>
                         @forelse($applications ?? [] as $item)
                             <tr>
-                                <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
+                                <td class="mw-45 d-flex align-items-center">{{$loop->iteration}}</td>
                                 <td>
                                     <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
                                     <p>Crte: {{$item->updated_at->format('d/m/Y')}}</p>
@@ -107,7 +107,7 @@
                                     <p class="{{$approve_class}}">{{$item->allocatedMedicalCenter?->status ? 'Approved' : 'Not Approved'}}</p>
                                 </td>
 
-                                @hasanyrole('super-admin|admin')
+                                @hasanyrole('super-admin|admin|analyst')
                                     <td>
                                         <a href="{{route('admin.application-list.allocations.approve', $item->id)}}"
                                            class="approve-btn btn-primary-fill" data-id="{{$item->id}}">Approve</a>

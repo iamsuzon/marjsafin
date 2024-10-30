@@ -42,7 +42,7 @@ class MedicalCenterAuthController extends Controller
 
     public function logout()
     {
-        Auth::guard('medical_center')->logout();
+        Auth::logout();
         session()->forget('medical_center');
         return redirect()->route('medical.login');
     }
@@ -50,7 +50,7 @@ class MedicalCenterAuthController extends Controller
     public function applicationList()
     {
         $username = Auth::guard('medical_center')->user()->username;
-        $applicationList = Application::where('center_name', $username);
+        $applicationList = Application::with(['applicationPayment'])->where('center_name', $username);
 
         if (request()->has('start_date') && request()->has('end_date')) {
             if (request('start_date') == null || request('end_date') == null) {
@@ -74,7 +74,6 @@ class MedicalCenterAuthController extends Controller
             $applicationList = $applicationList->whereDate('created_at', Carbon::today())->latest()->get();
         }
 
-
         return view('medical-center.application-list', compact('applicationList'));
     }
 
@@ -86,7 +85,11 @@ class MedicalCenterAuthController extends Controller
             'health_status' => 'nullable',
             'health_condition' => 'nullable',
             'allocated_medical_center' => 'nullable',
+            'application_payment' => 'nullable|numeric',
+        ],[
+            'application_payment.numeric' => 'The status must be a number.'
         ]);
+
 
         $application = Application::find($validated['id']);
         $application->ems_number = $validated['ems_number'];
@@ -107,6 +110,20 @@ class MedicalCenterAuthController extends Controller
                     'allocated_medical_center' => $validated['allocated_medical_center'],
                 ]
             );
+
+            if ($validated['application_payment']) {
+                $payment = (double) $validated['application_payment'];
+
+                $application->applicationPayment()->updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                    ],
+                    [
+                        'application_id' => $application->id,
+                        'center_amount' => $payment,
+                    ]
+                );
+            }
         }
 
         return response()->json([

@@ -207,10 +207,18 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Date of Birth</label>
-                                        <div class="d-flex justify-content-between">
-                                            <input type="date" class="contact-input" name="date_of_birth"
-                                                   value="{{$application->date_of_birth->format('Y-m-d')}}">
+                                        {{--                                        <div class="d-flex justify-content-between">--}}
+                                        {{--                                            <input type="date" class="contact-input" name="date_of_birth"--}}
+                                        {{--                                                   value="{{$application->date_of_birth?->format('Y-m-d')}}">--}}
+                                        {{--                                            <span> <b class="caret"></b></span>--}}
+                                        {{--                                        </div>--}}
+
+                                        <div class="d-flex justify-content-between date-pic-icon">
+                                            <input type="text" class="input single-date-picker"
+                                                   placeholder="Choose Date" name="date_of_birth"
+                                                   value="{{$application->date_of_birth?->format('d-m-Y')}}">
                                             <span> <b class="caret"></b></span>
+                                            <i class="ri-calendar-line"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -230,32 +238,63 @@
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Issue Date</label>
-                                        <div class="d-flex justify-content-between">
-                                            <input type="date" class="contact-input" name="passport_issue_date"
-                                                   value="{{$application->passport_issue_date->format('Y-m-d')}}">
+                                        {{--                                        <div class="d-flex justify-content-between">--}}
+                                        {{--                                            <input type="date" class="contact-input" name="passport_issue_date"--}}
+                                        {{--                                                   value="{{$application->passport_issue_date?->format('Y-m-d')}}">--}}
+                                        {{--                                            <span> <b class="caret"></b></span>--}}
+                                        {{--                                        </div>--}}
+
+                                        <div class="d-flex justify-content-between date-pic-icon">
+                                            <input type="text" class="input single-date-picker"
+                                                   placeholder="Choose Date" name="passport_issue_date"
+                                                   value="{{$application->passport_issue_date?->format('d-m-Y')}}">
                                             <span> <b class="caret"></b></span>
+                                            <i class="ri-calendar-line"></i>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Expiry Date</label>
-                                        <div class="d-flex justify-content-between">
-                                            <input type="date" class="contact-input" name="passport_expiry_date"
-                                                   value="{{$application->passport_expiry_date->format('Y-m-d')}}">
+                                        {{--                                        <div class="d-flex justify-content-between">--}}
+                                        {{--                                            <input type="date" class="contact-input" name="passport_expiry_date"--}}
+                                        {{--                                                   value="{{$application->passport_expiry_date?->format('Y-m-d')}}">--}}
+                                        {{--                                            <span> <b class="caret"></b></span>--}}
+                                        {{--                                        </div>--}}
+
+                                        <div class="d-flex justify-content-between date-pic-icon">
+                                            <input type="text" class="input single-date-picker"
+                                                   placeholder="Choose Date" name="passport_expiry_date"
+                                                   value="{{$application->passport_expiry_date?->format('d-m-Y')}}">
                                             <span> <b class="caret"></b></span>
+                                            <i class="ri-calendar-line"></i>
                                         </div>
                                     </div>
                                 </div>
 
                                 @hasrole('super-admin')
-                                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                        <div class="contact-form">
-                                            <label class="contact-label">Ref No<span class="fillable mx-1">*</span></label>
-                                            <input class="form-control input" type="text" name="ref_no"
-                                                   placeholder="Ref Number" value="{{$application->ref_no}}">
-                                        </div>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    @php--}}
+{{--                                        $seleted_problems = json_decode($application->problem);--}}
+{{--                                    @endphp--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Problems<span--}}
+{{--                                                class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="multiple-select" multiple="multiple" name="problem[]">--}}
+{{--                                            @foreach(problemList() ?? [] as $index => $problem)--}}
+{{--                                                <option {{in_array($index, $seleted_problems) ? 'selected' : ''}} value="{{ $index }}">{{ $problem }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+
+                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                                    <div class="contact-form">
+                                        <label class="contact-label">Ref No<span class="fillable mx-1">*</span></label>
+                                        <input class="form-control input" type="text" name="ref_no"
+                                               placeholder="Ref Number" value="{{$application->ref_no}}">
                                     </div>
+                                </div>
                                 @endhasrole
                             </div>
 
@@ -271,4 +310,27 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function () {
+            // Initialize datepicker for every date input field
+            $('.single-date-picker').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoApply: false,
+                locale: {
+                    format: 'DD-MM-YYYY',
+                    separator: ' - ',
+                }
+            });
+
+            $('.single-date-picker').val("");
+
+            $('input[name="date_of_birth"]').val(`{{$application->date_of_birth}}`);
+            $('input[name="passport_issue_date"]').val(`{{$application->passport_issue_date}}`);
+            $('input[name="passport_expiry_date"]').val(`{{$application->passport_expiry_date}}`);
+        });
+    </script>
 @endsection

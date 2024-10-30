@@ -36,7 +36,8 @@ class Application extends Model
         'health_status',
         'health_status_details',
         'serial_number',
-        'ems_number'
+        'ems_number',
+        'problem',
     ];
 
     protected $casts = [
@@ -58,5 +59,15 @@ class Application extends Model
     public function allocatedMedicalCenter(): HasOne
     {
         return $this->hasOne(AllocateMedicalCenter::class, 'application_id', 'id');
+    }
+
+    public function applicationPayment(): HasOne
+    {
+        return $this->hasOne(ApplicationPayments::class, 'application_id', 'id');
+    }
+
+    public function paymentLog(): HasOne
+    {
+        return $this->hasOne(PaymentLog::class, 'application_id', 'id');
     }
 }

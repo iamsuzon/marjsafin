@@ -102,6 +102,33 @@ function allocateMedicalCenter(): array
     return $centerListArray;
 }
 
+function problemList(): array
+{
+    return [
+        'hbs' => 'HBS',
+        'tph' => 'TPH',
+        'vdrl' => 'VDRL',
+        'tph vdrl' => 'TPH VDRL',
+        'tb' => 'TB',
+        'pt' => 'PT'
+    ];
+}
+
+function paymentMethods(): array
+{
+    return [
+        'ibbl' => 'IBBL',
+        'brac' => 'Brac',
+        'eastern_bank' => 'Eastern Bank',
+        'dbbl' => 'DBBL'
+    ];
+}
+
+function getPaymentMethodName($method): string
+{
+    return paymentMethods()[$method] ?? '';
+}
+
 function getAllocatedMedicalCenterName(Application $item): string
 {
     return $item->allocatedMedicalCenter?->allocated_medical_center ?? '';
@@ -133,6 +160,9 @@ function generatePdfCode($location): string
 
     // Define the code prefix with IMS and the location letter
     $prefix = "IMS-{$locationPrefix}-";
+    if ($location === 'mostafa_health') {
+        $prefix = 'IMS-MHC-';
+    }
 
     // Count how many entries already exist with this location prefix
     $count = Application::where('center_name', $location)->count();
@@ -142,4 +172,14 @@ function generatePdfCode($location): string
 
     // Return the full code
     return $prefix . $newNumber;
+}
+
+function fixNoticeText($text): string
+{
+    return str_replace('@gap', '<br>', $text);
+}
+
+function amountWithCurrency($amount): string
+{
+    return number_format($amount, 2) . ' BDT';
 }

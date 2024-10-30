@@ -24,6 +24,14 @@
     @yield('styles')
 </head>
 <body>
+<style>
+    .swal2-icon {
+        font-size: 20px !important;
+    }
+    .sidebar .sidebar-menu .sidebar-menu .sidebar-menu-item .parent-item-content.exclude-menu-icon::after{
+        content: none;
+    }
+</style>
 
 <div id="layout-wrapper">
     <header class="header">
@@ -229,6 +237,30 @@
                             <span class="on-half-expanded">Password Manage</span>
                         </a>
                     </li>
+
+                    @hasanyrole('super-admin')
+                        @php
+                            $depositRequestCount = 0;
+                            try {
+                                $depositRequestCount = App\Models\PaymentLog::where('status', 'pending')->count();
+                            }
+                            catch (\Exception $e) {}
+                        @endphp
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.deposit-request-history')}}">
+                            <a href="{{route('admin.deposit-request-history')}}" class="parent-item-content exclude-menu-icon">
+                                <i class="ri-caravan-line"></i>
+                                <span class="on-half-expanded">Deposit Request History ({{$depositRequestCount}})</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.transaction-history')}}">
+                            <a href="{{route('admin.transaction-history')}}" class="parent-item-content">
+                                <i class="ri-caravan-line"></i>
+                                <span class="on-half-expanded">Transaction History</span>
+                            </a>
+                        </li>
+                    @endhasanyrole
 
                     @hasanyrole('super-admin|admin')
                         <li class="sidebar-menu-item">

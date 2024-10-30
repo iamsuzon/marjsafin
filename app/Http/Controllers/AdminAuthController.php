@@ -50,7 +50,7 @@ class AdminAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList = Application::whereBetween('created_at', [$start_date, $end_date])->get();
+            $applicationList = Application::with(['applicationPayment'])->whereBetween('created_at', [$start_date, $end_date])->get();
         }
         else if(request()->has('passport_search'))
         {
@@ -58,10 +58,10 @@ class AdminAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList = Application::where('passport_number', trim(request('passport_search')))->get();
+            $applicationList = Application::with(['applicationPayment'])->where('passport_number', trim(request('passport_search')))->get();
         }
         else {
-            $applicationList = Application::whereDate('created_at', Carbon::today())->latest()->get();
+            $applicationList = Application::with(['applicationPayment'])->whereDate('created_at', Carbon::today())->latest()->get();
         }
 
         return view('admin.application-list', ['applicationList' => $applicationList]);
@@ -74,13 +74,22 @@ class AdminAuthController extends Controller
             'ems_number' => 'nullable',
             'health_status' => 'nullable',
             'health_condition' => 'nullable',
+            'application_payment' => 'nullable|numeric',
+        ], [
+            'application_payment.numeric' => 'The admin status must be a number.'
         ]);
 
         $application = Application::find($validated['id']);
         $application->ems_number = $validated['ems_number'];
         $application->health_status = $validated['health_status'];
         $application->health_status_details = $validated['health_condition'];
-        $application->save();
+
+        if ($application->save())
+        {
+            $application->applicationPayment()->update([
+                'admin_amount' => (double) $validated['application_payment']
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -115,7 +124,10 @@ class AdminAuthController extends Controller
             'passport_issue_date' => 'nullable',
             'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',
+            'problem' => 'nullable'
         ]);
+
+//        $validated['problem'] = json_encode($validated['problem']);
 
         $application = Application::find($id);
         $application->update($validated);

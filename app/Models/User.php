@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -22,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'refer_by'
+        'refer_by',
+        'balance'
     ];
 
     /**
@@ -43,5 +45,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'balance' => 'decimal:2'
     ];
+
+    public function banned(): HasOne
+    {
+        return $this->hasOne(BannedUser::class);
+    }
 }
