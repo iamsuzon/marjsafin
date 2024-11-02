@@ -248,9 +248,9 @@
                         @endphp
 
                         <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.deposit-request-history')}}">
-                            <a href="{{route('admin.deposit-request-history')}}" class="parent-item-content exclude-menu-icon">
+                            <a href="{{route('admin.score-request-history')}}" class="parent-item-content exclude-menu-icon">
                                 <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">Deposit Request History ({{$depositRequestCount}})</span>
+                                <span class="on-half-expanded">Score Request History ({{$depositRequestCount}})</span>
                             </a>
                         </li>
 
@@ -258,6 +258,13 @@
                             <a href="{{route('admin.transaction-history')}}" class="parent-item-content">
                                 <i class="ri-caravan-line"></i>
                                 <span class="on-half-expanded">Transaction History</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.union-accounts')}}">
+                            <a href="{{route('admin.union-accounts')}}" class="parent-item-content">
+                                <i class="ri-sparkling-fill"></i>
+                                <span class="on-half-expanded">Union Accounts</span>
                             </a>
                         </li>
                     @endhasanyrole

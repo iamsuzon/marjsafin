@@ -35,4 +35,9 @@ class PaymentLog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function application(): BelongsTo
+    {
+        return $this->belongsTo(Application::class);
+    }
 }

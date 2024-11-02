@@ -1,4 +1,4 @@
-@extends('admin.layout.user-master')
+@extends('user.layout.user-master')
 
 @section('styles')
     <style>
@@ -10,6 +10,7 @@
         .approve_btn {
             border: 1px solid transparent !important;
         }
+
         .approve_btn:hover {
             background: transparent !important;
             border: 1px solid green !important;
@@ -20,6 +21,7 @@
             background: red !important;
             border: 1px solid transparent !important;
         }
+
         .decline_btn:hover {
             background: transparent !important;
             border: 1px solid red !important;
@@ -103,58 +105,70 @@
                             <thead>
                             <tr>
                                 <th class="mw-45">#SL</th>
-                                <th>Username</th>
-                                <th>Payment Type</th>
-                                <th>Deposit Date</th>
-                                <th>Payment Method</th>
-                                <th>Reference No</th>
+                                <th>Application Reg ID</th>
+                                <th>Score Type</th>
+                                <th>Score Transaction Date</th>
+                                {{--                                <th>Payment Method</th>--}}
+                                {{--                                <th>Reference No</th>--}}
                                 <th>Score</th>
-                                <th>Deposit Slip</th>
-                                <th>Remarks</th>
+                                {{--                                <th>Deposit Slip</th>--}}
+                                {{--                                <th>Transaction Status</th>--}}
+                                {{--                                <th>Remarks</th>--}}
                             </tr>
                             </thead>
                             <tbody>
                             @forelse($transactionHistory ?? [] as $item)
                                 <tr>
                                     <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
+                                    <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
                                     <td>
-                                        <p>{{$item->user?->name}}</p>
-                                        <p>{{$item->user?->username}}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-capitalize">{{$item->payment_type}}</p>
+                                        @if($item->payment_type === 'deposit')
+                                            <p class="text-capitalize">Score Added</p>
+                                        @else
+                                            <p class="text-capitalize">Score Deducted</p>
+                                        @endif
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
-                                    <td>
-                                        <p>{{getPaymentMethodName($item->payment_method)}}</p>
-                                    </td>
-                                    <td>{{$item->reference_no}}</td>
+                                    {{--                                    <td>--}}
+                                    {{--                                        <p>{{getPaymentMethodName($item->payment_method)}}</p>--}}
+                                    {{--                                    </td>--}}
+                                    {{--                                    <td>{{$item->reference_no}}</td>--}}
                                     <td>
                                         <p class="{{$item->payment_type === 'deposit' ? 'text-success' : 'text-danger'}}">
                                             {{$item->payment_type === 'deposit' ? '+' : '-'}}{{$item->amount}}
                                         </p>
                                     </td>
-                                    <td>
-                                        @if($item->deposit_slip)
-                                            <a href="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"
-                                               target="_blank">
-                                                @php
-                                                    $file_type = $item->deposit_slip ? pathinfo($item->deposit_slip, PATHINFO_EXTENSION) : '';
-                                                @endphp
+                                    {{--                                    <td>--}}
+                                    {{--                                        @if($item->deposit_slip)--}}
+                                    {{--                                            <a href="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"--}}
+                                    {{--                                               target="_blank">--}}
+                                    {{--                                                @php--}}
+                                    {{--                                                    $file_type = $item->deposit_slip ? pathinfo($item->deposit_slip, PATHINFO_EXTENSION) : '';--}}
+                                    {{--                                                @endphp--}}
 
-                                                @if($file_type === 'pdf')
-                                                    <img src="{{customAsset('assets/images/pdf.webp')}}"
-                                                         alt="Deposit Slip"
-                                                         class="img-fluid" style="max-width: 50px">
-                                                @else
-                                                    <img src="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"
-                                                         alt="Deposit Slip"
-                                                         class="img-fluid" style="max-width: 50px">
-                                                @endif
-                                            </a>
-                                        @endif
-                                    </td>
-                                    <td>{{$item->remarks}}</td>
+                                    {{--                                                @if($file_type === 'pdf')--}}
+                                    {{--                                                    <img src="{{customAsset('assets/images/pdf.webp')}}"--}}
+                                    {{--                                                         alt="Deposit Slip"--}}
+                                    {{--                                                         class="img-fluid" style="max-width: 50px">--}}
+                                    {{--                                                @else--}}
+                                    {{--                                                    <img src="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"--}}
+                                    {{--                                                         alt="Deposit Slip"--}}
+                                    {{--                                                         class="img-fluid" style="max-width: 50px">--}}
+                                    {{--                                                @endif--}}
+                                    {{--                                            </a>--}}
+                                    {{--                                        @endif--}}
+                                    {{--                                    </td>--}}
+                                    {{--                                    <td>--}}
+                                    {{--                                        @php--}}
+                                    {{--                                            $class = [--}}
+                                    {{--                                                'pending' => 'text-warning',--}}
+                                    {{--                                                'approved' => 'text-success',--}}
+                                    {{--                                                'declined' => 'text-danger',--}}
+                                    {{--                                            ];--}}
+                                    {{--                                        @endphp--}}
+                                    {{--                                        <p class="text-capitalize {{$class[$item->status]}}">{{$item->status}}</p>--}}
+                                    {{--                                    </td>--}}
+                                    {{--                                    <td>{{$item->remarks}}</td>--}}
                                 </tr>
                             @empty
                                 <tr>
@@ -179,11 +193,11 @@
                 let start_date = $('.start_date').val();
                 let end_date = $('.end_date').val();
 
-                window.location.href = `{{route('admin.transaction-history')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('user.transaction.history')}}?start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('admin.transaction-history')}}`;
+                location.href = `{{route('user.transaction.history')}}`;
             });
         })
     </script>

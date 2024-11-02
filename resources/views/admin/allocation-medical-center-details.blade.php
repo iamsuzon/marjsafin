@@ -42,11 +42,11 @@
                             @endhasrole
                             <th>Traveling To</th>
                             <th>Center</th>
-                            <th>Result</th>
+                            <th>Comment</th>
                             <th>Allocated Center</th>
-                            <th>Status</th>
 
-                            @hasanyrole('super-admin|admin')
+                            @hasanyrole('super-admin')
+                            <th>Status</th>
                             <th>Action</th>
                             @endhasanyrole
                         </tr>
@@ -95,11 +95,17 @@
                                             'text-danger' => $item->health_status == 'unfit',
                                             'text-warning' => $item->health_status == 'held-up',
                                         ])>{{$item->health_status}}</p>
-                                    <p>{{$item->health_status_details}}</p>
+                                    <p>C: {{$item->health_status_details}}</p>
+
+                                    @hasrole('super-admin')
+                                    <p>A: {{$item->applicationCustomComment?->health_condition}}</p>
+                                    @endhasrole
                                 </td>
                                 <td>
                                     <p>{{getAllocatedMedicalCenterName($item)}}</p>
                                 </td>
+
+                                @hasanyrole('super-admin')
                                 <td>
                                     @php
                                         $approve_class = $item->allocatedMedicalCenter?->status ? 'text-success' : 'text-danger';
@@ -107,7 +113,6 @@
                                     <p class="{{$approve_class}}">{{$item->allocatedMedicalCenter?->status ? 'Approved' : 'Not Approved'}}</p>
                                 </td>
 
-                                @hasanyrole('super-admin|admin|analyst')
                                     <td>
                                         <a href="{{route('admin.application-list.allocations.approve', $item->id)}}"
                                            class="approve-btn btn-primary-fill" data-id="{{$item->id}}">Approve</a>

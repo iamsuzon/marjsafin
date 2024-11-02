@@ -32,6 +32,10 @@ class MedicalCenterAuthController extends Controller
             return redirect()->route('medical.dashboard');
         }
 
+        if (Auth::guard('union_account')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
+            return redirect()->route('union.dashboard');
+        }
+
         return back()->with('error', 'Invalid username or password');
     }
 
@@ -81,8 +85,7 @@ class MedicalCenterAuthController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'ems_number' => 'nullable',
-            'health_status' => 'nullable',
+            'health_status' => 'nullable|in:fit,cfit,unfit,held-up',
             'health_condition' => 'nullable',
             'allocated_medical_center' => 'nullable',
             'application_payment' => 'nullable|numeric',
@@ -90,13 +93,21 @@ class MedicalCenterAuthController extends Controller
             'application_payment.numeric' => 'The status must be a number.'
         ]);
 
-
         $application = Application::find($validated['id']);
-        $application->ems_number = $validated['ems_number'];
         $application->health_status = $validated['health_status'];
         $application->health_status_details = $validated['health_condition'];
 
         if ($application->save()) {
+            $application->applicationCustomComment()->updateOrCreate(
+                [
+                    'application_id' => $application->id,
+                ],
+                [
+                    'application_id' => $application->id,
+                    'health_condition' => $validated['health_condition'],
+                ]
+            );
+
             $medical_center_id = Auth::guard('medical_center')->id();
 
             AllocateMedicalCenter::updateOrCreate(
@@ -111,8 +122,8 @@ class MedicalCenterAuthController extends Controller
                 ]
             );
 
-            if ($validated['application_payment']) {
-                $payment = (double) $validated['application_payment'];
+            if ($validated['application_payment'] ?? false) {
+                $payment = (double) $validated['application_payment'] ?? 0;
 
                 $application->applicationPayment()->updateOrCreate(
                     [

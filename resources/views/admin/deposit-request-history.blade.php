@@ -34,42 +34,7 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Deposit Request History List</h2>
-
-                        <form id="search-form">
-                            <div class="row d-flex justify-content-center mt-25">
-                                <div class="col-md-2">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Start Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker start_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <!-- Date Picker -->
-                                    <div class="contact-form">
-                                        <label class="contact-label">end Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker end_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex">
-                                        <button class="btn-primary-fill search_btn" type="submit">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        <h2 class="manage__title">Score Request History List</h2>
                     </div>
                 </div>
 
@@ -104,14 +69,9 @@
                             <tr>
                                 <th class="mw-45">#SL</th>
                                 <th>Username</th>
-                                <th>Payment Type</th>
-                                <th>Deposit Date</th>
-                                <th>Payment Method</th>
-                                <th>Reference No</th>
-                                <th>Amount(BDT)</th>
-                                <th>Deposit Slip</th>
-                                <th>Remarks</th>
-                                <th>Payment Status</th>
+                                <th>Type</th>
+                                <th>Request Date</th>
+                                <th>Status</th>
 
                                 @hasanyrole('super-admin')
                                 <th>Action</th>
@@ -127,33 +87,9 @@
                                         <p>{{$item->user?->username}}</p>
                                     </td>
                                     <td>
-                                        Deposit
+                                        Score Request
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
-                                    <td>
-                                        <p>{{getPaymentMethodName($item->payment_method)}}</p>
-                                    </td>
-                                    <td>{{$item->reference_no}}</td>
-                                    <td>{{$item->amount}}</td>
-                                    <td>
-                                        <a href="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"
-                                           target="_blank">
-                                            @php
-                                                $file_type = $item->deposit_slip ? pathinfo($item->deposit_slip, PATHINFO_EXTENSION) : '';
-                                            @endphp
-
-                                            @if($file_type === 'pdf')
-                                                <img src="{{customAsset('assets/images/pdf.webp')}}"
-                                                     alt="Deposit Slip"
-                                                     class="img-fluid" style="max-width: 50px">
-                                            @else
-                                                <img src="{{customAsset('assets/uploads/deposit/'.$item->deposit_slip)}}"
-                                                     alt="Deposit Slip"
-                                                     class="img-fluid" style="max-width: 50px">
-                                            @endif
-                                        </a>
-                                    </td>
-                                    <td>{{$item->remarks}}</td>
                                     <td>
                                         @php
                                             $class = ['approved' => 'text-success', 'pending' => 'text-warning', 'declined' => 'text-danger'];
@@ -164,10 +100,10 @@
                                     @hasanyrole('super-admin')
                                     <td>
                                         @if($item->status === 'pending')
-                                            <div class="d-flex justify-content-between gap-10">
-                                                <a class="approve_btn btn btn-primary btn-sm" href="javascript:void(0)" data-id="{{$item->id}}">Approve</a>
-                                                <a class="decline_btn btn btn-primary btn-sm" href="javascript:void(0)"
-                                                   data-id="{{$item->id}}">Decline</a>
+                                            <div>
+                                                <a class="add_score_btn btn btn-primary btn-sm" href="javascript:void(0)"
+                                                    data-bs-target="#add-score-modal" data-bs-toggle="modal"
+                                                    data-id="{{$item->id}}" data-name="{{$item->user?->name}}">Add Score</a>
                                             </div>
                                         @else
                                             @php
@@ -190,63 +126,146 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="add-score-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header mb-10 p-0 pb-10">
+                    <div class="d-flex align-items-center gap-8">
+                        <div class="icon text-20">
+                            <i class="ri-bar-chart-horizontal-line"></i>
+                        </div>
+                        <h6 class="modal-title">Add Score</h6>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <form action="#" method="POST" id="edit-form" enctype="multipart/form-data">
+
+                        <input type="hidden" name="id">
+
+                        <div class="row g-10">
+                            <div class="col-md-12">
+                                <!-- Date Picker -->
+                                <div class="contact-form">
+                                    <label class="contact-label">User Name</label>
+                                    <input class="form-control input" name="name" disabled>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <!-- Date Picker -->
+                                <div class="contact-form">
+                                    <label class="contact-label">Score Amount</label>
+                                    <input class="form-control input" name="score_amount">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <div class="d-flex align-items-center gap-16 flex-wrap mt-18">
+                            <button class="btn-primary-fill" type="submit">
+                                <span class="d-flex align-items-center gap-6">
+                                    <i class="las la-check-circle"></i>
+                                    <span>Update</span>
+                                </span>
+                            </button>
+                            <button class="btn-cancel-fill" type="reset" data-bs-dismiss="modal">
+                                <span class="d-flex align-items-center gap-6">
+                                    <i class="ri-close-line"></i>
+                                    <span>Discard</span>
+                                </span>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $(document).on('click', '#search-form .search_btn', function (e) {
-                e.preventDefault();
-
-                let start_date = $('.start_date').val();
-                let end_date = $('.end_date').val();
-
-                window.location.href = `{{route('admin.deposit-request-history')}}?start_date=${start_date}&end_date=${end_date}`;
-            });
-
-            $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('admin.deposit-request-history')}}`;
-            });
-
-            $(document).on('click', '.approve_btn', function (e) {
-                e.preventDefault();
-
+            $(document).on('click', '.add_score_btn', function () {
                 let el = $(this);
-                let id = el.data('id')
+                let id = el.data('id');
+                let name = el.data('name');
+
+                let from = $('#add-score-modal');
+
+                from.find('input[name="id"]').val('');
+                from.find('input[name="name"]').val('');
+                from.find('input[name="score_amount"]').val('');
+
+                from.find('input[name="id"]').val(id);
+                from.find('input[name="name"]').val(name);
+            });
+
+
+            $(document).on('submit', '#add-score-modal form', function (e) {
+                e.preventDefault();
+
+                let from = $('#add-score-modal');
+                let id = from.find('input[name="id"]').val();
+                let score_amount = from.find('input[name="score_amount"]').val();
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You want to approve this deposit request!",
+                    text: "You want to add score to this user?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Approve it!'
+                    confirmButtonText: 'Yes, Add it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        location.href = `{{route('admin.deposit-request-history.change-status')}}?status=approved&id=${id}`;
-                    }
-                })
-            });
+                        $.ajax({
+                            url: '{{route('admin.score-request-history.add-score')}}',
+                            type: 'POST',
+                            data: {
+                                _token: '{{csrf_token()}}',
+                                request_id: id,
+                                score_amount: score_amount
+                            },
+                            success: function (response) {
+                                if (response.status) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: response.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
 
-            $(document).on('click', '.decline_btn', function (e) {
-                e.preventDefault();
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1500);
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function (error) {
+                                let errors = error.responseJSON.errors;
+                                let errorValues = Object.values(errors).map((value) => {
+                                    return value;
+                                });
 
-                let el = $(this);
-                let id = el.data('id')
-                console.log(id)
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to decline this deposit request!",
-                    icon: 'error',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Decline it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.href = `{{route('admin.deposit-request-history.change-status')}}?status=declined&id=${id}`;
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    html: errorValues.join('<br>')
+                                });
+                            }
+                        });
                     }
                 })
             });

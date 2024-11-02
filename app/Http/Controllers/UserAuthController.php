@@ -76,7 +76,7 @@ class UserAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->whereBetween('created_at', [$start_date, $end_date])
                 ->latest()
                 ->get();
@@ -87,18 +87,37 @@ class UserAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->where('passport_number', trim(request('passport_search')))
                 ->latest()
                 ->get();
         }
         else {
-            $applicationList = Application::with(['applicationPayment'])->where('user_id', $user_id)
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->whereDate('created_at', Carbon::today())
                 ->latest()->get();
         }
 
         return view('user.user-panel', compact('applicationList'));
+    }
+
+    public function userPanelUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'registration_number' => 'nullable',
+            'medical_date' => 'nullable|date',
+        ]);
+
+        $application = Application::findOrFail($validated['id']);
+        $application->serial_number = $validated['registration_number'];
+        $application->medical_date = Carbon::parse($validated['medical_date']);
+        $application->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Application updated successfully.'
+        ]);
     }
 
     public function userRegistration()
@@ -138,7 +157,7 @@ class UserAuthController extends Controller
         ]);
 
         $validated['user_id'] = Auth::guard('web')->id();
-        $validated['serial_number'] = now()->format('Ym').'-'.rand(1, 999999);
+//        $validated['serial_number'] = now()->format('Ym').'-'.rand(1, 999999);
         $validated['pdf_code'] = generatePdfCode($validated['center_name']);
         $validated['contact_no'] = 0000;
         $validated['religion'] = 'none';

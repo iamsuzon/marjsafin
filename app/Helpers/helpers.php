@@ -124,9 +124,47 @@ function paymentMethods(): array
     ];
 }
 
+function unionAccountTypes(): array
+{
+    return [
+        'user' => 'User',
+        'medical_center' => 'Medical Center',
+    ];
+}
+
+function healthConditions(): array
+{
+    return [
+        "fit" => "Fit",
+        "cfit" => "C.Fit",
+        "unfit" => "Unfit",
+        "held-up" => "Held-Up",
+    ];
+}
+
+function medicalStatus(): array
+{
+    return [
+        'new' => 'New',
+        'in-progress' => 'In Progress',
+        'under-review' => 'Under Review',
+        'fit' => 'Fit',
+    ];
+}
+
+function getMedicalStatusName($status): string
+{
+    return medicalStatus()[$status] ?? '';
+}
+
+function getHealthConditionsName($condition): string
+{
+    return healthConditions()[$condition] ?? '';
+}
+
 function getPaymentMethodName($method): string
 {
-    return paymentMethods()[$method] ?? '';
+    return paymentMethods()[$method] ?? 'admin';
 }
 
 function getAllocatedMedicalCenterName(Application $item): string

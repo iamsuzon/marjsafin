@@ -11,48 +11,49 @@ class AdminDepositRequestHistoryController extends Controller
 {
     public function depositRequestHistory()
     {
-        if (request()->has('start_date') && request()->has('end_date')) {
-            if (request('start_date') == null || request('end_date') == null) {
-                return back()->with('error', 'Please select both start and end date.');
-            }
-
-            $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
-            $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
-
-            $deposit_history = PaymentLog::where('payment_type', 'deposit')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
-        }
-        else {
-            $deposit_history = PaymentLog::where('payment_type', 'deposit')->whereDate('created_at', Carbon::today())->latest()->get();
-        }
+        $deposit_history = PaymentLog::where('payment_type', 'score_request')
+                ->latest()
+                ->get();
 
         return view('admin.deposit-request-history', [
             'deposit_history' => $deposit_history
         ]);
     }
 
-    public function changePaymentStatus()
+    public function addScore(Request $request)
     {
-        $validated = request()->validate([
-            'id' => 'required|integer',
-            'status' => 'required|in:approved,declined'
+        $validated = $request->validate([
+            'request_id' => 'required|exists:payment_logs,id',
+            'score_amount' => 'required|integer|min:1'
         ]);
 
-        $payment = PaymentLog::findOrFail($validated['id']);
+        try {
+            $payment_log = PaymentLog::find($validated['request_id']);
+            $payment_log->user()->increment('balance', $validated['score_amount']);
 
-        if ($payment->approved === 'approved') {
-            return back()->with('error', 'Payment has already been approved.');
+            PaymentLog::create([
+                'user_id' => $payment_log->user_id,
+                'amount' => $validated['score_amount'],
+                'payment_type' => 'deposit',
+                'payment_method' => 'admin',
+                'reference_no' => 'admin',
+                'deposit_date' => Carbon::now(),
+                'remarks' => 'Score added by admin.',
+                'status' => 'approved'
+            ]);
+
+            $payment_log->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again.'
+            ]);
         }
 
-        $payment->update([
-            'status' => $validated['status']
+        return response()->json([
+            'status' => true,
+            'message' => 'Score added successfully.'
         ]);
-
-        if ($payment->status === 'approved') {
-            $payment->user()->increment('balance', $payment->amount);
-            return back()->with('success', 'Payment has been approved.');
-        }
-
-        return back()->with('error', 'Payment has been declined.');
     }
 
     public function transactionHistory()

@@ -48,6 +48,10 @@ return [
             'driver' => 'session',
             'provider' => 'medical_centers',
         ],
+        'union_account' => [
+            'driver' => 'session',
+            'provider' => 'union_accounts',
+        ],
     ],
 
     /*
@@ -79,6 +83,10 @@ return [
         'medical_centers' => [
             'driver' => 'eloquent',
             'model' => App\Models\MedicalCenter::class,
+        ],
+        'union_accounts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UnionAccount::class,
         ],
 
         // 'users' => [

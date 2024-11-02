@@ -104,7 +104,7 @@
 
             @auth('web')
                 <li>
-                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;" href="javascript:void(0)">{{amountWithCurrency(auth('web')->user()->balance)}}</a>
+                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;" href="javascript:void(0)">Score: {{auth('web')->user()->balance}}</a>
                 </li>
             @endauth
 
@@ -146,8 +146,18 @@
                         {{--                            </a>--}}
                         {{--                        </li>--}}
                         <li class="list">
+                            @php
+                                if (auth('web')->check()) {
+                                    $route = route('logout');
+                                } elseif (auth('medical_center')->check()) {
+                                    $route = route('medical.logout');
+                                } elseif (auth('union_account')->check()) {
+                                    $route = route('union.logout');
+                                }
+                            @endphp
+
                             <a class="list-items dropdown-item"
-                               href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}">
+                               href="{{$route}}">
                                 <span>logout</span>
                                 <i class="ri-logout-box-line"></i>
                             </a>
@@ -192,10 +202,24 @@
                             </a>
                         </li>
 
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.index')}}">
-                            <a href="{{route('user.deposit.index')}}" class="parent-item-content">
-                                <i class="ri-wallet-3-line"></i>
-                                <span class="on-half-expanded">Deposit Request</span>
+{{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.index')}}">--}}
+{{--                            <a href="{{route('user.deposit.index')}}" class="parent-item-content">--}}
+{{--                                <i class="ri-wallet-3-line"></i>--}}
+{{--                                <span class="on-half-expanded">Deposit Request</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+
+{{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.history')}}">--}}
+{{--                            <a href="{{route('user.deposit.history')}}" class="parent-item-content">--}}
+{{--                                <i class="ri-file-history-line"></i>--}}
+{{--                                <span class="on-half-expanded">Deposit History</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.transaction.history')}}">
+                            <a href="{{route('user.transaction.history')}}" class="parent-item-content">
+                                <i class="ri-list-indefinite"></i>
+                                <span class="on-half-expanded">Transaction History</span>
                             </a>
                         </li>
                     @endauth
@@ -223,8 +247,33 @@
                         </li>
                     @endauth
 
+                    @auth('union_account')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.dashboard')}}">
+                            <a href="{{route('union.dashboard')}}" class="parent-item-content">
+                                <i class="ri-dashboard-line"></i>
+                                <span class="on-half-expanded">Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.medical.list')}}">
+                            <a href="{{route('union.medical.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Medical List</span>
+                            </a>
+                        </li>
+                    @endauth
+
                     <li class="sidebar-menu-item">
-                        <a href="{{auth('web')->check() ? route('logout') : route('medical.logout')}}"
+                        @php
+                            if (auth('web')->check()) {
+                                $route = route('logout');
+                            } elseif (auth('medical_center')->check()) {
+                                $route = route('medical.logout');
+                            } elseif (auth('union_account')->check()) {
+                                $route = route('union.logout');
+                            }
+                        @endphp
+                        <a href="{{$route}}"
                            class="parent-item-content">
                             <i class="ri-caravan-line"></i>
                             <span class="on-half-expanded">Logout</span>

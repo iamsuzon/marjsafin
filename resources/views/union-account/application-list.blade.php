@@ -15,7 +15,12 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List ({{$applicationList->count()}})</h2>
+                        <div class="manage__title d-flex justify-content-between">
+                            <h2>Application List ({{$applicationList->count()}})</h2>
+                            <a href="{{route('union.medical.list')}}" class="btn-primary-fill">
+                                <i class="ri-arrow-left-line"></i>
+                            </a>
+                        </div>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -83,6 +88,7 @@
                                 <th>Center</th>
                                 <th>Comment</th>
                                 <th>Allocate Center</th>
+                                <th>Medical Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -124,16 +130,37 @@
                                     <td>
                                         <p @class([
                                             'text-capitalize',
-                                            'text-success' => $item->health_status == 'fit' || $item->health_status == 'cfit',
+                                            'text-success' => $item->health_status == 'fit',
                                             'text-danger' => $item->health_status == 'unfit',
                                             'text-warning' => $item->health_status == 'held-up',
-                                        ])>{{getHealthConditionsName($item->health_status)}}</p>
+                                        ])>{{$item->health_status}}</p>
                                         <p>{{$item->health_status_details}}</p>
                                     </td>
                                     <td>
                                         <p>{{getAllocatedMedicalCenterName($item) ?? ''}}</p>
                                     </td>
-                                    <td class="text-end px-15 d-flex gap-10">
+                                    <td>
+                                        @php
+                                            $medical_status = $item->medical_status;
+
+                                            $class = 'info';
+                                            if ($medical_status == 'new') {
+                                                $class = 'info';
+                                            } elseif ($medical_status == 'in-progress' || $medical_status == 'under-review') {
+                                                $class = 'warning';
+                                            } elseif ($medical_status == 'fit') {
+                                                $class = 'success';
+                                            }
+                                        @endphp
+
+                                        <p class="mb-10 text-{{$class}}">{{getMedicalStatusName($item->medical_status ?? 'new')}}</p>
+                                        <select class="select2" name="medical_status" data-id="{{$item->id}}">
+                                            @foreach(medicalStatus() as $key => $status)
+                                                <option value="{{$key}}" @if($item->medical_status == $key) selected @endif>{{$status}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
                                         <a class="edit-btn" href="javascript:void(0)"
                                            data-id="{{$item->id}}"
                                            data-health_status="{{$item->health_status}}"
@@ -144,9 +171,9 @@
                                             <i class="ri-file-edit-line"></i>
                                         </a>
 
-                                        <a class="view-btn" href="{{route('medical.application.edit', $item->id)}}">
-                                            <i class="ri-pencil-fill"></i>
-                                        </a>
+{{--                                        <a class="view-btn" href="{{route('medical.application.edit', $item->id)}}">--}}
+{{--                                            <i class="ri-pencil-fill"></i>--}}
+{{--                                        </a>--}}
                                     </td>
                                 </tr>
                             @empty
@@ -282,12 +309,13 @@
                     return;
                 }
 
-                axios.post(`{{route('medical.application.result.update')}}?id=${id}`, {
+                axios.post(`{{route('union.application.result.update')}}?id=${id}`, {
                     _token: '{{csrf_token()}}',
                     health_status: health_status,
                     health_condition: health_condition,
                     allocated_medical_center: allocated_medical_center,
                     // application_payment: application_payment,
+                    center: '{{$username}}'
                 })
                     .then(res => {
                         let data = res.data;
@@ -308,11 +336,11 @@
                 let start_date = $('.start_date').val();
                 let end_date = $('.end_date').val();
 
-                window.location.href = `{{route('medical.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('union.application.list')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('medical.application.list')}}`;
+                location.href = `{{route('union.application.list')}}?center={{$username}}`;
             });
 
             $(document).on('click', '.search_btn_passport', function (e) {
@@ -320,7 +348,30 @@
 
                 let passport_search = $('input[name="passport_search"]').val();
 
-                window.location.href = `{{route('medical.application.list')}}?passport_search=${passport_search}`;
+                window.location.href = `{{route('union.application.list')}}?center={{$username}}&passport_search=${passport_search}`;
+            });
+
+            $(document).on('change', 'select[name=medical_status]', function () {
+                let el = $(this);
+                let id = el.data('id');
+                let medical_status = el.val();
+
+                axios.post(`{{route('user.application.list.update.medical-status')}}`, {
+                    _token: '{{csrf_token()}}',
+                    id: id,
+                    medical_status: medical_status,
+                })
+                    .then(res => {
+                        let data = res.data;
+
+                        if (data.status) {
+                            toastSuccess(data.message);
+                            reloadThisPage();
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             });
         })
     </script>

@@ -79,6 +79,10 @@
                     @if(session('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <strong>Unsuccessful!</strong> {{ session('error') }}
+
+                            @if(session('url'))
+                                    আরো স্কোর এর জন্য রিকোয়েস্ট করুন <a href="{{session('url')}}" class="btn btn-primary">Request Score</a>
+                            @endif
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
@@ -105,9 +109,10 @@
                                 <th>Reference</th>
                                 <th>Traveling To</th>
                                 <th>Center</th>
-                                <th>Status</th>
-                                <th>Result</th>
+                                <th>Score</th>
+                                <th>Comment</th>
                                 <th>PDF</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -116,7 +121,7 @@
                                     <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
                                     <td>
                                         <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
-                                        <p>Crte: {{$item->updated_at->format('d/m/Y')}}</p>
+                                        <p>Crte: {{$item->medical_date?->format('d/m/Y')}}</p>
                                     </td>
                                     <td>{{ucfirst($item->medical_type)}}</td>
                                     <td>
@@ -151,30 +156,50 @@
                                         @endphp
 
                                         @if($payment_status)
-                                            <p class="mb-10">{{amountWithCurrency($payment_status)}}</p>
+                                            <p class="mb-10 text-danger">-{{$payment_status}}</p>
+
+                                            @php
+                                                $medical_status = $item->medical_status;
+
+                                                $class = 'info';
+                                                if ($medical_status == 'new') {
+                                                    $class = 'info';
+                                                } elseif ($medical_status == 'in-progress' || $medical_status == 'under-review') {
+                                                    $class = 'warning';
+                                                } elseif ($medical_status == 'fit') {
+                                                    $class = 'success';
+                                                }
+                                            @endphp
 
                                             @if(auth('web')->user()->balance > 0)
                                                 @if(empty($item->paymentLog))
-                                                    <a href="javascript:void(0)" class="pay-bill-btn btn-primary-fill btn-sm" data-id="{{$item->id}}">
-                                                        <i class="ri-money-dollar-circle-line"></i> Pay Bill
+                                                    <a href="javascript:void(0)" class="pay-bill-btn btn-primary-fill"
+                                                       data-id="{{$item->id}}">
+                                                        <i class="ri-money-dollar-circle-line"></i> Submit Score
                                                     </a>
                                                 @else
-                                                    <p class="badge bg-success">PAID</p>
+                                                    <p class="badge bg-{{$class}}">{{getMedicalStatusName($item->medical_status ?? 'new')}}</p>
                                                 @endif
                                             @else
-                                                <a href="{{route('user.deposit.index')}}" class="btn-primary-fill btn-sm" style="background: #ffc107; color: #000">No Balance</a>
+                                                @if(!empty($item->paymentLog))
+                                                    <p class="badge bg-{{$class}}">{{getMedicalStatusName($item->medical_status ?? 'new')}}</p>
+                                                @else
+                                                    <a href="{{route('user.score.request', $item->user_id)}}"
+                                                       class="btn-primary-fill"
+                                                       style="background: #ffc107; color: #000">No Score Available</a>
+                                                @endif
                                             @endif
                                         @endif
                                     </td>
                                     <td>
                                         @if($item->allocatedMedicalCenter?->status)
-                                                <p @class([
+                                            <p @class([
                                                 'text-capitalize',
                                                 'text-success' => $item->health_status == 'fit',
                                                 'text-danger' => $item->health_status == 'unfit',
                                                 'text-warning' => $item->health_status == 'held-up',
                                             ])>{{$item->health_status}}</p>
-                                                <p>{{$item->health_status_details}}</p>
+                                            <p>{{$item->applicationCustomComment?->health_condition}}</p>
                                         @endif
                                     </td>
                                     <td class="text-end px-15">
@@ -182,10 +207,16 @@
                                             <i class="ri-printer-line"></i>
                                         </a>
                                     </td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="update_btn btn btn-primary"
+                                           data-bs-target="#update-modal" data-bs-toggle="modal"
+                                           data-id="{{$item->id}}" data-passport_number="{{$item->passport_number}}"
+                                        >Update</a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">No Data Found</td>
+                                    <td colspan="10" class="text-center">No Data Found</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -195,11 +226,102 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="update-modal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="#" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="scoreModalLabel">Submit Medical Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <input type="hidden" name="id">
+
+                    <div class="modal-body">
+                        <div class="contact-form">
+                            <label for="score">Passport Number</label>
+                            <input class="form-control" type="text" name="passport_number" disabled>
+                        </div>
+
+                        <div class="contact-form mt-15">
+                            <label for="score">Registration Number</label>
+                            <input class="form-control" type="text" name="registration_number">
+                        </div>
+
+                        <div class="contact-form mt-15">
+                            <label class="contact-label">Medical Date <small>(Day-Month-Year)</small></label>
+                            <div class="d-flex justify-content-between date-pic-icon">
+                                <input type="text" class="input single-date-picker"
+                                       placeholder="Choose Date" name="medical_date" value="{{old('medical_date')}}">
+                                <span> <b class="caret"></b></span>
+                                <i class="ri-calendar-line"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Yes, Submit Now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            // Initialize datepicker for every date input field
+            $('.single-date-picker').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoApply: false,
+                locale: {
+                    format: 'DD-MM-YYYY',
+                    separator: ' - ',
+                }
+            });
+            $('.single-date-picker').val("");
+
+            $(document).on('click', '.update_btn', function () {
+                let el = $(this);
+                let id = el.data('id');
+                let passport_number = el.data('passport_number');
+
+                let modal = $('#update-modal');
+                modal.find('input[name="id"]').val(id);
+                modal.find('input[name="passport_number"]').val(passport_number);
+            });
+
+            $(document).on('submit', '#update-modal form', function (e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let id = form.find('input[name="id"]').val();
+                let registration_number = form.find('input[name="registration_number"]').val();
+                let medical_date = form.find('input[name="medical_date"]').val();
+
+                $.ajax({
+                    url: `{{route('user.application.list.update')}}`,
+                    type: 'POST',
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        id: id,
+                        registration_number: registration_number,
+                        medical_date: medical_date,
+                    },
+                    success: function (response) {
+                        if (response.status) {
+                            toastSuccess(response.message);
+                            reloadThisPage();
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                });
+            });
+
             $(document).on('click', '.search_btn', function (e) {
                 e.preventDefault();
 
@@ -227,11 +349,11 @@
                 let id = el.data('id');
 
                 Swal.fire({
-                    title: 'Payment Confirmation',
-                    text: 'Are you sure you want to pay the bill?',
+                    title: 'Score Submission Confirmation',
+                    text: 'Are you sure you want to submit score for this application?',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, Pay Now',
+                    confirmButtonText: 'Yes, Submit Now',
                     cancelButtonText: 'No, Cancel',
                 }).then((result) => {
                     if (result.isConfirmed) {

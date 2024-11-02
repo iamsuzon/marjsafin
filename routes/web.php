@@ -8,6 +8,8 @@ use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\MedicalCenterAuthController;
 use App\Http\Controllers\MedicalCenterManageController;
 use App\Http\Controllers\PaymentLogController;
+use App\Http\Controllers\UnionAccountManageController;
+use App\Http\Controllers\UnionMedicalManageController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +39,17 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/generate-pdf/{id}', [UserAuthController::class, 'generatePdf'])->name('user.generate.pdf');
 
     Route::get('/customer-application-list', [UserAuthController::class, 'userPanel'])->name('user.application.list');
+    Route::post('/customer-application-list/update', [UserAuthController::class, 'userPanelUpdate'])->name('user.application.list.update');
 
-    Route::get('/customer-deposit-request', [PaymentLogController::class, 'index'])->name('user.deposit.index');
-    Route::post('/customer-deposit-request', [PaymentLogController::class, 'deposit']);
+//    Route::get('/customer-deposit-request', [PaymentLogController::class, 'index'])->name('user.deposit.index');
+//    Route::post('/customer-deposit-request', [PaymentLogController::class, 'deposit']);
+
+    Route::get('/customer-score-request/{id}', [PaymentLogController::class, 'scoreRequest'])->name('user.score.request');
+//
+//    Route::get('/customer-deposit-history', [PaymentLogController::class, 'depositHistory'])
+//        ->name('user.deposit.history');
+    Route::get('/customer-transaction-history', [PaymentLogController::class, 'transactionHistory'])
+        ->name('user.transaction.history');
 
     Route::get('/customer/pay-bil', [PaymentLogController::class, 'payBill'])->name('user.pay-bill');
 
@@ -57,6 +67,7 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationEdit'])->name('admin.application.edit');
     Route::post('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationUpdate']);
+    Route::post('/admin/application-update', [AdminAuthController::class, 'applicationRegDateUpdate'])->name('admin.application.update.reg-date');
 
     Route::get('/admin/application-delete', [AdminAuthController::class, 'applicationDelete'])
         ->name('admin.application.delete')
@@ -112,13 +123,25 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.application-list.allocations.disapprove')
         ->can('update-allocation');
 
-    Route::get('/admin/deposit-request-history', [AdminDepositRequestHistoryController::class, 'depositRequestHistory'])
-        ->name('admin.deposit-request-history');
-    Route::get('/admin/deposit-request-history/change-status', [AdminDepositRequestHistoryController::class, 'changePaymentStatus'])
-        ->name('admin.deposit-request-history.change-status');
+    Route::get('/admin/score-request-history', [AdminDepositRequestHistoryController::class, 'depositRequestHistory'])
+        ->name('admin.score-request-history');
+    Route::post('/admin/score-request-history/add-score', [AdminDepositRequestHistoryController::class, 'addScore'])
+        ->name('admin.score-request-history.add-score');
 
     Route::get('admin/transaction-history', [AdminDepositRequestHistoryController::class, 'transactionHistory'])
         ->name('admin.transaction-history');
+
+    Route::get('admin/union-accounts', [UnionAccountManageController::class, 'index'])
+        ->name('admin.union-accounts');
+    Route::get('admin/union-accounts/new', [UnionAccountManageController::class, 'create'])
+        ->name('admin.new.union-accounts');
+    Route::post('admin/union-accounts/new', [UnionAccountManageController::class, 'store']);
+    Route::get('admin/union-accounts/edit/{id}', [UnionAccountManageController::class, 'edit'])
+        ->name('admin.edit.union-accounts');
+    Route::post('admin/union-accounts/edit/{id}', [UnionAccountManageController::class, 'update']);
+    Route::get('admin/union-accounts/assign/{id}', [UnionAccountManageController::class, 'assign'])
+        ->name('admin.assign.union-accounts');
+    Route::post('admin/union-accounts/assign/{id}', [UnionAccountManageController::class, 'assignStore']);
 
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
@@ -149,4 +172,25 @@ Route::middleware('auth:medical_center')->prefix('medical')->group(function () {
     Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
 
     Route::get('/logout', [MedicalCenterAuthController::class, 'logout'])->name('medical.logout');
+});
+
+Route::middleware('auth:union_account')->prefix('medicals')->group(function () {
+    Route::get('/dashboard', [UnionMedicalManageController::class, 'dashboard'])->name('union.dashboard');
+    Route::get('/medical-list', [UnionMedicalManageController::class, 'medicalList'])->name('union.medical.list');
+    Route::get('/application-list', [UnionMedicalManageController::class, 'applicationList'])->name('union.application.list');
+
+    Route::post('/application-update-result', [UnionMedicalManageController::class, 'applicationUpdateResult'])->name('union.application.result.update');
+    Route::post('/customer-application-list/update-medical-status', [UnionMedicalManageController::class, 'updateMedicalStatus'])->name('user.application.list.update.medical-status');
+
+//    Route::get('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationEdit'])->name('medical.application.edit');
+//    Route::post('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationUpdate']);
+//
+//    Route::post('/application-update-result', [MedicalCenterAuthController::class, 'applicationUpdateResult'])->name('medical.application.result.update');
+//
+//    Route::get('/application-list/search', [MedicalCenterAuthController::class, 'searchApplication'])->name('medical.application.search');
+//
+//    Route::get('/change-password', [MedicalCenterAuthController::class, 'changePassword'])->name('medical.change.password');
+//    Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
+//
+    Route::get('/logout', [UnionMedicalManageController::class, 'logout'])->name('union.logout');
 });

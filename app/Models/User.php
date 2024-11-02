@@ -45,7 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'balance' => 'decimal:2'
+        'balance' => 'integer'
     ];
 
     public function banned(): HasOne

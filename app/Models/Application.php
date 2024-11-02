@@ -38,12 +38,15 @@ class Application extends Model
         'serial_number',
         'ems_number',
         'problem',
+        'medical_date',
+        'medical_status',
     ];
 
     protected $casts = [
         'date_of_birth' => 'date',
         'passport_issue_date' => 'date',
         'passport_expiry_date' => 'date',
+        'medical_date' => 'date',
     ];
 
     public function user(): BelongsTo
@@ -69,5 +72,10 @@ class Application extends Model
     public function paymentLog(): HasOne
     {
         return $this->hasOne(PaymentLog::class, 'application_id', 'id');
+    }
+
+    public function applicationCustomComment(): HasOne
+    {
+        return $this->hasOne(ApplicationCustomComment::class, 'application_id', 'id');
     }
 }

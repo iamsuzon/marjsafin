@@ -50,7 +50,7 @@ class AdminAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList = Application::with(['applicationPayment'])->whereBetween('created_at', [$start_date, $end_date])->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereBetween('created_at', [$start_date, $end_date])->get();
         }
         else if(request()->has('passport_search'))
         {
@@ -58,10 +58,10 @@ class AdminAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList = Application::with(['applicationPayment'])->where('passport_number', trim(request('passport_search')))->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('passport_number', trim(request('passport_search')))->get();
         }
         else {
-            $applicationList = Application::with(['applicationPayment'])->whereDate('created_at', Carbon::today())->latest()->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereDate('created_at', Carbon::today())->latest()->get();
         }
 
         return view('admin.application-list', ['applicationList' => $applicationList]);
@@ -71,24 +71,36 @@ class AdminAuthController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'ems_number' => 'nullable',
-            'health_status' => 'nullable',
             'health_condition' => 'nullable',
             'application_payment' => 'nullable|numeric',
         ], [
-            'application_payment.numeric' => 'The admin status must be a number.'
+            'application_payment.numeric' => 'The admin score must be a number.'
         ]);
 
         $application = Application::find($validated['id']);
-        $application->ems_number = $validated['ems_number'];
-        $application->health_status = $validated['health_status'];
-        $application->health_status_details = $validated['health_condition'];
 
-        if ($application->save())
+        if ($application)
         {
-            $application->applicationPayment()->update([
-                'admin_amount' => (double) $validated['application_payment']
-            ]);
+            $application->applicationCustomComment()->updateOrCreate(
+                [
+                    'application_id' => $application->id,
+                ],
+                [
+                    'application_id' => $application->id,
+                    'health_condition' => $validated['health_condition'] ?? $application->health_status_details,
+                ]
+            );
+
+            $application->applicationPayment()->updateOrCreate(
+                [
+                    'application_id' => $application->id,
+                ],
+                [
+                    'application_id' => $application->id,
+                    'admin_amount' => (double) $validated['application_payment'],
+                    'center_amount' => 0
+                ]
+            );
         }
 
         return response()->json([
@@ -133,6 +145,25 @@ class AdminAuthController extends Controller
         $application->update($validated);
 
         return back()->with('success', 'Application updated successfully.');
+    }
+
+    public function applicationRegDateUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'registration_number' => 'nullable',
+            'medical_date' => 'nullable|date',
+        ]);
+
+        $application = Application::findOrFail($validated['id']);
+        $application->serial_number = $validated['registration_number'];
+        $application->medical_date = Carbon::parse($validated['medical_date']);
+        $application->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Application updated successfully.'
+        ]);
     }
 
     public function applicationDelete()

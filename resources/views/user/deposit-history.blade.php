@@ -1,4 +1,4 @@
-@extends('admin.layout.user-master')
+@extends('user.layout.user-master')
 
 @section('styles')
     <style>
@@ -34,7 +34,7 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Transaction History</h2>
+                        <h2 class="manage__title">Deposit History</h2>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -103,24 +103,20 @@
                             <thead>
                             <tr>
                                 <th class="mw-45">#SL</th>
-                                <th>Username</th>
                                 <th>Payment Type</th>
                                 <th>Deposit Date</th>
                                 <th>Payment Method</th>
                                 <th>Reference No</th>
-                                <th>Score</th>
+                                <th>Amount(BDT)</th>
                                 <th>Deposit Slip</th>
+                                <th>Deposit Status</th>
                                 <th>Remarks</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($transactionHistory ?? [] as $item)
+                            @forelse($depositHistory ?? [] as $item)
                                 <tr>
                                     <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
-                                    <td>
-                                        <p>{{$item->user?->name}}</p>
-                                        <p>{{$item->user?->username}}</p>
-                                    </td>
                                     <td>
                                         <p class="text-capitalize">{{$item->payment_type}}</p>
                                     </td>
@@ -130,9 +126,13 @@
                                     </td>
                                     <td>{{$item->reference_no}}</td>
                                     <td>
-                                        <p class="{{$item->payment_type === 'deposit' ? 'text-success' : 'text-danger'}}">
-                                            {{$item->payment_type === 'deposit' ? '+' : '-'}}{{$item->amount}}
-                                        </p>
+                                        @if($item->status === 'pending')
+                                            <p>{{$item->amount}}</p>
+                                        @else
+                                            <p class="{{$item->payment_type === 'deposit' ? 'text-success' : 'text-danger'}}">
+                                                {{$item->payment_type === 'deposit' ? '+' : '-'}}{{$item->amount}}
+                                            </p>
+                                        @endif
                                     </td>
                                     <td>
                                         @if($item->deposit_slip)
@@ -153,6 +153,16 @@
                                                 @endif
                                             </a>
                                         @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $class = [
+                                                'pending' => 'text-warning',
+                                                'approved' => 'text-success',
+                                                'declined' => 'text-danger',
+                                            ];
+                                        @endphp
+                                        <p class="text-capitalize {{$class[$item->status]}}">{{$item->status}}</p>
                                     </td>
                                     <td>{{$item->remarks}}</td>
                                 </tr>
@@ -179,11 +189,11 @@
                 let start_date = $('.start_date').val();
                 let end_date = $('.end_date').val();
 
-                window.location.href = `{{route('admin.transaction-history')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('user.deposit.history')}}?start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('admin.transaction-history')}}`;
+                location.href = `{{route('user.deposit.history')}}`;
             });
         })
     </script>
