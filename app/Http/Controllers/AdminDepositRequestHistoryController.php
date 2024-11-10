@@ -24,7 +24,8 @@ class AdminDepositRequestHistoryController extends Controller
     {
         $validated = $request->validate([
             'request_id' => 'required|exists:payment_logs,id',
-            'score_amount' => 'required|integer|min:1'
+            'score_amount' => 'required|integer|min:1',
+            'remarks' => 'nullable|string|max:255'
         ]);
 
         try {
@@ -38,7 +39,7 @@ class AdminDepositRequestHistoryController extends Controller
                 'payment_method' => 'admin',
                 'reference_no' => 'admin',
                 'deposit_date' => Carbon::now(),
-                'remarks' => 'Score added by admin.',
+                'remarks' => $validated['remarks'] ?? 'Score added by admin.',
                 'status' => 'approved'
             ]);
 

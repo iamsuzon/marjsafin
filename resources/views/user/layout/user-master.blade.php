@@ -25,6 +25,30 @@
 </head>
 <body>
 
+<style>
+    .unread-message {
+        background: #f1f1f1;
+    }
+
+    .notification-listing .list {
+        padding: 4px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .notification-listing .list:hover {
+        background: #dadada;
+    }
+
+    .notification-listing .list span {
+        position: absolute;
+        right: 5px;
+        top: 80%;
+        transform: translateY(-50%);
+        font-size: 10px;
+    }
+</style>
+
 <div id="layout-wrapper">
     <header class="header">
         <!-- Header Left -->
@@ -48,63 +72,59 @@
         <!-- Header Right -->
         <ul class="header-right">
             <!-- Notification -->
-            <li class="cart-list notification dropdown">
-                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
-                    {{--                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">--}}
-                    {{--                        <h6>Notifications</h6>--}}
-                    {{--                        <button class="clear-notification">clear</button>--}}
-                    {{--                    </div>--}}
-                    {{--                    <ul class="notification-listing scroll-active p-0">--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                        <li class="list">--}}
-                    {{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-                    {{--                                <i class="ri-notification-3-line"></i>--}}
-                    {{--                                <p class="line-clamp-2">Notifications show when you swipe down from  sadf asdf asdf asdf </p>--}}
-                    {{--                            </a>--}}
-                    {{--                        </li>--}}
-                    {{--                    </ul>--}}
-                    {{--                    <a href="notification.html" class="see-all-notification border-0">see all notification</a>--}}
-                </div>
+            <li class="cart-list notification dropdown" id="notification-div">
+                @auth('union_account')
+                    @php
+                        $notifications = \App\Models\Notification::whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
+                        $unreadNotifications = $notifications->whereNull('read_at')->count();
+                    @endphp
+                    <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ri-notification-2-line p-0"></i>
+
+                        @if($unreadNotifications > 0)
+                            <span class="count">{{$unreadNotifications}}</span>
+                        @endif
+                    </a>
+
+                    <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
+                        <div class="notification-header d-flex justify-content-between align-items-center mb-10">
+                            <h6>Notifications</h6>
+                            <button class="clear-notification">clear</button>
+                        </div>
+                        <ul class="notification-listing scroll-active p-0">
+                            @forelse($notifications ?? [] as $notification)
+                                <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
+                                    <a class="list-items custom-break-spaces dropdown-item"
+                                       href="{{$notification->link}}">
+                                        <i class="ri-notification-3-line"></i>
+                                        <p class="line-clamp-2">{{$notification->message}}</p>
+                                        <span>
+                                            <small>{{$notification->created_at->diffForHumans()}}</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="list">
+                                    <a class="dropdown-item my-4" href="javascript:void(0)">
+                                        <p class="line-clamp text-center">No notification found</p>
+                                    </a>
+                                </li>
+                            @endforelse
+                        </ul>
+
+                        @if($notifications->count() > 10)
+                            <a href="{{route('union.notification.all')}}" class="see-all-notification border-0">see all
+                                notification</a>
+                        @endif
+                    </div>
+                @endauth
             </li>
 
             @auth('web')
                 <li>
-                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;" href="javascript:void(0)">Score: {{auth('web')->user()->balance}}</a>
+                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;"
+                       href="javascript:void(0)">Score: {{auth('web')->user()->balance}}</a>
                 </li>
             @endauth
 
@@ -202,19 +222,19 @@
                             </a>
                         </li>
 
-{{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.index')}}">--}}
-{{--                            <a href="{{route('user.deposit.index')}}" class="parent-item-content">--}}
-{{--                                <i class="ri-wallet-3-line"></i>--}}
-{{--                                <span class="on-half-expanded">Deposit Request</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
+                        {{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.index')}}">--}}
+                        {{--                            <a href="{{route('user.deposit.index')}}" class="parent-item-content">--}}
+                        {{--                                <i class="ri-wallet-3-line"></i>--}}
+                        {{--                                <span class="on-half-expanded">Deposit Request</span>--}}
+                        {{--                            </a>--}}
+                        {{--                        </li>--}}
 
-{{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.history')}}">--}}
-{{--                            <a href="{{route('user.deposit.history')}}" class="parent-item-content">--}}
-{{--                                <i class="ri-file-history-line"></i>--}}
-{{--                                <span class="on-half-expanded">Deposit History</span>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
+                        {{--                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.deposit.history')}}">--}}
+                        {{--                            <a href="{{route('user.deposit.history')}}" class="parent-item-content">--}}
+                        {{--                                <i class="ri-file-history-line"></i>--}}
+                        {{--                                <span class="on-half-expanded">Deposit History</span>--}}
+                        {{--                            </a>--}}
+                        {{--                        </li>--}}
 
                         <li class="sidebar-menu-item {{activeCurrentSidebarMenu('user.transaction.history')}}">
                             <a href="{{route('user.transaction.history')}}" class="parent-item-content">
@@ -320,5 +340,25 @@
 <script src="{{customAsset('assets/js/custom.js')}}"></script>
 
 @yield('scripts')
+
+{{--<script>--}}
+{{--    $(document).ready(function () {--}}
+{{--        // setInterval(() => {--}}
+{{--            $.ajax({--}}
+{{--                url: '{{route('union.notification.all')}}',--}}
+{{--                headers: {--}}
+{{--                    'Content-Type':'application/json'--}}
+{{--                },--}}
+{{--                type: 'GET',--}}
+{{--                success: function (response) {--}}
+{{--                    if (response.status) {--}}
+{{--                        // $('#notification-div').html("");--}}
+{{--                        // $('#notification-div').html(response.markup);--}}
+{{--                    }--}}
+{{--                }--}}
+{{--            });--}}
+{{--        // }, 10000);--}}
+{{--    });--}}
+{{--</script>--}}
 </body>
 </html>

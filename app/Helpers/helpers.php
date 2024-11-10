@@ -201,6 +201,12 @@ function generatePdfCode($location): string
     if ($location === 'mostafa_health') {
         $prefix = 'IMS-MHC-';
     }
+    elseif ($location === 'kent_medical') {
+        $prefix = 'Kent-x02-';
+    }
+    elseif ($location === 'malancha_medical') {
+        $prefix = 'Malancha-x02-';
+    }
 
     // Count how many entries already exist with this location prefix
     $count = Application::where('center_name', $location)->count();

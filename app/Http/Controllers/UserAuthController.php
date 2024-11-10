@@ -105,9 +105,16 @@ class UserAuthController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'registration_number' => 'nullable',
+            'registration_number' => 'nullable|numeric|unique:applications,serial_number,'.$request->id,
             'medical_date' => 'nullable|date',
         ]);
+
+        if ($validated['registration_number'] == null && $validated['medical_date'] == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Nothing to update.'
+            ]);
+        }
 
         $application = Application::findOrFail($validated['id']);
         $application->serial_number = $validated['registration_number'];
@@ -135,7 +142,7 @@ class UserAuthController extends Controller
     {
         $validated = $request->validate([
             'medical_type' => 'required',
-            'passport_number' => 'required',
+            'passport_number' => 'required|unique:applications,passport_number',
             'gender' => 'required',
             'traveling_to' => 'required',
             'marital_status' => 'nullable',

@@ -211,6 +211,7 @@
                                         <a href="javascript:void(0)" class="update_btn btn btn-primary"
                                            data-bs-target="#update-modal" data-bs-toggle="modal"
                                            data-id="{{$item->id}}" data-passport_number="{{$item->passport_number}}"
+                                           data-registration_number="{{$item->serial_number}}" data-medical_date="{{$item->medical_date}}"
                                         >Update</a>
                                     </td>
                                 </tr>
@@ -260,7 +261,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Yes, Submit Now</button>
                     </div>
                 </form>
@@ -288,10 +289,14 @@
                 let el = $(this);
                 let id = el.data('id');
                 let passport_number = el.data('passport_number');
+                let registration_number = el.data('registration_number');
+                let medical_date = el.data('medical_date');
 
                 let modal = $('#update-modal');
                 modal.find('input[name="id"]').val(id);
                 modal.find('input[name="passport_number"]').val(passport_number);
+                modal.find('input[name="registration_number"]').val(registration_number);
+                modal.find('input[name="medical_date"]').val(medical_date);
             });
 
             $(document).on('submit', '#update-modal form', function (e) {
@@ -316,7 +321,17 @@
                             toastSuccess(response.message);
                             reloadThisPage();
                         } else {
-                            alert(response.message);
+                            toastError(response.message);
+                        }
+                    },
+                    error: function (error) {
+                        let errors = error.responseJSON.errors;
+                        if (errors) {
+                            let message = '';
+                            for (let key in errors) {
+                                message += errors[key][0] + '\n';
+                            }
+                            toastError(message);
                         }
                     }
                 });

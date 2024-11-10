@@ -16,60 +16,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="manage__title d-flex justify-content-between">
-                            <h2>Application List ({{$applicationList->count()}})</h2>
+                            <h2>Application - Passport: {{$applicationList->first()->passport_number}}</h2>
                             <a href="{{route('union.medical.list')}}" class="btn-primary-fill">
                                 <i class="ri-arrow-left-line"></i>
                             </a>
                         </div>
-
-                        <form id="search-form">
-                            <div class="row d-flex justify-content-center mt-25">
-                                <div class="col-md-2">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Start Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker start_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <!-- Date Picker -->
-                                    <div class="contact-form">
-                                        <label class="contact-label">end Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker end_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex">
-                                        <button class="btn-primary-fill search_btn" type="submit">Search</button>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Passport Number</label>
-                                        <input type="text" class="contact-input"
-                                               placeholder="Search By Passport Number" name="passport_search">
-                                    </div>
-                                </div>
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
-                                        <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
 

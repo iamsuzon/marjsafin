@@ -17391,9 +17391,9 @@ input[type=number] {
 }
 
 .notification .dropdown-menu {
-  width: 267px;
+  width: 350px;
   background: #fff;
-  height: 350px;
+  height: 570px;
   -webkit-box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
   padding: 20px !important;
 }
@@ -17408,7 +17408,7 @@ input[type=number] {
 .notification-listing {
   padding-top: 14px;
   padding-bottom: 10px;
-  max-height: 236px;
+  max-height: 460px;
   margin-bottom: 12px;
 }
 .notification-listing .list {
@@ -17779,8 +17779,8 @@ input[type=number] {
   border: 1px solid var(--primary-border);
 }
 
-/* -------------------------------  
-    Footer 
+/* -------------------------------
+    Footer
 ------------------------------- */
 .footer {
   border-top: 0;
@@ -17806,7 +17806,7 @@ input[type=number] {
 }
 
 /* ---------------------------------
-    Sidebar  
+    Sidebar
 --------------------------------- */
 .sidebar {
   position: fixed;
@@ -24296,10 +24296,7 @@ a {
 .btn-common,
 .dropdown-btn,
 .btn-primary,
-.btn-success,
-.btn-danger,
-.btn-warning,
-.btn-info {
+.btn-success {
   background: var(--primary);
   color: #ffffff !important;
   border-radius: 5px;
@@ -28551,10 +28548,7 @@ span.select2-search.select2-search--dropdown {
 .btn-common,
 .dropdown-btn,
 .btn-primary,
-.btn-success,
-.btn-danger,
-.btn-warning,
-.btn-info {
+.btn-success {
   background: var(--primary) !important;
 }
 

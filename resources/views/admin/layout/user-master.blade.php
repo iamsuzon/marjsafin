@@ -28,8 +28,31 @@
     .swal2-icon {
         font-size: 20px !important;
     }
-    .sidebar .sidebar-menu .sidebar-menu .sidebar-menu-item .parent-item-content.exclude-menu-icon::after{
+
+    .sidebar .sidebar-menu .sidebar-menu .sidebar-menu-item .parent-item-content.exclude-menu-icon::after {
         content: none;
+    }
+
+    .unread-message {
+        background: #f1f1f1;
+    }
+
+    .notification-listing .list {
+        padding: 4px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .notification-listing .list:hover {
+        background: #dadada;
+    }
+
+    .notification-listing .list span {
+        position: absolute;
+        right: 5px;
+        top: 80%;
+        transform: translateY(-50%);
+        font-size: 10px;
     }
 </style>
 
@@ -58,86 +81,72 @@
 
         <!-- Header Right -->
         <ul class="header-right">
-
-            <!-- Reports -->
-{{--            <li class="cart-list position-relative d-none d-md-block">--}}
-{{--                <a href="#" class="cart-items btn-light-outline btn-sm text-14 d-flex gap-10 align-items-center">--}}
-{{--                    <div class="icon">--}}
-{{--                        <i class="ri-download-cloud-2-line"></i>--}}
-{{--                    </div>--}}
-{{--                    <span>Download dali Reports</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
-
-            <!-- create -->
-{{--            <li class="cart-list position-relative d-none d-md-block">--}}
-{{--                <a href="create_campaign.html" class="cart-items btn-primary-fill btn-sm text-14">--}}
-{{--                    <div class="icon">--}}
-{{--                        <i class="ri-add-line"></i>--}}
-{{--                    </div>--}}
-{{--                    <span>create Campaign </span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
-
-            <!-- Notification -->
-            <li class="cart-list notification dropdown">
+            <li class="cart-list notification dropdown" id="notification-div">
+                @php
+                    $notifications = \App\Models\Notification::whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
+                    $unreadNotifications = $notifications->whereNull('read_at')->count();
+                @endphp
                 <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="ri-notification-2-line p-0"></i>
-{{--                    <span class="count">12</span>--}}
+
+                    @if($unreadNotifications > 0)
+                        <span class="count">{{$unreadNotifications}}</span>
+                    @endif
                 </a>
-{{--                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">--}}
-{{--                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">--}}
-{{--                        <h6>Notifications</h6>--}}
-{{--                        <button class="clear-notification">clear</button>--}}
-{{--                    </div>--}}
-{{--                    <ul class="notification-listing scroll-active p-0">--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="list">--}}
-{{--                            <a class="list-items custom-break-spaces dropdown-item" href="javascript:void(0)">--}}
-{{--                                <i class="ri-notification-3-line"></i>--}}
-{{--                                <p class="line-clamp-2">Payment success</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                    <a href="notification.html" class="see-all-notification border-0">see all notification <i class="ri-arrow-right-up-line"></i></a>--}}
-{{--                </div>--}}
+
+                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
+                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">
+                        <h6>Notifications</h6>
+                        <button class="clear-notification">clear</button>
+                    </div>
+                    <ul class="notification-listing scroll-active p-0">
+                        @forelse($notifications ?? [] as $notification)
+                            <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
+                                <a class="list-items custom-break-spaces dropdown-item"
+                                   href="{{route('admin.application.list.single', $notification->link)}}">
+                                    <i class="ri-notification-3-line"></i>
+                                    <p class="line-clamp-2">{{$notification->message}}</p>
+                                    <span>
+                                            <small>{{$notification->created_at->diffForHumans()}}</small>
+                                        </span>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="list">
+                                <a class="dropdown-item my-4" href="javascript:void(0)">
+                                    <p class="line-clamp text-center">No notification found</p>
+                                </a>
+                            </li>
+                        @endforelse
+                    </ul>
+
+                    @if($notifications->count() > 10)
+                        <a href="{{route('admin.notification.all')}}" class="see-all-notification border-0">see all
+                            notification</a>
+                    @endif
+                </div>
             </li>
+
+            <!-- Reports -->
+            {{--            <li class="cart-list position-relative d-none d-md-block">--}}
+            {{--                <a href="#" class="cart-items btn-light-outline btn-sm text-14 d-flex gap-10 align-items-center">--}}
+            {{--                    <div class="icon">--}}
+            {{--                        <i class="ri-download-cloud-2-line"></i>--}}
+            {{--                    </div>--}}
+            {{--                    <span>Download dali Reports</span>--}}
+            {{--                </a>--}}
+            {{--            </li>--}}
+
+            <!-- create -->
+            {{--            <li class="cart-list position-relative d-none d-md-block">--}}
+            {{--                <a href="create_campaign.html" class="cart-items btn-primary-fill btn-sm text-14">--}}
+            {{--                    <div class="icon">--}}
+            {{--                        <i class="ri-add-line"></i>--}}
+            {{--                    </div>--}}
+            {{--                    <span>create Campaign </span>--}}
+            {{--                </a>--}}
+            {{--            </li>--}}
 
             <!-- Login User -->
             <li class="cart-list dropdown">
@@ -206,12 +215,12 @@
 
                     <!-- Single Menu -->
                     @hasrole('super-admin')
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.user.list')}}">
-                            <a href="{{route('admin.user.list')}}" class="parent-item-content">
-                                <i class="ri-hand-heart-line"></i>
-                                <span class="on-half-expanded">Customer List</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.user.list')}}">
+                        <a href="{{route('admin.user.list')}}" class="parent-item-content">
+                            <i class="ri-hand-heart-line"></i>
+                            <span class="on-half-expanded">Customer List</span>
+                        </a>
+                    </li>
                     @endhasrole
 
                     <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}}">
@@ -222,12 +231,12 @@
                     </li>
 
                     @hasrole('super-admin')
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">
-                            <a href="{{route('admin.allocate-center.list')}}" class="parent-item-content">
-                                <i class="ri-hand-heart-line"></i>
-                                <span class="on-half-expanded">Allocate Center List</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">
+                        <a href="{{route('admin.allocate-center.list')}}" class="parent-item-content">
+                            <i class="ri-hand-heart-line"></i>
+                            <span class="on-half-expanded">Allocate Center List</span>
+                        </a>
+                    </li>
                     @endhasrole
 
                     <!-- Single Menu -->
@@ -239,43 +248,44 @@
                     </li>
 
                     @hasanyrole('super-admin')
-                        @php
-                            $depositRequestCount = 0;
-                            try {
-                                $depositRequestCount = App\Models\PaymentLog::where('status', 'pending')->count();
-                            }
-                            catch (\Exception $e) {}
-                        @endphp
+                    @php
+                        $depositRequestCount = 0;
+                        try {
+                            $depositRequestCount = App\Models\PaymentLog::where('status', 'pending')->count();
+                        }
+                        catch (\Exception $e) {}
+                    @endphp
 
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.deposit-request-history')}}">
-                            <a href="{{route('admin.score-request-history')}}" class="parent-item-content exclude-menu-icon">
-                                <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">Score Request History ({{$depositRequestCount}})</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.deposit-request-history')}}">
+                        <a href="{{route('admin.score-request-history')}}"
+                           class="parent-item-content exclude-menu-icon">
+                            <i class="ri-caravan-line"></i>
+                            <span class="on-half-expanded">Score Request History ({{$depositRequestCount}})</span>
+                        </a>
+                    </li>
 
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.transaction-history')}}">
-                            <a href="{{route('admin.transaction-history')}}" class="parent-item-content">
-                                <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">Transaction History</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.transaction-history')}}">
+                        <a href="{{route('admin.transaction-history')}}" class="parent-item-content">
+                            <i class="ri-caravan-line"></i>
+                            <span class="on-half-expanded">Transaction History</span>
+                        </a>
+                    </li>
 
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.union-accounts')}}">
-                            <a href="{{route('admin.union-accounts')}}" class="parent-item-content">
-                                <i class="ri-sparkling-fill"></i>
-                                <span class="on-half-expanded">Union Accounts</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.union-accounts')}}">
+                        <a href="{{route('admin.union-accounts')}}" class="parent-item-content">
+                            <i class="ri-sparkling-fill"></i>
+                            <span class="on-half-expanded">Union Accounts</span>
+                        </a>
+                    </li>
                     @endhasanyrole
 
                     @hasanyrole('super-admin|admin')
-                        <li class="sidebar-menu-item">
-                            <a href="{{route('admin.general.settings')}}" class="parent-item-content">
-                                <i class="ri-caravan-line"></i>
-                                <span class="on-half-expanded">General Settings</span>
-                            </a>
-                        </li>
+                    <li class="sidebar-menu-item">
+                        <a href="{{route('admin.general.settings')}}" class="parent-item-content">
+                            <i class="ri-caravan-line"></i>
+                            <span class="on-half-expanded">General Settings</span>
+                        </a>
+                    </li>
                     @endhasanyrole
 
                     @if(app()->hasDebugModeEnabled())

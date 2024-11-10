@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Notification;
 use App\Models\PaymentLog;
 use App\Models\User;
 use Carbon\Carbon;
@@ -127,6 +128,13 @@ class PaymentLogController extends Controller
             ]);
 
             $application->user()->decrement('balance', $decrease_amount);
+
+            Notification::create([
+                'user_id' => $application->user_id,
+                'application_id' => $application->id,
+                'message' => 'Application processing request for passport no : '. $application->passport_number ?? '',
+                'link' => $application->id
+            ]);
 
             \DB::commit();
         } catch (\Exception $e) {

@@ -160,7 +160,15 @@
                                 <!-- Date Picker -->
                                 <div class="contact-form">
                                     <label class="contact-label">Score Amount</label>
-                                    <input class="form-control input" name="score_amount">
+                                    <input type="number" class="form-control input" name="score_amount">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <!-- Date Picker -->
+                                <div class="contact-form">
+                                    <label class="contact-label">Remarks</label>
+                                    <input type="text" class="form-control input" name="remarks">
                                 </div>
                             </div>
                         </div>
@@ -213,6 +221,7 @@
                 let from = $('#add-score-modal');
                 let id = from.find('input[name="id"]').val();
                 let score_amount = from.find('input[name="score_amount"]').val();
+                let remarks = from.find('input[name="remarks"]').val();
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -230,7 +239,8 @@
                             data: {
                                 _token: '{{csrf_token()}}',
                                 request_id: id,
-                                score_amount: score_amount
+                                score_amount: score_amount,
+                                remarks: remarks
                             },
                             success: function (response) {
                                 if (response.status) {

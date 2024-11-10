@@ -1,4 +1,4 @@
-@extends('user.layout.user-master')
+@extends('admin.layout.user-master')
 
 @section('styles')
     <style>
@@ -16,60 +16,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="manage__title d-flex justify-content-between">
-                            <h2>Application List ({{$applicationList->count()}})</h2>
-                            <a href="{{route('union.medical.list')}}" class="btn-primary-fill">
+                            <h2>Application - Passport: {{$applicationList->first()->passport_number}}</h2>
+                            <a href="{{route('admin.dashboard')}}" class="btn-primary-fill">
                                 <i class="ri-arrow-left-line"></i>
                             </a>
                         </div>
-
-                        <form id="search-form">
-                            <div class="row d-flex justify-content-center mt-25">
-                                <div class="col-md-2">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Start Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker start_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <!-- Date Picker -->
-                                    <div class="contact-form">
-                                        <label class="contact-label">end Date </label>
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="contact-input single-date-picker end_date"
-                                                   placeholder="Choose Date">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex">
-                                        <button class="btn-primary-fill search_btn" type="submit">Search</button>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Passport Number</label>
-                                        <input type="text" class="contact-input"
-                                               placeholder="Search By Passport Number" name="passport_search">
-                                    </div>
-                                </div>
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
-                                        <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
 
@@ -89,7 +40,7 @@
                                 <th>Comment</th>
                                 <th>Allocate Center</th>
                                 <th>Medical Status</th>
-                                <th>Action</th>
+{{--                                <th>Action</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -161,21 +112,21 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td>
-                                        <a class="edit-btn" href="javascript:void(0)"
-                                           data-id="{{$item->id}}"
-                                           data-health_status="{{$item->health_status}}"
-                                           data-health_status_details="{{$item->health_status_details}}"
-                                           data-allocated_medical_center="{{strtolower(getAllocatedMedicalCenterName($item))}}"
-                                           data-application_payment="{{$item->applicationPayment?->center_amount}}"
-                                           data-bs-toggle="modal" data-bs-target="#edit-modal">
-                                            <i class="ri-file-edit-line"></i>
-                                        </a>
+{{--                                    <td>--}}
+{{--                                        <a class="edit-btn" href="javascript:void(0)"--}}
+{{--                                           data-id="{{$item->id}}"--}}
+{{--                                           data-health_status="{{$item->health_status}}"--}}
+{{--                                           data-health_status_details="{{$item->health_status_details}}"--}}
+{{--                                           data-allocated_medical_center="{{strtolower(getAllocatedMedicalCenterName($item))}}"--}}
+{{--                                           data-application_payment="{{$item->applicationPayment?->center_amount}}"--}}
+{{--                                           data-bs-toggle="modal" data-bs-target="#edit-modal">--}}
+{{--                                            <i class="ri-file-edit-line"></i>--}}
+{{--                                        </a>--}}
 
 {{--                                        <a class="view-btn" href="{{route('medical.application.edit', $item->id)}}">--}}
 {{--                                            <i class="ri-pencil-fill"></i>--}}
 {{--                                        </a>--}}
-                                    </td>
+{{--                                    </td>--}}
                                 </tr>
                             @empty
                                 <tr>
@@ -294,42 +245,42 @@
                 $('#edit-form input[name="id"]').val(id);
             })
 
-            $(document).on('click', '#edit-form button[type=submit]', function (e) {
-                e.preventDefault();
+            {{--$(document).on('click', '#edit-form button[type=submit]', function (e) {--}}
+            {{--    e.preventDefault();--}}
 
-                let form = $('#edit-form');
+            {{--    let form = $('#edit-form');--}}
 
-                let id = form.find(`input[name="id"]`).val();
-                let health_status = form.find(`select[name="health_status"]`).val();
-                let health_condition = form.find(`textarea[name="health_condition"]`).val();
-                let allocated_medical_center = form.find(`select[name="allocated_medical_center"]`).val();
-                // let application_payment = form.find(`input[name="application_payment"]`).val();
+            {{--    let id = form.find(`input[name="id"]`).val();--}}
+            {{--    let health_status = form.find(`select[name="health_status"]`).val();--}}
+            {{--    let health_condition = form.find(`textarea[name="health_condition"]`).val();--}}
+            {{--    let allocated_medical_center = form.find(`select[name="allocated_medical_center"]`).val();--}}
+            {{--    // let application_payment = form.find(`input[name="application_payment"]`).val();--}}
 
-                if (!id) {
-                    toastError('All fields are required');
-                    return;
-                }
+            {{--    if (!id) {--}}
+            {{--        toastError('All fields are required');--}}
+            {{--        return;--}}
+            {{--    }--}}
 
-                axios.post(`{{route('union.application.result.update')}}?id=${id}`, {
-                    _token: '{{csrf_token()}}',
-                    health_status: health_status,
-                    health_condition: health_condition,
-                    allocated_medical_center: allocated_medical_center,
-                    // application_payment: application_payment,
-                    center: '{{$username}}'
-                })
-                    .then(res => {
-                        let data = res.data;
+            {{--    axios.post(`{{route('admin.application.result.update')}}?id=${id}`, {--}}
+            {{--        _token: '{{csrf_token()}}',--}}
+            {{--        health_status: health_status,--}}
+            {{--        health_condition: health_condition,--}}
+            {{--        allocated_medical_center: allocated_medical_center,--}}
+            {{--        // application_payment: application_payment,--}}
+            {{--        center: '{{$username}}'--}}
+            {{--    })--}}
+            {{--        .then(res => {--}}
+            {{--            let data = res.data;--}}
 
-                        if (data.status) {
-                            toastSuccess(data.message);
-                            reloadThisPage();
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            })
+            {{--            if (data.status) {--}}
+            {{--                toastSuccess(data.message);--}}
+            {{--                reloadThisPage();--}}
+            {{--            }--}}
+            {{--        })--}}
+            {{--        .catch(err => {--}}
+            {{--            console.log(err);--}}
+            {{--        })--}}
+            {{--})--}}
 
             $(document).on('click', '#search-form .search_btn', function (e) {
                 e.preventDefault();
@@ -337,11 +288,11 @@
                 let start_date = $('.start_date').val();
                 let end_date = $('.end_date').val();
 
-                window.location.href = `{{route('union.application.list')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('admin.application.list')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('union.application.list')}}?center={{$username}}`;
+                location.href = `{{route('admin.application.list')}}?center={{$username}}`;
             });
 
             $(document).on('click', '.search_btn_passport', function (e) {
@@ -349,7 +300,7 @@
 
                 let passport_search = $('input[name="passport_search"]').val();
 
-                window.location.href = `{{route('union.application.list')}}?center={{$username}}&passport_search=${passport_search}`;
+                window.location.href = `{{route('admin.application.list')}}?center={{$username}}&passport_search=${passport_search}`;
             });
 
             $(document).on('change', 'select[name=medical_status]', function () {
@@ -357,7 +308,7 @@
                 let id = el.data('id');
                 let medical_status = el.val();
 
-                axios.post(`{{route('user.application.list.update.medical-status')}}`, {
+                axios.post(`{{route('admin.application.list.update.medical-status')}}`, {
                     _token: '{{csrf_token()}}',
                     id: id,
                     medical_status: medical_status,
@@ -367,7 +318,7 @@
 
                         if (data.status) {
                             toastSuccess(data.message);
-                            reloadThisPage();
+                            reloadThisPage(1000);
                         }
                     })
                     .catch(err => {

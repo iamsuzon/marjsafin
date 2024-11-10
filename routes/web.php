@@ -143,6 +143,11 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.assign.union-accounts');
     Route::post('admin/union-accounts/assign/{id}', [UnionAccountManageController::class, 'assignStore']);
 
+    Route::get('admin/application-list-single/{id}', [AdminAuthController::class, 'applicationListSingle'])->name('admin.application.list.single');
+    Route::get('admin/all-notifications', [AdminAuthController::class, 'allNotification'])->name('admin.notification.all');
+
+    Route::post('admin/customer-application-list/update-medical-status', [AdminAuthController::class, 'updateMedicalStatus'])->name('admin.application.list.update.medical-status');
+
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
 
@@ -181,6 +186,9 @@ Route::middleware('auth:union_account')->prefix('medicals')->group(function () {
 
     Route::post('/application-update-result', [UnionMedicalManageController::class, 'applicationUpdateResult'])->name('union.application.result.update');
     Route::post('/customer-application-list/update-medical-status', [UnionMedicalManageController::class, 'updateMedicalStatus'])->name('user.application.list.update.medical-status');
+
+    Route::get('/application-list-single/{id}', [UnionMedicalManageController::class, 'applicationListSingle'])->name('union.application.list.single');
+    Route::get('/all-notifications', [UnionMedicalManageController::class, 'allNotification'])->name('union.notification.all');
 
 //    Route::get('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationEdit'])->name('medical.application.edit');
 //    Route::post('/application-edit/{id}', [MedicalCenterAuthController::class, 'applicationUpdate']);

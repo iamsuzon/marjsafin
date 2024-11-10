@@ -97,7 +97,7 @@
                                     <th>Medical Status</th>
                                 @endhasrole
 
-                                @hasanyrole('super-admin|admin|analyst')
+                                @hasanyrole('super-admin|admin')
                                     <th>Action</th>
                                 @endhasanyrole
                             </tr>
@@ -178,7 +178,7 @@
                                         </td>
                                     @endhasrole
 
-                                    @hasanyrole('super-admin|admin|analyst')
+                                    @hasanyrole('super-admin|admin')
                                     <td class="text-end px-15 d-flex gap-10">
                                         @can('modify-application')
                                             <a class="edit-btn" href="javascript:void(0)"

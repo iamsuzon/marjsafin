@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\MedicalCenter;
+use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -274,5 +275,54 @@ class AdminAuthController extends Controller
         $admin->save();
 
         return back()->with('success', 'Password changed successfully.');
+    }
+
+    public function applicationListSingle($id)
+    {
+        $applicationList = Application::with(['applicationPayment', 'applicationCustomComment', 'notification'])->where('id', $id)->get();
+        $the_application = $applicationList->first();
+
+        if ($the_application->notification) {
+            if ($the_application->notification->read_at === null)
+            {
+                $the_application->notification->update(['read_at' => now()]);
+            }
+        }
+
+        $username = $the_application->center_name;
+
+        return view('admin.application-list-single', compact('applicationList', 'username'));
+    }
+
+    public function allNotification()
+    {
+        if (request()->ajax())
+        {
+            $notificationsMarkup = view('admin.render.notification-list')->render();
+            return response()->json([
+                'status' => true,
+                'markup' => $notificationsMarkup,
+            ]);
+        }
+
+        $notifications = Notification::whereDate('created_at', '>=', now()->subDays(7))->latest()->get();
+        return view('admin.all-notifications', compact('notifications'));
+    }
+
+    public function updateMedicalStatus(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'medical_status' => 'required|in:' . implode(',', array_keys(medicalStatus())),
+        ]);
+
+        $application = Application::find($validated['id']);
+        $application->medical_status = $validated['medical_status'];
+        $application->save();
+
+        return response()->json([
+            'status' => true,
+            'success' => 'Application updated successfully.'
+        ]);
     }
 }

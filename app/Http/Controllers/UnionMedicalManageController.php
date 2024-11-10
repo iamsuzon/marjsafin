@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AllocateMedicalCenter;
 use App\Models\Application;
 use App\Models\MedicalCenter;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -140,6 +141,38 @@ class UnionMedicalManageController extends Controller
             'status' => true,
             'success' => 'Application updated successfully.'
         ]);
+    }
+
+    public function applicationListSingle($id)
+    {
+        $applicationList = Application::with(['applicationPayment', 'applicationCustomComment', 'notification'])->where('id', $id)->get();
+        $the_application = $applicationList->first();
+
+        if ($the_application->notification) {
+            if ($the_application->notification->read_at === null)
+            {
+                $the_application->notification->update(['read_at' => now()]);
+            }
+        }
+
+        $username = $the_application->center_name;
+
+        return view('union-account.application-list-single', compact('applicationList', 'username'));
+    }
+
+    public function allNotification()
+    {
+        if (request()->ajax())
+        {
+            $notificationsMarkup = view('union-account.render.notification-list')->render();
+            return response()->json([
+                'status' => true,
+                'markup' => $notificationsMarkup,
+            ]);
+        }
+
+        $notifications = Notification::whereDate('created_at', '>=', now()->subDays(7))->latest()->get();
+        return view('union-account.all-notifications', compact('notifications'));
     }
 
     public function logout()

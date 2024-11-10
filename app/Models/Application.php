@@ -78,4 +78,9 @@ class Application extends Model
     {
         return $this->hasOne(ApplicationCustomComment::class, 'application_id', 'id');
     }
+
+    public function notification(): HasOne
+    {
+        return $this->hasOne(Notification::class, 'application_id', 'id');
+    }
 }
