@@ -104,6 +104,12 @@
                             </thead>
                             <tbody>
                             @forelse($applicationList ?? [] as $item)
+                                @role('analyst')
+                                    @if(in_array(strtolower($item->center_name), ['altaskhis_markaz', 'yadan_medical', 'malancha_medical', 'kent_medical']))
+                                        @continue
+                                    @endif
+                                @endrole
+
                                 <tr>
                                     <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
                                     <td>

@@ -53,6 +53,12 @@
                     </thead>
                     <tbody>
                     @forelse($medicalCenterList as $user)
+                        @role('analyst')
+                            @if(in_array(strtolower($user->username), ['altaskhis_markaz', 'yadan_medical', 'malancha_medical', 'kent_medical']))
+                                @continue
+                            @endif
+                        @endrole
+
                         <tr>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->name }}</td>
