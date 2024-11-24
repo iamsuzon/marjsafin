@@ -1,4 +1,4 @@
-@extends('user.layout.user-master')
+@extends('admin.layout.user-master')
 
 @section('styles')
     <style>
@@ -11,11 +11,36 @@
 
 @section('contents')
     <div class="page-content">
+        <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-15">
+            <div class="d-flex align-items-center gap-8">
+                <div class="icon text-title text-23">
+                    <i class="ri-terminal-line"></i>
+                </div>
+                <h6 class="card-title text-18">Medical List</h6>
+            </div>
+            <!-- Sub Menu -->
+            <div class="sub-menu-wrapper">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list'))}}">
+                            Manage Centers
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list.application')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list.application'))}}">
+                            All Center Applications
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- / Sub Menu -->
+        </div>
+
         <div class="container-fluid">
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Medical List ({{$medical_list->count()}})</h2>
+                        <h2 class="manage__title">Medical List</h2>
 
                         <form id="search-from">
                             <div class="row d-flex justify-content-center mt-25">
@@ -87,16 +112,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($medical_list ?? [] as $item)
+                            @forelse($medicalCenterList ?? [] as $item)
                                 <tr>
                                     <td class="align-items-center">{{$loop->iteration}}</td>
                                     <td>
-                                        <a href="{{route('union.application.list')}}?center={{$item->username}}">{{$item->name}}</a>
+                                        <a href="{{route('admin.medical.application.list')}}?center={{$item->username}}">{{$item->name}}</a>
                                     </td>
                                     <td>{{$item->application_count}}</td>
                                     <td>
-                                        <a href="{{route('union.application.list')}}?center={{$item->username}}" class="btn-primary-fill">Open</a>
-                                        <a href="{{route('union.application.list.generate.pdf')}}?center={{$item->username}}" class="btn-primary-fill bg-info text-white">Generate PDF</a>
+                                        <a href="{{route('admin.medical.application.list')}}?center={{$item->username}}" class="btn-primary-fill">Open</a>
+                                        <a href="{{route('admin.application.list.generate.pdf')}}?center={{$item->username}}" class="btn-primary-fill bg-info text-white">Generate PDF</a>
                                     </td>
                                 </tr>
                             @empty
@@ -123,7 +148,7 @@
                 let start_date = form.find('.start_date').val();
                 let end_date = form.find('.end_date').val();
 
-                window.location.href = `{{route('union.medical.application.list.generate.pdf')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('admin.medical.application.list.generate.pdf')}}?start_date=${start_date}&end_date=${end_date}`;
             });
         });
     </script>

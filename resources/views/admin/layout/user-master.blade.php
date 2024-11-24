@@ -223,7 +223,7 @@
                     </li>
                     @endhasrole
 
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}}">
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}} {{activeCurrentSidebarMenu('admin.medical-center.list.application')}}">
                         <a href="{{route('admin.medical-center.list')}}" class="parent-item-content">
                             <i class="ri-hand-heart-line"></i>
                             <span class="on-half-expanded">Medical Center List</span>

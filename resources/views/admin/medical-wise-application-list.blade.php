@@ -11,11 +11,40 @@
 
 @section('contents')
     <div class="page-content">
+        <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-15">
+            <div class="d-flex align-items-center gap-8">
+                <div class="icon text-title text-23">
+                    <i class="ri-terminal-line"></i>
+                </div>
+                <h6 class="card-title text-18">Medical List</h6>
+            </div>
+            <!-- Sub Menu -->
+            <div class="sub-menu-wrapper">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list'))}}">
+                            Manage Centers
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list.application')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list.application'))}}">
+                            All Center Applications
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- / Sub Menu -->
+        </div>
+
         <div class="container-fluid">
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List</h2>
+                        @php
+                            $username = request()->get('center') ?? '';
+                            $center_name = \App\Models\MedicalCenter::where('username', $username)->first();
+                        @endphp
+                        <h2 class="manage__title">Application List - <span class="fs-4">{{$center_name->name}}</span></h2>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -45,8 +74,12 @@
                                 </div>
 
                                 <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex">
+                                    <div class="contact-form d-flex gap-10">
                                         <button class="btn-primary-fill search_btn" type="submit">Search</button>
+
+                                        @hasrole('super-admin')
+                                            <button class="btn-secondary-fill report_btn" type="submit">Generate Report</button>
+                                        @endhasrole
                                     </div>
                                 </div>
 
@@ -66,6 +99,27 @@
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show my-5" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if($errors->any())
+                            <div class="alert alert-danger my-5">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -147,15 +201,15 @@
                                         <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
                                     @hasrole('super-admin')
-                                        <td>
-                                            @if($item->applicationPayment?->admin_amount > 0)
-                                                <p>Score: {{$item->applicationPayment?->admin_amount}}</p>
-                                            @endif
+                                    <td>
+                                        @if($item->applicationPayment?->admin_amount > 0)
+                                            <p>Score: {{$item->applicationPayment?->admin_amount}}</p>
+                                        @endif
 
-                                            @if($item->applicationPayment?->discount_amount > 0)
-                                                <p>Discount: {{$item->applicationPayment?->discount_amount}}</p>
-                                            @endif
-                                        </td>
+                                        @if($item->applicationPayment?->discount_amount > 0)
+                                            <p>Discount: {{$item->applicationPayment?->discount_amount}}</p>
+                                        @endif
+                                    </td>
                                     @endhasrole
                                     <td>
                                         <p @class([
@@ -478,11 +532,11 @@
                 let start_date = $('.start_date').val();
                 let end_date = $('.end_date').val();
 
-                window.location.href = `{{route('admin.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `{{route('admin.medical.application.list')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('admin.application.list')}}`;
+                location.href = `{{route('admin.medical.application.list')}}?center={{$username}}`;
             });
 
             $(document).on('click', '.search_btn_passport', function (e) {
@@ -490,7 +544,7 @@
 
                 let passport_search = $('input[name="passport_search"]').val();
 
-                window.location.href = `{{route('admin.application.list')}}?passport_search=${passport_search}`;
+                window.location.href = `{{route('admin.medical.application.list')}}?center={{$username}}&passport_search=${passport_search}`;
             });
 
             $(document).on('click', '.delete-btn', function () {
@@ -507,6 +561,20 @@
                     }
                 });
             })
+
+            $(document).on('click', '#search-form .report_btn', function (e) {
+                e.preventDefault();
+
+                let start_date = $('.start_date').val();
+                let end_date = $('.end_date').val();
+
+                if (!start_date || !end_date) {
+                    toastError('Please select start and end date');
+                    return;
+                }
+
+                window.location.href = `{{route('admin.application.list.generate.pdf')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
+            });
         })
     </script>
 @endsection

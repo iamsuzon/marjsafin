@@ -10,6 +10,31 @@
 
 @section('contents')
     <div class="page-content">
+        <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-15">
+            <div class="d-flex align-items-center gap-8">
+                <div class="icon text-title text-23">
+                    <i class="ri-terminal-line"></i>
+                </div>
+                <h6 class="card-title text-18">Medical List</h6>
+            </div>
+            <!-- Sub Menu -->
+            <div class="sub-menu-wrapper">
+                <ul class="sub-menu-list">
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list'))}}">
+                            Manage Centers
+                        </a>
+                    </li>
+                    <li class="sub-menu-item">
+                        <a href="{{route('admin.medical-center.list.application')}}" class="single {{activeCurrentUrl(route('admin.medical-center.list.application'))}}">
+                            All Center Applications
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- / Sub Menu -->
+        </div>
+
         <div class="card">
             <div class="d-flex justify-content-between">
                 <h2>Medical Center List</h2>

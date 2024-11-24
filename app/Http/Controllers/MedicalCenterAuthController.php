@@ -32,7 +32,12 @@ class MedicalCenterAuthController extends Controller
             return redirect()->route('medical.dashboard');
         }
 
-        if (Auth::guard('union_account')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
+        if (Auth::guard('union_account')->attempt([
+            'username' => $validated['username'],
+            'password' => $validated['password'],
+            'account_type' => 'medical_center'
+        ]))
+        {
             return redirect()->route('union.dashboard');
         }
 
@@ -199,5 +204,45 @@ class MedicalCenterAuthController extends Controller
         $application->update($validated);
 
         return back()->with('success', 'Application updated successfully.');
+    }
+
+    public function checkApplicationId(Request $request)
+    {
+        $validated = $request->validate([
+            'application_id' => 'required|numeric',
+        ]);
+
+        $username = Auth::guard('medical_center')->user()->username;
+        $application = Application::where('center_name', $username)->where('id', $validated['application_id'])->first();
+
+        if (empty($application)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Application not found.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Application found.',
+            'application' => $application
+        ]);
+    }
+
+    public function submitSerialNumber(Request $request)
+    {
+        $validated = $request->validate([
+            'application_id' => 'required|numeric',
+            'serial_number' => 'required',
+        ]);
+
+        $application = Application::find($validated['application_id']);
+        $application->serial_number = $validated['serial_number'];
+        $application->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Serial number updated successfully.'
+        ]);
     }
 }

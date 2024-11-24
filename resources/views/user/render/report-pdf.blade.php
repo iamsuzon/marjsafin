@@ -6,8 +6,9 @@
     <title>Money Receipt</title>
     <style>
         body {
+            position: relative;
             font-family: Arial, sans-serif;
-            margin: 10px;
+            margin: 5px;
         }
         .receipt-container {
             width: 80%;
@@ -46,6 +47,11 @@
         .official-signature {
             text-align: right;
             margin-top: 40px;
+        }
+        .qr-code {
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
     </style>
 </head>
@@ -86,6 +92,9 @@
         </tr>
     </table>
 
+    <div class="qr-code">
+        <img src="{{ $qrCode }}" alt="QR Code">
+    </div>
     <div class="official-signature">
         _______________________________<br>
         Official Signature

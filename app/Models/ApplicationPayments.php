@@ -12,12 +12,14 @@ class ApplicationPayments extends Model
     protected $fillable = [
         'application_id',
         'center_amount',
-        'admin_amount'
+        'admin_amount',
+        'discount_amount'
     ];
 
     protected $casts = [
         'application_id' => 'integer',
         'center_amount' => 'double',
-        'admin_amount' => 'double'
+        'admin_amount' => 'double',
+        'discount_amount' => 'double'
     ];
 }

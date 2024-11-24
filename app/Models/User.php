@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(BannedUser::class);
     }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'passport_number', 'username');
+    }
 }

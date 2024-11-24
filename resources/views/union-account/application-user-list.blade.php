@@ -15,9 +15,14 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List ({{$applicationList->count()}})</h2>
+                        <div class="manage__title d-flex justify-content-between">
+                            <h2>Application List ({{$applicationList->count()}})</h2>
+                            <a href="{{route('union.user.list')}}" class="btn-primary-fill">
+                                <i class="ri-arrow-left-line"></i>
+                            </a>
+                        </div>
 
-                        <form id="search-from">
+                        <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
                                 <div class="col-md-2">
                                     <div class="contact-form">
@@ -49,17 +54,17 @@
                                         <button class="btn-primary-fill search_btn" type="submit">Search</button>
                                     </div>
                                 </div>
+
                                 <div class="col-md-2">
                                     <div class="contact-form">
                                         <label class="contact-label">Passport Number</label>
-                                        <input type="text" class="contact-input passport_search"
+                                        <input type="text" class="contact-input"
                                                placeholder="Search By Passport Number" name="passport_search">
                                     </div>
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <div class="contact-form d-flex gap-10">
-                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search
-                                        </button>
+                                        <button class="btn-primary-fill search_btn_passport" type="submit">Search</button>
                                         <button class="btn-danger-fill reset_btn" type="reset">Reset</button>
                                     </div>
                                 </div>
@@ -81,7 +86,7 @@
                             <strong>Unsuccessful!</strong> {{ session('error') }}
 
                             @if(session('url'))
-                                    আরো স্কোর এর জন্য রিকোয়েস্ট করুন <a href="{{session('url')}}" class="btn btn-primary">Request Score</a>
+                                আরো স্কোর এর জন্য রিকোয়েস্ট করুন <a href="{{session('url')}}" class="btn btn-primary">Request Score</a>
                             @endif
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -109,7 +114,6 @@
                                 <th>Reference</th>
                                 <th>Traveling To</th>
                                 <th>Center</th>
-                                <th>Allocate Center</th>
                                 <th>Score</th>
                                 <th>Comment</th>
                                 <th>PDF</th>
@@ -132,7 +136,6 @@
                                     <td>
                                         <p>{{$item->passport_number}}</p>
                                         <p>{{$item->given_name}}</p>
-                                        <p>{{$item->surname}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
                                     </td>
                                     <td>
@@ -152,7 +155,6 @@
                                         <p class="text-capitalize">{{$center_name}}</p>
                                         <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
-                                    <td class="text-capitalize">{{getAllocatedMedicalCenterHumanName($item)}}</td>
                                     <td>
                                         @php
                                             $payment_status = $item->applicationPayment?->admin_amount;
@@ -174,10 +176,10 @@
                                                 }
                                             @endphp
 
-                                            @if(auth('web')->user()->balance > 0)
+                                            @if($item->user->balance > 0)
                                                 @if(empty($item->paymentLog))
                                                     <a href="javascript:void(0)" class="pay-bill-btn btn-primary-fill"
-                                                       data-id="{{$item->id}}">
+                                                       data-id="{{$item->id}}" data-user_id="{{$item->user_id}}">
                                                         <i class="ri-money-dollar-circle-line"></i> Submit Score
                                                     </a>
                                                 @else
@@ -187,7 +189,7 @@
                                                 @if(!empty($item->paymentLog))
                                                     <p class="badge bg-{{$class}}">{{getMedicalStatusName($item->medical_status ?? 'new')}}</p>
                                                 @else
-                                                    <a href="{{route('user.score.request', $item->user_id)}}"
+                                                    <a href="{{route('union.user.score.request', $item->user_id)}}"
                                                        class="btn-primary-fill"
                                                        style="background: #ffc107; color: #000">No Score Available</a>
                                                 @endif
@@ -206,7 +208,7 @@
                                         @endif
                                     </td>
                                     <td class="text-end px-15">
-                                        <a class="view-btn" href="{{route('user.generate.pdf', $item->id)}}">
+                                        <a class="view-btn" href="{{route('union.user.generate.pdf', $item->id)}}">
                                             <i class="ri-printer-line"></i>
                                         </a>
                                     </td>
@@ -226,6 +228,88 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header mb-10 p-0 pb-10">
+                    <div class="d-flex align-items-center gap-8">
+                        <div class="icon text-20">
+                            <i class="ri-bar-chart-horizontal-line"></i>
+                        </div>
+                        <h6 class="modal-title">Update Application</h6>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <form action="#" method="POST" id="edit-form" enctype="multipart/form-data">
+
+                        <input type="hidden" name="id">
+
+                        <div class="row g-10">
+                            <div class="col-md-12">
+                                <div class="contact-form">
+                                    <label class="contact-label">Health Status</label>
+                                    <select class="select2-modal" name="health_status">
+                                        <option value="" selected disabled>Select an option</option>
+                                        <option value="fit">Fit</option>
+                                        <option value="cfit">C.Fit</option>
+                                        <option value="unfit">Unfit</option>
+                                        <option value="held-up">Held-Up</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <!-- Date Picker -->
+                                <div class="contact-form">
+                                    <label class="contact-label">Comment</label>
+                                    <textarea class="form-control input" name="health_condition"
+                                              placeholder="Comment"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="contact-form">
+                                    <label class="contact-label">Allocate Medical Center</label>
+                                    <select class="select2-modal allocated_medical_center" name="allocated_medical_center">
+                                        @foreach(allocateMedicalCenter() as $key => $center)
+                                            <option value="{{$key}}">{{$center}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+{{--                            <div class="col-md-12">--}}
+{{--                                <div class="contact-form">--}}
+{{--                                    <label class="contact-label">Status</label>--}}
+{{--                                    <input class="form-control input" type="number" name="application_payment"--}}
+{{--                                           placeholder="exp: 1500">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+                        </div>
+
+                        <!-- Submit button -->
+                        <div class="d-flex align-items-center gap-16 flex-wrap mt-18">
+                            <button class="btn-primary-fill" type="submit">
+                                <span class="d-flex align-items-center gap-6">
+                                    <i class="las la-check-circle"></i>
+                                    <span>Update</span>
+                                </span>
+                            </button>
+                            <button class="btn-cancel-fill" type="reset" data-bs-dismiss="modal">
+                                <span class="d-flex align-items-center gap-6">
+                                    <i class="ri-close-line"></i>
+                                    <span>Discard</span>
+                                </span>
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -276,6 +360,27 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $(document).on('click', '#search-form .search_btn', function (e) {
+                e.preventDefault();
+
+                let start_date = $('.start_date').val();
+                let end_date = $('.end_date').val();
+
+                window.location.href = `{{route('union.user.application.list')}}?username={{$username}}&start_date=${start_date}&end_date=${end_date}`;
+            });
+
+            $(document).on('click', '.reset_btn', function () {
+                location.href = `{{route('union.user.application.list')}}?username={{$username}}`;
+            });
+
+            $(document).on('click', '.search_btn_passport', function (e) {
+                e.preventDefault();
+
+                let passport_search = $('input[name="passport_search"]').val();
+
+                window.location.href = `{{route('union.user.application.list')}}?username={{$username}}&passport_search=${passport_search}`;
+            });
+
             // Initialize datepicker for every date input field
             $('.single-date-picker').daterangepicker({
                 singleDatePicker: true,
@@ -311,7 +416,7 @@
                 let medical_date = form.find('input[name="medical_date"]').val();
 
                 $.ajax({
-                    url: `{{route('user.application.list.update')}}`,
+                    url: `{{route('union.user.application.list.update')}}`,
                     type: 'POST',
                     data: {
                         _token: '{{csrf_token()}}',
@@ -340,31 +445,10 @@
                 });
             });
 
-            $(document).on('click', '.search_btn', function (e) {
-                e.preventDefault();
-
-                let form = $('#search-from');
-                let start_date = form.find('.start_date').val();
-                let end_date = form.find('.end_date').val();
-
-                window.location.href = `{{route('user.application.list')}}?start_date=${start_date}&end_date=${end_date}`;
-            });
-
-            $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('user.application.list')}}`;
-            });
-
-            $(document).on('click', '.search_btn_passport', function (e) {
-                e.preventDefault();
-
-                let passport_search = $('input[name="passport_search"]').val();
-
-                window.location.href = `{{route('user.application.list')}}?passport_search=${passport_search}`;
-            });
-
             $(document).on('click', '.pay-bill-btn', function () {
                 let el = $(this);
                 let id = el.data('id');
+                let user_id = el.data('user_id');
 
                 Swal.fire({
                     title: 'Score Submission Confirmation',
@@ -375,10 +459,10 @@
                     cancelButtonText: 'No, Cancel',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = `{{route('user.pay-bill')}}?application_id=${id}`;
+                        window.location.href = `{{route('union.user.pay-bill')}}?application_id=${id}&user_id=${user_id}`;
                     }
                 })
             });
-        });
+        })
     </script>
 @endsection

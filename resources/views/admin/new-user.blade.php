@@ -12,6 +12,10 @@
             border: 1px solid red;
             background-color: #ffe6e6; /* Light red background */
         }
+
+        .fillable {
+            color: red;
+        }
     </style>
 @endsection
 
@@ -76,6 +80,12 @@
                         <div class="contact-form">
                             <label class="contact-label">Refer <span class="fillable mx-1">*</span></label>
                             <input class="form-control input" type="text" name="refer" placeholder="Refer By" value="{{old('refer')}}">
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <div class="contact-form">
+                            <label class="contact-label">Starting Score</label>
+                            <input class="form-control input" type="number" name="balance" placeholder="Starting Score" value="{{old('balance')}}">
                         </div>
                     </div>
                 </div>

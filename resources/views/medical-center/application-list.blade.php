@@ -15,7 +15,11 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List ({{$applicationList->count()}})</h2>
+                        <div class="manage__title d-flex justify-content-between">
+                            <h2 class="">Application List ({{$applicationList->count()}})</h2>
+                            <a href="javascript:void(0)" class="btn btn-info qr_btn"
+                               data-bs-toggle="modal" data-bs-target="#staticBackdrop">Scan QR</a>
+                        </div>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -243,6 +247,27 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Scan QR</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ri-close-line" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="mb-3 text-center">Scan the QR Code</h5>
+                    <input class="form-control" type="number" name="qr_application_id" placeholder="Scan QR Code here">
+
+                    <div class="form-group mt-3 serial_wrapper">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -321,6 +346,113 @@
                 let passport_search = $('input[name="passport_search"]').val();
 
                 window.location.href = `{{route('medical.application.list')}}?passport_search=${passport_search}`;
+            });
+
+            $(document).on('click', '.qr_btn', function () {
+                $('#staticBackdrop').on('shown.bs.modal', function () {
+                    $('#staticBackdrop input[name="qr_application_id"]').focus();
+                });
+            })
+
+            $(document).on('change', '#staticBackdrop input[name="qr_application_id"]', function () {
+                let el = $(this);
+                let application_id = el.val();
+
+                axios.post(`{{route('medical.check.application-id')}}`, {
+                    _token: '{{csrf_token()}}',
+                    application_id: application_id,
+                })
+                    .then(res => {
+                        let data = res.data;
+
+                        console.log(data);
+
+                        if (data.status) {
+                            toastSuccess(data.message);
+                            $(this).hide();
+
+                            let serial_wrapper = $('.serial_wrapper');
+                            serial_wrapper.append(`
+                                <h5 class="alert alert-success my-2">Application found - Passport No: ${data.application.passport_number}</h5>
+                                <input type="hidden" name="application_id" value="${data.application.id}" readonly>
+                                <label for="serial_number">Serial Number</label>
+                                <input type="text" class="form-control" id="serial_number" name="serial_number">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-primary mt-3" id="submit_serial">Submit</button>
+                                </div>`
+                            );
+
+                            $('#serial_number').focus();
+                        } else {
+                            toastError(data.message);
+
+                            let serial_wrapper = $('.serial_wrapper');
+                            serial_wrapper.empty();
+
+                            setTimeout(() => {
+                                el.val('');
+                                el.focus()
+                            }, 2000)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            });
+
+            $(document).on('click', '#submit_serial', function (e) {
+                let application_id = $('#staticBackdrop input[name="application_id"]').val();
+                let serial_number = $('#staticBackdrop #serial_number').val();
+
+                if (!serial_number) {
+                    toastError('Serial Number is required');
+                    return;
+                }
+
+                axios.post(`{{route('medical.submit.serial-number')}}`, {
+                    _token: '{{csrf_token()}}',
+                    application_id: application_id,
+                    serial_number: serial_number,
+                })
+                    .then(res => {
+                        let data = res.data;
+
+                        if (data.status) {
+                            toastSuccess(data.message);
+
+                            let serial_wrapper = $('.serial_wrapper');
+                            serial_wrapper.append(`
+                                <h5 class="alert alert-success my-2">${data.message}</h5>`
+                            );
+
+                            setTimeout(() => {
+                                $('#staticBackdrop input[name="qr_application_id"]').val('');
+                                let serial_wrapper = $('.serial_wrapper');
+                                serial_wrapper.empty();
+
+                                let qr_application_id = $('#staticBackdrop input[name="qr_application_id"]');
+                                qr_application_id.show();
+                                qr_application_id.focus();
+                            }, 1500);
+                        } else {
+                            toastError(data.message);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            });
+
+            $(document).on('click', '#staticBackdrop .btn-close', function () {
+                $('#staticBackdrop input[name="application_id"]').val('');
+                let serial_wrapper = $('.serial_wrapper');
+                serial_wrapper.empty();
+            });
+
+            $(document).on('keydown', function (e) {
+                if (e.key === 'Enter' || e.which === 13) {
+                    $('#submit_serial').click();
+                }
             });
         })
     </script>

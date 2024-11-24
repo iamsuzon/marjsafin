@@ -54,7 +54,7 @@
                         <tbody>
                         @forelse($applications ?? [] as $item)
                             <tr>
-                                <td class="mw-45 d-flex align-items-center">{{$loop->iteration}}</td>
+                                <td class="mw-45 d-flex align-items-center">{{ ($applications->currentPage() - 1) * $applications->perPage() + $loop->index + 1 }}</td>
                                 <td>
                                     <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
                                     <p>Crte: {{$item->updated_at->format('d/m/Y')}}</p>
@@ -128,6 +128,10 @@
                         @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <div class="d-flex justify-content-start">
+                    {{ $applications->links() }}
                 </div>
             </div>
         </div>

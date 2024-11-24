@@ -53,21 +53,21 @@
     <header class="header">
         <!-- Header Left -->
         <div class="left-content d-flex flex-wrap gap-10">
-            {{--            <div class="header-search">--}}
-            {{--                <div class="search-icon">--}}
-            {{--                    <i class="ri-search-line"></i>--}}
-            {{--                </div>--}}
-            {{--                <input class="search-field" type="text" placeholder="Search...">--}}
-            {{--            </div>--}}
+            <!-- Sidebar Toggle Button -->
+            <button class="half-expand-toggle sidebar-toggle">
+                <i class="ri-arrow-left-right-fill"></i>
+            </button>
+        </div>
+        <!-- / Left -->
 
-            @auth('web')
+        @auth('web')
+            <div class="d-flex flex-wrap">
                 <marquee style="color: red" width="100%" direction="left">
                     মেডিকেল ডাটা সঠিক ভাবে সাবমিট করে মেডিকেল করলে ৩য় দিন রিপোর্ট প্রদান করার চান্স 99% (যদি সার্ভার
                     সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর রিপোর্ট পাবেন।
                 </marquee>
-            @endauth
-        </div>
-        <!-- / Left -->
+            </div>
+        @endauth
 
         <!-- Header Right -->
         <ul class="header-right">
@@ -75,7 +75,7 @@
             <li class="cart-list notification dropdown" id="notification-div">
                 @auth('union_account')
                     @php
-                        $notifications = \App\Models\Notification::whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
+                        $notifications = auth('union_account')->user()->unionNotification();
                         $unreadNotifications = $notifications->whereNull('read_at')->count();
                     @endphp
                     <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
@@ -96,7 +96,7 @@
                             @forelse($notifications ?? [] as $notification)
                                 <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
                                     <a class="list-items custom-break-spaces dropdown-item"
-                                       href="{{$notification->link}}">
+                                       href="{{route('union.application.list.single', $notification->link)}}">
                                         <i class="ri-notification-3-line"></i>
                                         <p class="line-clamp-2">{{$notification->message}}</p>
                                         <span>
@@ -121,13 +121,6 @@
                 @endauth
             </li>
 
-            @auth('web')
-                <li>
-                    <a class="btn btn-primary btn-sm" style="padding: 10px !important; background: #0d6efd !important;"
-                       href="javascript:void(0)">Score: {{auth('web')->user()->balance}}</a>
-                </li>
-            @endauth
-
             <!-- Login User -->
             <li class="cart-list dropdown">
                 <!-- User Profile -->
@@ -141,6 +134,14 @@
                 <div class="dropdown-menu dropdown-list-style dropdown-menu-end white-bg with-248">
                     <ul class="profileListing">
                         <!-- User info -->
+                        @auth('web')
+                            <a href="#" class="user-sub-info">
+                                <div class="user-details">
+                                    <span class="text-info">Score: {{auth('web')->user()->balance}}</span>
+                                </div>
+                            </a>
+                        @endauth
+
                         <a href="#" class="user-sub-info">
                             <div class="user-details">
                                 <span class="name">{{auth()->user()->username}}</span>
@@ -268,19 +269,37 @@
                     @endauth
 
                     @auth('union_account')
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.dashboard')}}">
-                            <a href="{{route('union.dashboard')}}" class="parent-item-content">
-                                <i class="ri-dashboard-line"></i>
-                                <span class="on-half-expanded">Dashboard</span>
-                            </a>
-                        </li>
+                        @if(auth('union_account')->user()->account_type === 'medical_center')
+                            <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.dashboard')}}">
+                                <a href="{{route('union.dashboard')}}" class="parent-item-content">
+                                    <i class="ri-dashboard-line"></i>
+                                    <span class="on-half-expanded">Dashboard</span>
+                                </a>
+                            </li>
 
-                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.medical.list')}}">
-                            <a href="{{route('union.medical.list')}}" class="parent-item-content">
-                                <i class="ri-hand-heart-line"></i>
-                                <span class="on-half-expanded">Medical List</span>
-                            </a>
-                        </li>
+                            <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.medical.list')}}">
+                                <a href="{{route('union.medical.list')}}" class="parent-item-content">
+                                    <i class="ri-hand-heart-line"></i>
+                                    <span class="on-half-expanded">Medical List</span>
+                                </a>
+                            </li>
+                        @endif
+
+                            @if(auth('union_account')->user()->account_type === 'user')
+                                <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.user.dashboard')}}">
+                                    <a href="{{route('union.user.dashboard')}}" class="parent-item-content">
+                                        <i class="ri-dashboard-line"></i>
+                                        <span class="on-half-expanded">Dashboard</span>
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-menu-item {{activeCurrentSidebarMenu('union.user.list')}}">
+                                    <a href="{{route('union.user.list')}}" class="parent-item-content">
+                                        <i class="ri-hand-heart-line"></i>
+                                        <span class="on-half-expanded">User List</span>
+                                    </a>
+                                </li>
+                            @endif
                     @endauth
 
                     <li class="sidebar-menu-item">

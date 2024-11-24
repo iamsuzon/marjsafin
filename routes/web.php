@@ -10,6 +10,7 @@ use App\Http\Controllers\MedicalCenterManageController;
 use App\Http\Controllers\PaymentLogController;
 use App\Http\Controllers\UnionAccountManageController;
 use App\Http\Controllers\UnionMedicalManageController;
+use App\Http\Controllers\UnionUserManageController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,7 +84,8 @@ Route::middleware('auth:admin')->group(function () {
         ->can('view-customer');
     Route::get('/admin/user-ban/{id}', [BanUserManageController::class, 'banUser'])
         ->name('admin.user.ban');
-
+    Route::post('/admin/user-balance/update', [AdminAuthController::class, 'updateBalance'])
+        ->name('admin.user.balance.update');
 
     Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
         ->name('admin.new.medical-center')
@@ -93,6 +95,16 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/medical-center-list', [MedicalCenterManageController::class, 'MedicalCenterList'])
         ->name('admin.medical-center.list')
         ->can('view-medical-center');
+    Route::get('/admin/medical-center-list/application', [MedicalCenterManageController::class, 'MedicalCenterListApplication'])
+        ->name('admin.medical-center.list.application')
+        ->can('view-medical-center');
+    Route::get('/admin/medical/application-list', [MedicalCenterManageController::class, 'medicalApplicationList'])
+        ->name('admin.medical.application.list');
+
+    Route::get('admin/application-list/pdf', [MedicalCenterManageController::class, 'applicationListPdf'])
+        ->name('admin.application.list.generate.pdf');
+    Route::get('/admin/application-list/medical/pdf', [MedicalCenterManageController::class, 'medicalApplicationListPdf'])
+        ->name('admin.medical.application.list.generate.pdf');
 
     Route::get('/admin/allocate-center-list', [MedicalCenterManageController::class, 'AllocateCenterList'])
         ->name('admin.allocate-center.list')
@@ -176,6 +188,9 @@ Route::middleware('auth:medical_center')->prefix('medical')->group(function () {
     Route::get('/change-password', [MedicalCenterAuthController::class, 'changePassword'])->name('medical.change.password');
     Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
 
+    Route::post('/qr/check-application-id', [MedicalCenterAuthController::class, 'checkApplicationId'])->name('medical.check.application-id');
+    Route::post('/qr/submit-serial-number', [MedicalCenterAuthController::class, 'submitSerialNumber'])->name('medical.submit.serial-number');
+
     Route::get('/logout', [MedicalCenterAuthController::class, 'logout'])->name('medical.logout');
 });
 
@@ -183,6 +198,8 @@ Route::middleware('auth:union_account')->prefix('medicals')->group(function () {
     Route::get('/dashboard', [UnionMedicalManageController::class, 'dashboard'])->name('union.dashboard');
     Route::get('/medical-list', [UnionMedicalManageController::class, 'medicalList'])->name('union.medical.list');
     Route::get('/application-list', [UnionMedicalManageController::class, 'applicationList'])->name('union.application.list');
+    Route::get('/application-list/pdf', [UnionMedicalManageController::class, 'applicationListPdf'])->name('union.application.list.generate.pdf');
+    Route::get('/application-list/medical/pdf', [UnionMedicalManageController::class, 'medicalApplicationListPdf'])->name('union.medical.application.list.generate.pdf');
 
     Route::post('/application-update-result', [UnionMedicalManageController::class, 'applicationUpdateResult'])->name('union.application.result.update');
     Route::post('/customer-application-list/update-medical-status', [UnionMedicalManageController::class, 'updateMedicalStatus'])->name('user.application.list.update.medical-status');
@@ -199,6 +216,20 @@ Route::middleware('auth:union_account')->prefix('medicals')->group(function () {
 //
 //    Route::get('/change-password', [MedicalCenterAuthController::class, 'changePassword'])->name('medical.change.password');
 //    Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
-//
+
     Route::get('/logout', [UnionMedicalManageController::class, 'logout'])->name('union.logout');
+});
+
+Route::middleware('auth:union_account')->prefix('user')->group(function () {
+    Route::get('/dashboard', [UnionUserManageController::class, 'dashboard'])->name('union.user.dashboard');
+    Route::get('/user-list', [UnionUserManageController::class, 'UserList'])->name('union.user.list');
+
+    Route::get('/application-list', [UnionUserManageController::class, 'applicationList'])->name('union.user.application.list');
+    Route::post('/application-list/update', [UnionUserManageController::class, 'applicationUpdate'])->name('union.user.application.list.update');
+    Route::get('/generate-pdf/{id}', [UserAuthController::class, 'generatePdf'])->name('union.user.generate.pdf');
+
+    Route::get('/score-request/{id}', [UnionUserManageController::class, 'scoreRequest'])->name('union.user.score.request');
+    Route::get('/customer/pay-bil', [UnionUserManageController::class, 'payBill'])->name('union.user.pay-bill');
+
+    Route::get('/logout', [UnionUserManageController::class, 'logout'])->name('union.logout');
 });

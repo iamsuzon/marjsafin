@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\MedicalCenter;
 use App\Models\Notification;
+use App\Models\PaymentLog;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -74,6 +75,7 @@ class AdminAuthController extends Controller
             'id' => 'required',
             'health_condition' => 'nullable',
             'application_payment' => 'nullable|numeric',
+            'application_admin_discount' => 'nullable|numeric',
         ], [
             'application_payment.numeric' => 'The admin score must be a number.'
         ]);
@@ -99,6 +101,7 @@ class AdminAuthController extends Controller
                 [
                     'application_id' => $application->id,
                     'admin_amount' => (double) $validated['application_payment'],
+                    'discount_amount' => (double) $validated['application_admin_discount'],
                     'center_amount' => 0
                 ]
             );
@@ -194,15 +197,30 @@ class AdminAuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required',
             'refer' => 'nullable',
+            'balance' => 'nullable|numeric',
         ]);
 
-        User::create([
+        $user = User::create([
             'username' => $validated['username'],
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'refer_by' => $validated['refer'],
+            'balance' => $validated['balance'],
         ]);
+
+        if (($validated['balance'] ?? 0) > 0) {
+            PaymentLog::create([
+                'user_id' => $user->id,
+                'amount' => $validated['balance'],
+                'payment_type' => 'deposit',
+                'payment_method' => 'admin',
+                'reference_no' => 'admin',
+                'deposit_date' => Carbon::now(),
+                'remarks' => 'Starting score added by admin.',
+                'status' => 'approved'
+            ]);
+        }
 
         return back()->with('success', 'User created successfully.');
     }
@@ -211,6 +229,23 @@ class AdminAuthController extends Controller
     {
         $userList = User::latest()->get();
         return view('admin.user-list', compact('userList'));
+    }
+
+    public function updateBalance(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:users',
+            'balance' => 'required|numeric',
+        ]);
+
+        $user = User::findOrFail($validated['id']);
+        $user->balance = $validated['balance'];
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'success' => 'Balance updated successfully.'
+        ]);
     }
 
     public function logout()
@@ -230,14 +265,14 @@ class AdminAuthController extends Controller
     public function allocatedMedicalCenterDetails($id)
     {
         $medical_center_details = MedicalCenter::with('allocatedMedicalCenter')->findOrFail($id);
-        $applications = Application::where('center_name', $medical_center_details->username)->latest()->get();
+        $applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->latest()->paginate(5);
 
         return view('admin.allocation-medical-center-details', compact('medical_center_details', 'applications'));
     }
 
     public function allocatedMedicalCenterApprove($id)
     {
-        $medical_center = Application::findOrFail($id);
+        $medical_center = Application::with(['allocatedMedicalCenter'])->findOrFail($id);
         $medical_center->allocatedMedicalCenter->status = true;
         $medical_center->allocatedMedicalCenter->save();
 

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserAuthController extends Controller
 {
@@ -27,7 +28,7 @@ class UserAuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|exists:users,username',
+            'username' => 'required',
             'password' => 'required',
 //            'captcha' => 'required|captcha'
         ], [
@@ -46,7 +47,16 @@ class UserAuthController extends Controller
 
         if (Auth::guard('web')->attempt(['username' => $validated['username'], 'password' => $validated['password']])) {
             return redirect()->route('dashboard');
-        } else {
+        }
+        else if (Auth::guard('union_account')->attempt([
+            'username' => $validated['username'],
+            'password' => $validated['password'],
+            'account_type' => 'user'
+        ]))
+        {
+            return redirect()->route('union.user.dashboard');
+        }
+        else {
             return back()->with('error', 'Invalid username or password.');
         }
     }
@@ -190,9 +200,13 @@ class UserAuthController extends Controller
             'delivery_date' => $application->created_at->addDays(3),
         ];
 
+        $qrCode = QrCode::format('png')->size(100)->generate($application->id);
+        $qrCodeBase64 = 'data:image/png;base64,' . base64_encode($qrCode);
+        $data['qrCode'] = $qrCodeBase64;
+
         $pdf = PDF::loadView('user.render.report-pdf', $data)->setPaper([0, 0, 650, 450]);
 
-        return $pdf->download('application.pdf');
+        return $pdf->stream('application.pdf');
     }
 
     public function logout()

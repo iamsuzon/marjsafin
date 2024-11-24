@@ -149,6 +149,7 @@ function medicalStatus(): array
         'in-progress' => 'In Progress',
         'under-review' => 'Under Review',
         'fit' => 'Fit',
+        'slip-not-found' => 'Slip Not Found',
     ];
 }
 
@@ -170,6 +171,11 @@ function getPaymentMethodName($method): string
 function getAllocatedMedicalCenterName(Application $item): string
 {
     return $item->allocatedMedicalCenter?->allocated_medical_center ?? '';
+}
+
+function getAllocatedMedicalCenterHumanName(Application $item): string
+{
+    return str_replace('-',' ', $item->allocatedMedicalCenter?->allocated_medical_center) ?? '';
 }
 
 function activeCurrentSidebarMenu($routeName): string
@@ -226,4 +232,9 @@ function fixNoticeText($text): string
 function amountWithCurrency($amount): string
 {
     return number_format($amount, 2) . ' BDT';
+}
+
+function activeCurrentUrl(string $url, string $activeClass = 'active'): string
+{
+    return url()->current() === $url ? $activeClass : '';
 }

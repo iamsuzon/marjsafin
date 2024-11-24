@@ -29,9 +29,9 @@
             <div class="container-fluid">
                 <div class="row justify-content-lg-end justify-content-sm-center">
                     <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">
-                        <marquee style="color: red" width="100%" direction="left" height="100px">
-                            মেডিকেল ডাটা সঠিক ভাবে সাবমিট করলে ৩য় দিন রিপোর্ট  প্রদান করার চান্স 99% (যদি সার্ভার সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর রিপোর্ট  পাবেন।
-                        </marquee>
+{{--                        <marquee style="color: red" width="100%" direction="left" height="100px">--}}
+{{--                            মেডিকেল ডাটা সঠিক ভাবে সাবমিট করলে ৩য় দিন রিপোর্ট  প্রদান করার চান্স 99% (যদি সার্ভার সংক্রান্ত কোন সমস্যা না হয়) । অন্যথায় ১ দিন পর রিপোর্ট  পাবেন।--}}
+{{--                        </marquee>--}}
                     </div>
                 </div>
 

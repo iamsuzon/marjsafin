@@ -50,8 +50,9 @@
                                 </div>
 
                                 <div class="col-md-2 d-flex align-items-end">
-                                    <div class="contact-form d-flex">
+                                    <div class="contact-form d-flex gap-10">
                                         <button class="btn-primary-fill search_btn" type="submit">Search</button>
+                                        <button class="btn-secondary-fill report_btn" type="submit">Generate Report</button>
                                     </div>
                                 </div>
 
@@ -373,6 +374,20 @@
                     .catch(err => {
                         console.log(err);
                     })
+            });
+
+            $(document).on('click', '#search-form .report_btn', function (e) {
+                e.preventDefault();
+
+                let start_date = $('.start_date').val();
+                let end_date = $('.end_date').val();
+
+                if (!start_date || !end_date) {
+                    toastError('Please select start and end date');
+                    return;
+                }
+
+                window.location.href = `{{route('union.application.list.generate.pdf')}}?center={{$username}}&start_date=${start_date}&end_date=${end_date}`;
             });
         })
     </script>

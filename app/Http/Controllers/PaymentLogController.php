@@ -62,7 +62,7 @@ class PaymentLogController extends Controller
 
     public function scoreRequest($id)
     {
-        abort_if(empty($id) && auth('web')->user()->id !== $id, 403);
+        abort_if(empty($id) && auth()->user()->id !== $id, 403);
         $user = User::findOrFail($id);
 
         $oldLog = PaymentLog::where('user_id', $user->id)
