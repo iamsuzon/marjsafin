@@ -175,7 +175,8 @@ function getAllocatedMedicalCenterName(Application $item): string
 
 function getAllocatedMedicalCenterHumanName(Application $item): string
 {
-    return str_replace('-',' ', $item->allocatedMedicalCenter?->allocated_medical_center) ?? '';
+    $text = str_replace('-',' ', $item->allocatedMedicalCenter?->allocated_medical_center) ?? '';
+    return ucwords($text);
 }
 
 function activeCurrentSidebarMenu($routeName): string

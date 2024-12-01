@@ -90,7 +90,7 @@
                 <p>{{$item->health_status_details}}</p>
             </td>
             <td>
-                <p>{{getAllocatedMedicalCenterName($item) ?? ''}}</p>
+                <p class="text-capitalize">{{getAllocatedMedicalCenterHumanName($item) ?? ''}}</p>
             </td>
             <td>
                 @php

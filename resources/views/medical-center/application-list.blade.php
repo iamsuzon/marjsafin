@@ -105,7 +105,7 @@
                                     </td>
                                     <td>
                                         <p>{{$item->passport_number}}</p>
-                                        <p>{{$item->given_name}}</p>
+                                        <p>{{$item->given_name}} {{$item->surname}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
                                     </td>
                                     <td>

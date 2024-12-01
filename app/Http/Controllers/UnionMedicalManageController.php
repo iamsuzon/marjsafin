@@ -78,6 +78,7 @@ class UnionMedicalManageController extends Controller
         $center_name = $center->name;
 
         $applicationList = Application::select([
+            'id',
             'pdf_code',
             'created_at',
             'updated_at',
@@ -91,8 +92,8 @@ class UnionMedicalManageController extends Controller
             'center_name',
             'health_status',
             'health_status_details',
-            'medical_status'
-        ])->where('center_name', $username);
+            'medical_status',
+        ])->with(['allocatedMedicalCenter'])->where('center_name', $username);
 
         $date_string = '';
         if (\request()->has('start_date') && \request()->has('end_date')) {
