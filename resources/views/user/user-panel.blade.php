@@ -119,7 +119,7 @@
                             <tbody>
                             @forelse($applicationList ?? [] as $item)
                                 <tr>
-                                    <td class="mw-45 d-flex align-items-center">{{$loop->iteration}}</td>
+                                    <td class="mw-45 d-flex align-items-center">{{listSerialNumber($applicationList, $loop)}}</td>
                                     <td>
                                         <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
                                         <p>Crte: {{$item->medical_date?->format('d/m/Y')}}</p>
@@ -225,6 +225,10 @@
                             @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="d-flex justify-content-start">
+                        {{$applicationList->links()}}
                     </div>
                 </div>
             </div>

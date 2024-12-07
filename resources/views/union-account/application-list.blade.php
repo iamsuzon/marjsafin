@@ -96,7 +96,7 @@
                             <tbody>
                             @forelse($applicationList ?? [] as $item)
                                 <tr>
-                                    <td class="align-items-center">{{$loop->iteration}}</td>
+                                    <td class="align-items-center">{{listSerialNumber($applicationList, $loop)}}</td>
                                     <td>{{$item->pdf_code}}</td>
                                     <td>
                                         <p>Drft: {{$item->created_at->format('d/m/Y')}}</p>
@@ -185,6 +185,10 @@
                             @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="d-flex justify-content-start">
+                        {{ $applicationList->links() }}
                     </div>
                 </div>
             </div>
@@ -322,9 +326,11 @@
                     .then(res => {
                         let data = res.data;
 
+                        console.log(data)
+
                         if (data.status) {
                             toastSuccess(data.message);
-                            reloadThisPage();
+                            reloadThisPage(0);
                         }
                     })
                     .catch(err => {

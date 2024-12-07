@@ -15,7 +15,13 @@
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List</h2>
+                        <h2 class="manage__title">
+                            Application List
+
+                            @if($start_date && $end_date)
+                                <span class="text-capitalize">({{$start_date}} <i class="ri-arrow-right-line"></i> {{$end_date}})</span>
+                            @endif
+                        </h2>
 
                         <form id="search-form">
                             <div class="row d-flex justify-content-center mt-25">
@@ -232,6 +238,10 @@
                             @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="d-flex justify-content-start">
+                        {{$applicationList->links()}}
                     </div>
                 </div>
             </div>

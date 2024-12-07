@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDepositRequestHistoryController;
 use App\Http\Controllers\BanUserManageController;
 use App\Http\Controllers\DeveloperSettingsController;
+use App\Http\Controllers\ExcelConverterController;
 use App\Http\Controllers\GeneralSettingsController;
 use App\Http\Controllers\MedicalCenterAuthController;
 use App\Http\Controllers\MedicalCenterManageController;
@@ -86,6 +87,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.user.ban');
     Route::post('/admin/user-balance/update', [AdminAuthController::class, 'updateBalance'])
         ->name('admin.user.balance.update');
+    Route::get('/admin/user/pdf-generate', [AdminAuthController::class, 'generatePdf'])
+        ->name('admin.user.pdf.generate');
 
     Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
         ->name('admin.new.medical-center')
@@ -159,6 +162,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/all-notifications', [AdminAuthController::class, 'allNotification'])->name('admin.notification.all');
 
     Route::post('admin/customer-application-list/update-medical-status', [AdminAuthController::class, 'updateMedicalStatus'])->name('admin.application.list.update.medical-status');
+
+    Route::get('admin/report-excel-list', [ExcelConverterController::class, 'excelList'])->name('admin.report.excel.list');
+    Route::post('admin/report-excel-list', [ExcelConverterController::class, 'excelDownload']);
+    Route::post('admin/excel-report/set-medical', [ExcelConverterController::class, 'setMedicalCenter'])->name('admin.excel.report.set.medical');
 
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);

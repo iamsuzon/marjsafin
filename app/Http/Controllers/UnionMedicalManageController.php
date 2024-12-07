@@ -63,7 +63,7 @@ class UnionMedicalManageController extends Controller
             $applicationList = $applicationList->whereDate('created_at', Carbon::today());
         }
 
-        $applicationList = $applicationList->latest()->get();
+        $applicationList = $applicationList->latest()->paginate(20)->withQueryString();
 
         return view('union-account.application-list', compact('applicationList', 'username'));
     }

@@ -239,3 +239,8 @@ function activeCurrentUrl(string $url, string $activeClass = 'active'): string
 {
     return url()->current() === $url ? $activeClass : '';
 }
+
+function listSerialNumber($applicationList, $loop): int
+{
+    return ($applicationList->currentPage() - 1) * $applicationList->perPage() + $loop->index + 1;
+}

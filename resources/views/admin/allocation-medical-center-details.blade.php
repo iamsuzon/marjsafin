@@ -4,7 +4,13 @@
     <div class="page-content">
         <div class="card">
             <div class="d-flex justify-content-between">
-                <h2>{{$medical_center_details->name}} - Allocated Medical Centers List ({{$applications->count()}})</h2>
+                <div>
+                    <h2>{{$medical_center_details->name}} - Allocated Medical Centers List</h2>
+                    <p>
+                        <strong>Unapproved Application:</strong> {{$unapproved_applications}}
+                    </p>
+                </div>
+
                 <a href="{{route('admin.application-list.allocations')}}" class="btn-primary-fill">
                     <i class="ri-arrow-left-line"></i>
                 </a>
@@ -106,7 +112,7 @@
                                 </td>
 
                                 @hasanyrole('super-admin')
-                                <td>
+                                <td class="td-{{$item->id}}">
                                     @php
                                         $approve_class = $item->allocatedMedicalCenter?->status ? 'text-success' : 'text-danger';
                                     @endphp
@@ -135,4 +141,42 @@
                 </div>
             </div>
         </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function () {
+            $('.approve-btn').on('click', function (e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+                let id = $(this).data('id');
+
+                changeStatus(url, id);
+            });
+
+            let changeStatus = function (url, id) {
+                axios.get(url)
+                    .then((response) => {
+                        let data = response.data;
+
+                        let status = data.status;
+                        let message = data.message;
+                        let medical_center = data.medical_center;
+
+                        if (status)
+                        {
+                            medical_center.status ? toastSuccess(message) : toastError(message);
+
+                            let className = medical_center.status ? 'text-success' : 'text-danger';
+                            let text = medical_center.status ? 'Approved' : 'Not Approved';
+
+                            $('.td-' + id).html(`<p class="${className}">${text}</p>`);
+                        }
+                    })
+                    .catch(() => {
+                        alert('Something went wrong');
+                    });
+            }
+        });
+    </script>
 @endsection

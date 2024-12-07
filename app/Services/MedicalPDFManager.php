@@ -7,9 +7,9 @@ use setasign\Fpdi\Fpdi;
 
 class MedicalPDFManager
 {
-    public static function generateEachPDF($applications, $center_name, $username, $iteration): void
+    public static function generateEachPDF($applications, $center_name, $username, $iteration, $pdf_view = 'union-account.render.application-list-pdf'): void
     {
-        $html = view('union-account.render.application-list-pdf', compact('applications', 'center_name', 'iteration'))->render();
+        $html = view($pdf_view, compact('applications', 'center_name', 'iteration'))->render();
 
         $pdf = new Dompdf();
         $pdf->loadHtml($html);

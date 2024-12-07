@@ -128,6 +128,12 @@
                 </div>
             </li>
 
+            <li class="cart-list notification dropdown">
+                <a href="{{route('admin.report.excel.list')}}" class="cart-items dropdown-toggle toggle-arro-hidden">
+                    <i class="ri-file-excel-2-line p-0"></i>
+                </a>
+            </li>
+
             <!-- Reports -->
             {{--            <li class="cart-list position-relative d-none d-md-block">--}}
             {{--                <a href="#" class="cart-items btn-light-outline btn-sm text-14 d-flex gap-10 align-items-center">--}}

@@ -89,7 +89,8 @@ class UserAuthController extends Controller
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->whereBetween('created_at', [$start_date, $end_date])
                 ->latest()
-                ->get();
+                ->paginate(20)
+                ->withQueryString();
         }
         else if(request()->has('passport_search'))
         {
@@ -100,12 +101,13 @@ class UserAuthController extends Controller
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->where('passport_number', trim(request('passport_search')))
                 ->latest()
-                ->get();
+                ->paginate(20);
         }
         else {
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('user_id', $user_id)
                 ->whereDate('created_at', Carbon::today())
-                ->latest()->get();
+                ->latest()->paginate(20)
+                ->withQueryString();
         }
 
         return view('user.user-panel', compact('applicationList'));

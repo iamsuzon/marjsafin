@@ -7,6 +7,7 @@ use App\Models\MedicalCenter;
 use App\Models\Notification;
 use App\Models\PaymentLog;
 use App\Models\User;
+use App\Services\MedicalPDFManager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,9 @@ class AdminAuthController extends Controller
 
     public function applicationList()
     {
+        $start_date = null;
+        $end_date = null;
+
         if (request()->has('start_date') && request()->has('end_date')) {
             if (request('start_date') == null || request('end_date') == null) {
                 return back()->with('error', 'Please select both start and end date.');
@@ -52,7 +56,7 @@ class AdminAuthController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereBetween('created_at', [$start_date, $end_date])->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereBetween('created_at', [$start_date, $end_date])->paginate(20)->withQueryString();
         }
         else if(request()->has('passport_search'))
         {
@@ -60,13 +64,17 @@ class AdminAuthController extends Controller
                 return back()->with('error', 'Please enter passport number.');
             }
 
-            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('passport_number', trim(request('passport_search')))->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('passport_number', trim(request('passport_search')))->paginate(20);
         }
         else {
-            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereDate('created_at', Carbon::today())->latest()->get();
+            $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereDate('created_at', Carbon::today())->latest()->paginate(20);
         }
 
-        return view('admin.application-list', ['applicationList' => $applicationList]);
+        return view('admin.application-list', [
+            'applicationList' => $applicationList,
+            'start_date' => $start_date ? Carbon::parse($start_date)->format('d-M-Y') : null,
+            'end_date' => $end_date ? Carbon::parse($end_date)->format('d-M-Y') : null,
+        ]);
     }
 
     public function applicationUpdateResult(Request $request)
@@ -248,6 +256,78 @@ class AdminAuthController extends Controller
         ]);
     }
 
+    public function generatePdf()
+    {
+        $validated = request()->validate([
+            'id' => 'required',
+        ]);
+
+        $start_date = request('start_date');
+        $end_date = request('end_date');
+
+        $applicationList = Application::select([
+            'id',
+            'user_id',
+            'pdf_code',
+            'created_at',
+            'updated_at',
+            'serial_number',
+            'ems_number',
+            'passport_number',
+            'given_name',
+            'nid_no',
+            'gender',
+            'traveling_to',
+            'center_name',
+            'health_status',
+            'health_status_details',
+            'medical_status',
+        ])->with(['user','applicationPayment', 'applicationCustomComment'])->where('user_id', $validated['id']);
+
+        $date_string = 'all';
+
+        if ($start_date && $end_date) {
+            $start_date = Carbon::parse($start_date)->format('Y-m-d');
+            $end_date = Carbon::parse($end_date)->format('Y-m-d');
+
+            $applicationList = $applicationList->whereBetween('created_at', [$start_date, $end_date]);
+            $date_string = Carbon::parse($start_date)->format('d-M-Y') . ' to ' . Carbon::parse($end_date)->format('d-M-Y');
+        }
+        elseif ($start_date) {
+            $start_date = Carbon::parse($start_date)->format('Y-m-d');
+            $applicationList = $applicationList->whereDate('created_at', $start_date);
+            $date_string = Carbon::parse($start_date)->format('d-M-Y');
+        }
+
+        if ($applicationList->count() === 0) {
+            return back()->with('error', 'No application found.');
+        }
+
+        $single_application_user = $applicationList->first()->user;
+        $name = $single_application_user->name;
+        $username = $single_application_user->username;
+
+        $iteration = 1;
+        $applicationList->chunk(100, function ($applications) use (&$iteration, $name) {
+            MedicalPDFManager::generateEachPDF(
+                applications: $applications,
+                center_name: $name,
+                username: '../admin',
+                iteration: $iteration,
+                pdf_view: 'admin.render.user-application-list-pdf'
+            );
+
+            $iteration += 100;
+        });
+
+
+        MedicalPDFManager::combinePDF(
+            target_directory: "app\public\admin\\",
+            center_name: $username,
+            date: $date_string
+        );
+    }
+
     public function logout()
     {
         Auth::guard('admin')->logout();
@@ -265,9 +345,13 @@ class AdminAuthController extends Controller
     public function allocatedMedicalCenterDetails($id)
     {
         $medical_center_details = MedicalCenter::with('allocatedMedicalCenter')->findOrFail($id);
-        $applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->latest()->paginate(5);
+        $applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->latest()->paginate(10);
 
-        return view('admin.allocation-medical-center-details', compact('medical_center_details', 'applications'));
+        $unapproved_applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->whereHas('allocatedMedicalCenter', function($query) {
+            $query->where('status', false);
+        })->latest()->count();
+
+        return view('admin.allocation-medical-center-details', compact('medical_center_details', 'applications', 'unapproved_applications'));
     }
 
     public function allocatedMedicalCenterApprove($id)
@@ -276,7 +360,11 @@ class AdminAuthController extends Controller
         $medical_center->allocatedMedicalCenter->status = true;
         $medical_center->allocatedMedicalCenter->save();
 
-        return back()->with('success', 'Medical Center approved successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Medical Center approved successfully.',
+            'medical_center' => $medical_center->allocatedMedicalCenter
+        ]);
     }
 
     public function allocatedMedicalCenterDisapprove($id)
@@ -285,7 +373,11 @@ class AdminAuthController extends Controller
         $medical_center->allocatedMedicalCenter->status = false;
         $medical_center->allocatedMedicalCenter->save();
 
-        return back()->with('success', 'Medical Center disapproved successfully.');
+        return response()->json([
+            'status' => true,
+            'message' => 'Medical Center disapproved successfully.',
+            'medical_center' => $medical_center->allocatedMedicalCenter
+        ]);
     }
 
     public function changePassword()
