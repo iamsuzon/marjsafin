@@ -1,4 +1,5 @@
 @extends('user.layout.user-master')
+@section('title', 'Medical List')
 
 @section('styles')
     <style>
@@ -12,10 +13,23 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
+            <x-page-tabs title="Medical" :links="[
+                [
+                    'name' => 'Medical List',
+                    'route' => route('user.application.list'),
+                    'active' => true
+                ],
+                [
+                    'name' => 'Slip List',
+                    'route' => route('user.slip.list'),
+                    'active' => false
+                ]
+            ]"/>
+
             <div class="card">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="manage__title">Application List ({{$applicationList->count()}})</h2>
+                        <h2 class="manage__title">Medical Application List ({{$applicationList->count()}})</h2>
 
                         <form id="search-from">
                             <div class="row d-flex justify-content-center mt-25">

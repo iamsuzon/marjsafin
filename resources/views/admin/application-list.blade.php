@@ -12,6 +12,21 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
+            @role('super-admin')
+            <x-page-tabs title="Medical" :links="[
+                [
+                    'name' => 'Medical List',
+                    'route' => route('admin.application.list'),
+                    'active' => true
+                ],
+                                [
+                    'name' => 'Slip List',
+                    'route' => route('admin.slip.list'),
+                    'active' => false
+                ]
+            ]"/>
+            @endrole
+
             <div class="card">
                 <div class="row">
                     <div class="col-12">
@@ -233,7 +248,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">No Data Found</td>
+                                    <td colspan="12" class="text-center">No Data Found</td>
                                 </tr>
                             @endforelse
                             </tbody>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDepositRequestHistoryController;
+use App\Http\Controllers\AdminSlipController;
 use App\Http\Controllers\BanUserManageController;
 use App\Http\Controllers\DeveloperSettingsController;
 use App\Http\Controllers\ExcelConverterController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\UnionAccountManageController;
 use App\Http\Controllers\UnionMedicalManageController;
 use App\Http\Controllers\UnionUserManageController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\UserSlipController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +56,14 @@ Route::middleware('auth:web')->group(function () {
         ->name('user.transaction.history');
 
     Route::get('/customer/pay-bil', [PaymentLogController::class, 'payBill'])->name('user.pay-bill');
+    Route::get('/customer/pay-slip-bil', [PaymentLogController::class, 'paySlipBill'])->name('user.pay-slip-bill');
+
+    Route::prefix('customer')->name('user.')->group(function () {
+        Route::get('slip-registration', [UserSlipController::class, 'slipRegistration'])->name('slip.registration');
+        Route::post('slip-registration', [UserSlipController::class, 'storeSlip']);
+
+        Route::get('slip-list', [UserSlipController::class, 'slipList'])->name('slip.list');
+    });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
@@ -167,6 +177,14 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/report-excel-list', [ExcelConverterController::class, 'excelDownload']);
     Route::post('admin/excel-report/set-medical', [ExcelConverterController::class, 'setMedicalCenter'])->name('admin.excel.report.set.medical');
 
+    Route::get('admin/slip-list', [AdminSlipController::class, 'slipList'])->name('admin.slip.list');
+    Route::post('admin/slip-list', [AdminSlipController::class, 'slipUpdate']);
+
+    Route::get('admin/slip-list-single/{id}', [AdminSlipController::class, 'slipListSingle'])->name('admin.slip.list.single');
+
+    Route::get('admin/slip-rates', [PaymentLogController::class, 'slipMedicalCenter'])->name('admin.slip.medical-center');
+    Route::post('admin/slip-rates', [PaymentLogController::class, 'storeSlipRate']);
+
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);
 
@@ -223,6 +241,11 @@ Route::middleware('auth:union_account')->prefix('medicals')->group(function () {
 //
 //    Route::get('/change-password', [MedicalCenterAuthController::class, 'changePassword'])->name('medical.change.password');
 //    Route::post('/change-password', [MedicalCenterAuthController::class, 'changePasswordAction']);
+
+    // For Dev Only
+    Route::get('/json/report/submit', [UnionMedicalManageController::class, 'jsonReportSubmitPage'])->name('union.json.report.submit');
+    Route::post('/json/report/submit', [UnionMedicalManageController::class, 'jsonReportSubmit']);
+    Route::post('/json/report/update', [UnionMedicalManageController::class, 'updateJsonReportSubmit'])->name('union.json.report.update');
 
     Route::get('/logout', [UnionMedicalManageController::class, 'logout'])->name('union.logout');
 });

@@ -70,6 +70,7 @@
                                 <th class="mw-45">#SL</th>
                                 <th>Username</th>
                                 <th>Type</th>
+                                <th>For</th>
                                 <th>Request Date</th>
                                 <th>Status</th>
 
@@ -88,6 +89,9 @@
                                     </td>
                                     <td>
                                         Score Request
+                                    </td>
+                                    <td>
+                                        <p class="text-capitalize">{{$item->score_type === 'slip' ? 'Slip' : 'Medical'}}</p>
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
                                     <td>

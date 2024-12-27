@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllocateCenter;
 use App\Models\AllocateMedicalCenter;
 use App\Models\Application;
 use App\Models\MedicalCenter;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UnionMedicalManageController extends Controller
 {
@@ -195,7 +197,6 @@ class UnionMedicalManageController extends Controller
             'application_payment.numeric' => 'The status must be a number.'
         ]);
 
-
         $application = Application::find($validated['id']);
         $application->health_status = $validated['health_status'];
         $application->health_status_details = $validated['health_condition'];
@@ -215,8 +216,7 @@ class UnionMedicalManageController extends Controller
 
             AllocateMedicalCenter::updateOrCreate(
                 [
-                    'application_id' => $application->id,
-                    'medical_center_id' => $medical_center_id,
+                    'application_id' => $application->id
                 ],
                 [
                     'application_id' => $application->id,
@@ -299,6 +299,154 @@ class UnionMedicalManageController extends Controller
 
         $notifications = Notification::whereDate('created_at', '>=', now()->subDays(7))->latest()->get();
         return view('union-account.all-notifications', compact('notifications'));
+    }
+
+    public function jsonReportSubmit(Request $request)
+    {
+        $validated = $request->validate([
+            'json_code' => 'required|json',
+        ]);
+
+        $json_code = json_decode($validated['json_code'], true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($json_code) || empty($json_code)) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Invalid JSON code.'
+            ]);
+        }
+
+        if (count($json_code) > 50) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Maximum 50 JSON code allowed.'
+            ]);
+        }
+
+        foreach ($json_code as $code) {
+            if (!isset($code['passport_number']) || !isset($code['status']) || !isset($code['remarks'])) {
+                return response()->json([
+                    'status' => false,
+                    'error' => 'Invalid JSON code.'
+                ]);
+            }
+        }
+
+        $total = 0;
+        $available = 0;
+        $unavailable = 0;
+        $report = [
+            'available' => [
+                'available_reports' => [],
+                'available_count' => 0,
+            ],
+            'unavailable' => [
+                'unavailable_reports' => [],
+                'unavailable_reports_count' => 0,
+            ],
+        ];
+
+        foreach ($json_code as $code) {
+            $application = Application::where('passport_number', $code['passport_number'])->first();
+            $total++;
+
+            if (empty($application)) {
+                $unavailable++;
+                $report['unavailable']['unavailable_reports'][$total] = $code['passport_number'];
+            } else {
+                $report['available']['available_reports'][$total] = [
+                    'passport_number' => $code['passport_number'],
+                    'status' => strtolower($code['status']),
+                    'remarks' => $code['remarks'],
+                ];
+                $available++;
+            }
+        }
+
+        $report['total'] = $total;
+        $report['available']['available_reports_count'] = $available;
+        $report['unavailable']['unavailable_reports_count'] = $unavailable;
+        session()->put('json_report', $report);
+
+        return view('union-account.dev.json-report', compact('report'));
+    }
+
+    public function jsonReportSubmitPage()
+    {
+        $report = session()->get('json_report');
+        return view('union-account.dev.json-report', compact('report'));
+    }
+
+    public function updateJsonReportSubmit(Request $request)
+    {
+        $validated = $request->validate([
+            'medical_center_id' => 'required|exists:medical_centers,id',
+            'fit_medical_center_id' => 'required|exists:allocate_centers,id',
+            'unfit_medical_center_id' => 'required|exists:allocate_centers,id',
+            'heldup_medical_center_id' => 'required|exists:allocate_centers,id',
+        ]);
+
+        $reports = session()->get('json_report');
+
+        if (empty($reports)) {
+            return back()->with('error', 'No report found.');
+        }
+
+        $available = $reports['available']['available_reports'];
+        $medical_center_id = MedicalCenter::where('id', $validated['medical_center_id'])->first()->id;
+        $allocate_centers = AllocateCenter::whereIn('id', [$validated['fit_medical_center_id'], $validated['unfit_medical_center_id'], $validated['heldup_medical_center_id']])->pluck( 'slug', 'id');
+
+        $fit_allocate_center_username = $allocate_centers[$validated['fit_medical_center_id']];
+        $unfit_allocate_center_username = $allocate_centers[$validated['unfit_medical_center_id']];
+        $heldup_allocate_center_username = $allocate_centers[$validated['heldup_medical_center_id']];
+
+        foreach ($available as $key => $data) {
+            $application = Application::with(['applicationCustomComment'])->where('passport_number', $data['passport_number'])->first();
+            $application->health_status = $data['status'];
+            $application->health_status_details = $data['remarks'];
+
+            if ($application->save())
+            {
+                $application->applicationCustomComment()->updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                    ],
+                    [
+                        'application_id' => $application->id,
+                        'health_condition' => $data['remarks'],
+                    ]
+                );
+
+                if ($data['status'] === 'fit')
+                {
+                    $medical_center_id = $validated['fit_medical_center_id'];
+                    $allocate_center_username = $fit_allocate_center_username;
+                }
+                else if ($data['status'] === 'unfit')
+                {
+                    $medical_center_id = $validated['unfit_medical_center_id'];
+                    $allocate_center_username = $unfit_allocate_center_username;
+                }
+                else if ($data['status'] === 'held-up')
+                {
+                    $medical_center_id = $validated['heldup_medical_center_id'];
+                    $allocate_center_username = $heldup_allocate_center_username;
+                }
+
+                AllocateMedicalCenter::updateOrCreate(
+                    [
+                        'application_id' => $application->id
+                    ],
+                    [
+                        'application_id' => $application->id,
+                        'medical_center_id' => $medical_center_id,
+                        'allocated_medical_center' => $allocate_center_username,
+                    ]
+                );
+            }
+        }
+
+        session()->forget('json_report');
+        return redirect()->route('union.user.dashboard')->with('success', 'Report updated successfully.');
     }
 
     public function logout()

@@ -102,9 +102,20 @@
                     </div>
                     <ul class="notification-listing scroll-active p-0">
                         @forelse($notifications ?? [] as $notification)
+                            @php
+                                $notification_type = json_decode($notification->extra, true);
+                                if ($notification_type) {
+                                    $notification_type = $notification_type['type'] ?? null;
+                                } else {
+                                    $notification_type = 'application';
+                                }
+
+                                $route = route("admin.{$notification_type}.list.single", $notification->link);
+                            @endphp
+
                             <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
                                 <a class="list-items custom-break-spaces dropdown-item"
-                                   href="{{route('admin.application.list.single', $notification->link)}}">
+                                   href="{{$route}}">
                                     <i class="ri-notification-3-line"></i>
                                     <p class="line-clamp-2">{{$notification->message}}</p>
                                     <span>
@@ -205,7 +216,7 @@
                     </li>
 
                     <!-- Single Menu -->
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application.list')}}">
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu(['admin.application.list', 'admin.slip.list'])}}">
                         <a href="{{route('admin.application.list')}}" class="parent-item-content">
                             <i class="ri-hand-heart-line"></i>
                             <span class="on-half-expanded">Application List</span>
@@ -281,6 +292,13 @@
                         <a href="{{route('admin.union-accounts')}}" class="parent-item-content">
                             <i class="ri-sparkling-fill"></i>
                             <span class="on-half-expanded">Union Accounts</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.slip.medical-center')}}">
+                        <a href="{{route('admin.slip.medical-center')}}" class="parent-item-content">
+                            <i class="ri-wallet-2-fill"></i>
+                            <span class="on-half-expanded">Slip Rates</span>
                         </a>
                     </li>
                     @endhasanyrole

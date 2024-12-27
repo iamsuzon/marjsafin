@@ -9,9 +9,10 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'link', 'read_at', 'user_id', 'application_id'];
+    protected $fillable = ['message', 'link', 'read_at', 'user_id', 'application_id', 'extra'];
 
     protected $casts = [
         'read_at' => 'datetime',
+        'extra' => 'string'
     ];
 }

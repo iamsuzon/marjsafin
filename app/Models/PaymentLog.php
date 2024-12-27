@@ -15,6 +15,7 @@ class PaymentLog extends Model
         'application_id',
         'amount',
         'payment_type',
+        'score_type',
         'payment_method',
         'reference_no',
         'deposit_date',

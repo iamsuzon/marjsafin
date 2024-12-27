@@ -30,12 +30,19 @@ class AdminDepositRequestHistoryController extends Controller
 
         try {
             $payment_log = PaymentLog::find($validated['request_id']);
-            $payment_log->user()->increment('balance', $validated['score_amount']);
+
+            if ($payment_log->score_type === 'slip')
+            {
+                $payment_log->user()->increment('slip_balance', $validated['score_amount']);
+            } else {
+                $payment_log->user()->increment('balance', $validated['score_amount']);
+            }
 
             PaymentLog::create([
                 'user_id' => $payment_log->user_id,
                 'amount' => $validated['score_amount'],
                 'payment_type' => 'deposit',
+                'score_type' => $payment_log->score_type,
                 'payment_method' => 'admin',
                 'reference_no' => 'admin',
                 'deposit_date' => Carbon::now(),
@@ -67,10 +74,10 @@ class AdminDepositRequestHistoryController extends Controller
             $start_date = Carbon::parse(request('start_date'))->format('Y-m-d');
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
-            $transactionHistory = PaymentLog::whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+            $transactionHistory = PaymentLog::with(['user', 'application:id,passport_number'])->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
         }
         else {
-            $transactionHistory = PaymentLog::whereDate('created_at', Carbon::today())->latest()->get();
+            $transactionHistory = PaymentLog::with(['user', 'application:id,passport_number'])->whereDate('created_at', Carbon::today())->latest()->get();
         }
 
         return view('admin.transaction-history', [

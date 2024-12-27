@@ -1,4 +1,4 @@
-@extends('user.layout.user-master')
+@extends('union-account.layout.user-master')
 
 @section('styles')
     <style>

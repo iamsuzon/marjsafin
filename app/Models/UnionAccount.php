@@ -22,6 +22,15 @@ class UnionAccount extends Authenticatable
         'password'
     ];
 
+    public function isMedical(): bool
+    {
+        if (isset($this->account_type)) {
+            return $this->account_type === 'medical_center';
+        }
+
+        return false;
+    }
+
     public function unionMedicalCenterList(): HasMany
     {
         return $this->hasMany(UnionMedicalCenterList::class, 'union_id', 'id');

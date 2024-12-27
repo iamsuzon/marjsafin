@@ -1,4 +1,5 @@
 @extends('user.layout.user-master')
+@section('title', 'Transaction History')
 
 @section('styles')
     <style>
@@ -105,8 +106,9 @@
                             <thead>
                             <tr>
                                 <th class="mw-45">#SL</th>
-                                <th>Application Reg ID</th>
+                                <th>Passport Number</th>
                                 <th>Score Type</th>
+                                <th>Score For</th>
                                 <th>Score Transaction Date</th>
                                 {{--                                <th>Payment Method</th>--}}
                                 {{--                                <th>Reference No</th>--}}
@@ -120,13 +122,16 @@
                             @forelse($transactionHistory ?? [] as $item)
                                 <tr>
                                     <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
-                                    <td class="mw-45 d-flex align-items-center">{{$item->id}}</td>
+                                    <td>{{$item?->application?->passport_number}}</td>
                                     <td>
                                         @if($item->payment_type === 'deposit')
                                             <p class="text-capitalize">Score Added</p>
                                         @else
                                             <p class="text-capitalize">Score Deducted</p>
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{$item->score_type === 'slip' ? 'Slip' : 'Medical'}}
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
                                     {{--                                    <td>--}}
@@ -135,7 +140,7 @@
                                     {{--                                    <td>{{$item->reference_no}}</td>--}}
                                     <td>
                                         <p class="{{$item->payment_type === 'deposit' ? 'text-success' : 'text-danger'}}">
-                                            {{$item->payment_type === 'deposit' ? '+' : '-'}}{{$item->amount}}
+                                            {{$item->payment_type === 'deposit' ? '+' : '-'}}{{number_format($item->amount)}}
                                         </p>
                                     </td>
                                     {{--                                    <td>--}}

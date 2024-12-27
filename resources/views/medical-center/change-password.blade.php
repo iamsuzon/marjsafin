@@ -1,4 +1,4 @@
-@extends('user.layout.user-master')
+@extends('medical-center.layout.user-master')
 
 @section('styles')
     <style>

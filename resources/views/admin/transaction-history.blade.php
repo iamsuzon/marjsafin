@@ -105,6 +105,7 @@
                                 <th class="mw-45">#SL</th>
                                 <th>Username</th>
                                 <th>Payment Type</th>
+                                <th>Payment For</th>
                                 <th>Deposit Date</th>
                                 <th>Payment Method</th>
                                 <th>Reference No</th>
@@ -123,6 +124,9 @@
                                     </td>
                                     <td>
                                         <p class="text-capitalize">{{$item->payment_type}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-capitalize">{{$item->score_type}}</p>
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
                                     <td>
@@ -154,7 +158,7 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>{{$item->remarks}}</td>
+                                    <td>Score for passport no. <strong>{{$item->application?->passport_number}}</strong></td>
                                 </tr>
                             @empty
                                 <tr>

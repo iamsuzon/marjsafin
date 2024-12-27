@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{env('APP_NAME')}}</title>
+    <title>@yield('title') - {{env('APP_NAME')}}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -46,6 +46,11 @@
         top: 80%;
         transform: translateY(-50%);
         font-size: 10px;
+    }
+
+    .user-details .balance {
+        font-size: 13px;
+        font-weight: 600;
     }
 </style>
 
@@ -137,7 +142,8 @@
                         @auth('web')
                             <a href="#" class="user-sub-info">
                                 <div class="user-details">
-                                    <span class="text-info">Score: {{auth('web')->user()->balance}}</span>
+                                    <p class="balance text-primary">Medical Score: {{number_format(auth('web')->user()->balance, 1)}}</p>
+                                    <p class="balance text-primary">Slip Score: {{number_format(auth('web')->user()->slip_balance, 1)}}</p>
                                 </div>
                             </a>
                         @endauth
