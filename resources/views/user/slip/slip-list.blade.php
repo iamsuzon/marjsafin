@@ -31,12 +31,14 @@
                 [
                     'name' => 'Medical List',
                     'route' => route('user.application.list'),
-                    'active' => false
+                    'active' => false,
+                    'has_permission' => hasMedicalPermission()
                 ],
                                 [
                     'name' => 'Slip List',
                     'route' => route('user.slip.list'),
-                    'active' => true
+                    'active' => true,
+                    'has_permission' => hasSlipPermission()
                 ]
             ]"/>
 
@@ -181,16 +183,15 @@
                                     <td>
                                         @php
                                             $class = match($item->slipStatusLink?->slip_status) {
-                                                'processing' => 'bg-warning',
-                                                'in-queue' => 'bg-primary',
+                                                'processed-link' => 'bg-warning',
+                                                'cancelled' => 'bg-danger',
+                                                'we-cant-not-expired' => 'bg-danger',
+                                                'cancelled-for-time-out' => 'bg-danger',
                                                 'completed' => 'bg-success',
                                                 default => 'bg-info'
                                             };
                                         @endphp
-                                        <p class="badge {{$class}} text-capitalize">{{$item->slipStatusLink?->slip_status}}</p>
-                                        <a class="slip-link" href="{{$item?->slipStatusLink?->link}}" target="_blank">
-                                            <p>{{$item?->slipStatusLink?->link}}</p>
-                                        </a>
+                                        <a class="slip-link badge {{$class}} text-capitalize" href="{{$item?->slipStatusLink?->link ?? '#'}}" target="{{$item?->slipStatusLink?->link ? '_blank' : ''}}">{{$item->slipStatusLink?->slip_status}}</a>
                                     </td>
                                     <td>
                                         @php

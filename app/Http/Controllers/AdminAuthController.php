@@ -328,6 +328,25 @@ class AdminAuthController extends Controller
         );
     }
 
+    public function updatePermission(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'medical_permission' => 'nullable|in:true,false',
+            'slip_permission' => 'nullable|in:true,false',
+        ]);
+
+        User::find($validated['id'])->update([
+            'has_medical_permission' => $validated['medical_permission'] === 'true',
+            'has_slip_permission' => $validated['slip_permission'] === 'true',
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'success' => 'Permission updated successfully.'
+        ]);
+    }
+
     public function logout()
     {
         Auth::guard('admin')->logout();

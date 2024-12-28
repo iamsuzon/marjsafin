@@ -27,12 +27,14 @@
                 [
                     'name' => 'Medical Registration',
                     'route' => route('user.registration'),
-                    'active' => false
+                    'active' => false,
+                    'has_permission' => hasMedicalPermission()
                 ],
                 [
                     'name' => 'Slip Registration',
                     'route' => route('user.slip.registration'),
-                    'active' => true
+                    'active' => true,
+                    'has_permission' => hasSlipPermission()
                 ]
             ]" />
 
@@ -65,7 +67,7 @@
                             <div class="row g-16">
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
-                                        <label class="contact-label">Medical Type<span class="fillable mx-1">*</span></label>
+                                        <label class="contact-label">Slip Type<span class="fillable mx-1">*</span></label>
                                         <select class="select2" name="slip_type">
                                             <option value="" selected disabled>Select an option</option>
                                             @foreach(slipType() ?? [] as $index => $slip)

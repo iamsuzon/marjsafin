@@ -51,7 +51,7 @@ class AdminSlipController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:slips,id',
-            'slip_status' => 'required|in:in-queue,processing,completed',
+            'slip_status' => 'required|in:processed-link,cancelled,we-cant-not-expired,cancelled-for-time-out,completed',
             'link' => 'required_if:slip_status,completed',
         ]);
 

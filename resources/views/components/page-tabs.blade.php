@@ -4,12 +4,8 @@
         [
             'name' => '',
             'route' => '',
-            'active' => false
-        ],
-        [
-            'name' => 'Slip',
-            'route' => route('user.slip.registration'),
-            'active' => false
+            'active' => false,
+            'has_permission' => true
         ]
     ]
 ])
@@ -25,6 +21,8 @@
     <div class="sub-menu-wrapper">
         <ul class="sub-menu-list">
             @foreach($links ?? [] as $link)
+                @continue(isset($link['has_permission']) && ! $link['has_permission'])
+
                 <li class="sub-menu-item">
                     <a href="{{$link['route']}}" class="single {{$link['active'] ? 'active' : ''}}">{{$link['name']}}</a>
                 </li>

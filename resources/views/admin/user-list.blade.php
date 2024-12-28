@@ -21,6 +21,10 @@
                 color: #0d6efd;
             }
         }
+
+        .balance-td p{
+            font-size: 13px;
+        }
     </style>
 @endsection
 
@@ -72,6 +76,7 @@
                         <th>Refer</th>
 
                         @hasrole('super-admin')
+                        <th>Permission</th>
                         <th>Score</th>
                         <th>Ban Status</th>
                         <th>Action</th>
@@ -88,7 +93,18 @@
                             <td>{{ $user->refer_by }}</td>
 
                             @hasrole('super-admin')
-                            <td>{{$user->balance}}</td>
+                            <td>
+                                @if($user->has_medical_permission)
+                                    <span class="badge bg-success">Medical</span>
+                                @endif
+                                @if($user->has_slip_permission)
+                                    <span class="badge bg-success">Slip</span>
+                                @endif
+                            </td>
+                            <td class="balance-td">
+                                <p>MB: {{$user->balance}}</p>
+                                <p>SB: {{$user->slip_balance}}</p>
+                            </td>
                             <td>
                                 @if($user->banned)
                                     <span class="badge bg-danger">Banned</span>
@@ -102,11 +118,20 @@
                                     {{ $user->banned ? 'Unban' : 'Ban' }} Customer
                                 </a>
 
-                                <a href="javascript:void(0)" class="balance-edit-btn btn-secondary-fill"
-                                   data-bs-target="#score-modal" data-bs-toggle="modal"
+{{--                                <a href="javascript:void(0)" class="balance-edit-btn btn-secondary-fill"--}}
+{{--                                   data-bs-target="#score-modal" data-bs-toggle="modal"--}}
+{{--                                   data-id="{{$user->id}}" data-name="{{$user->name}}"--}}
+{{--                                   data-balance="{{$user->balance}}"--}}
+{{--                                >Edit Score</a>--}}
+
+                                <a href="javascript:void(0)" class="btn-permission btn-secondary-fill"
+                                   data-bs-target="#permission-modal" data-bs-toggle="modal"
                                    data-id="{{$user->id}}" data-name="{{$user->name}}"
-                                   data-balance="{{$user->balance}}"
-                                >Edit Score</a>
+                                   data-has_medical_permission="{{$user->has_medical_permission ? 1 : 0}}"
+                                   data-has_slip_permission="{{$user->has_slip_permission ? 1 : 0}}"
+                                >
+                                    <i class="ri-equalizer-3-line"></i> Permissions
+                                </a>
 
                                 <a href="javascript:void(0)" class="btn-pdf btn-secondary-fill"
                                    data-bs-target="#pdf-modal" data-bs-toggle="modal"
@@ -194,6 +219,43 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="permission-modal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="#" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="scoreModalLabel">User Permissions</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id">
+                            <div class="contact-form mb-10">
+                                <label class="contact-label">Select Permissions</label>
+                                <div class="mt-3">
+                                    <div class="check-wrap style-one mb-10">
+                                        <input type="checkbox" id="1" name="permissions" value="medical">
+                                        <label for="1">Medical</label>
+                                    </div>
+                                    <div class="check-wrap style-one mb-10">
+                                        <input type="checkbox" id="2" name="permissions" value="slip">
+                                        <label for="2">Slip</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <small class="text-primary">এখানে যে যে পারমিশনগুলো সিলেক্ট করবেন, ইউজার শুধু মাত্র ঐ অপশনই পাবে</small>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="permission-btn btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         @endsection
 
         @section('scripts')
@@ -273,6 +335,49 @@
                         let end_date = modal.find('.end_date').val();
 
                         window.location.href = `{{route('admin.user.pdf.generate')}}?id=${id}&start_date=${start_date}&end_date=${end_date}`;
+                    });
+
+                    $(document).on('click', '.btn-permission', function () {
+                        let el = $(this);
+                        let id = el.data('id');
+                        let name = el.data('name');
+                        let has_medical_permission = el.data('has_medical_permission');
+                        let has_slip_permission = el.data('has_slip_permission');
+
+                        console.log(has_medical_permission, has_slip_permission);
+
+                        let modal = $("#permission-modal");
+                        modal.find('.modal-title').text('User Permissions for ' + name);
+                        modal.find('input[name="id"]').val(id);
+                        modal.find('input[name="permissions"]').prop('checked', false);
+                        modal.find('input[name="permissions"][value="medical"]').prop('checked', has_medical_permission);
+                        modal.find('input[name="permissions"][value="slip"]').prop('checked', has_slip_permission);
+                    });
+
+                    $(document).on('click', '#permission-modal button[type="submit"]', function (e) {
+                        e.preventDefault();
+                        let modal = $("#permission-modal");
+                        let id = modal.find('input[name="id"]').val();
+                        let medical = modal.find('input[name="permissions"][value="medical"]').is(':checked');
+                        let slip = modal.find('input[name="permissions"][value="slip"]').is(':checked');
+
+                        $.ajax({
+                            url: `{{route('admin.user.permission.update')}}`,
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                id: id,
+                                medical_permission: medical,
+                                slip_permission: slip
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    modal.modal('hide');
+                                    toastSuccess(response.success);
+                                    reloadThisPage(1000);
+                                }
+                            }
+                        });
                     });
                 });
             </script>

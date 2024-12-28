@@ -1,5 +1,9 @@
-@extends('user.layout.user-master')
+@extends('user.layout.common-master')
 @section('title', 'Medical List')
+
+@section('sidebar')
+    @include('user.partials.medical-sidebar')
+@endsection
 
 @section('styles')
     <style>
@@ -17,16 +21,19 @@
                 [
                     'name' => 'Medical List',
                     'route' => route('user.application.list'),
-                    'active' => true
+                    'active' => true,
+                    'has_permission' => hasMedicalPermission()
                 ],
                 [
                     'name' => 'Slip List',
                     'route' => route('user.slip.list'),
-                    'active' => false
+                    'active' => false,
+                    'has_permission' => hasSlipPermission()
                 ]
             ]"/>
 
-            <div class="card">
+            @if(hasMedicalPermission())
+                <div class="card">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="manage__title">Medical Application List ({{$applicationList->count()}})</h2>
@@ -246,6 +253,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 

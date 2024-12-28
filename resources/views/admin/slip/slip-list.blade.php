@@ -181,16 +181,16 @@
                                         <td>
                                             @php
                                                 $class = match($item->slipStatusLink?->slip_status) {
-                                                    'processing' => 'bg-warning',
-                                                    'in-queue' => 'bg-primary',
+                                                    'processed-link' => 'bg-warning',
+                                                    'cancelled' => 'bg-danger',
+                                                    'we-cant-not-expired' => 'bg-danger',
+                                                    'cancelled-for-time-out' => 'bg-danger',
                                                     'completed' => 'bg-success',
                                                     default => 'bg-info'
                                                 };
                                             @endphp
-                                            <p class="badge {{$class}} text-capitalize">{{$item->slipStatusLink?->slip_status}}</p>
-                                            <a class="slip-link" href="{{$item?->slipStatusLink?->link}}" target="_blank">
-                                                <p>{{$item?->slipStatusLink?->link}}</p>
-                                            </a>
+
+                                            <a class="slip-link badge {{$class}} text-capitalize" href="{{$item?->slipStatusLink?->link ?? '#'}}" target="{{$item?->slipStatusLink?->link ? '_blank' : ''}}">{{$item->slipStatusLink?->slip_status}}</a>
                                         </td>
                                     @endhasrole
 
@@ -258,8 +258,10 @@
                                     <label class="contact-label">Slip Status</label>
                                     <select name="slip_status" id="slip_status" class="form-control">
                                         <option value="">Select an option</option>
-                                        <option value="in-queue">In Queue</option>
-                                        <option value="processing">Processing</option>
+                                        <option value="processed-link">Processed-Link</option>
+                                        <option value="cancelled">Cancelled:Non</option>
+                                        <option value="we-cant-not-expired">We Can't Not Expired</option>
+                                        <option value="cancelled-for-time-out">Cancelled for Time Out</option>
                                         <option value="completed">Completed</option>
                                     </select>
                                 </div>

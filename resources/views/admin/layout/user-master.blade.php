@@ -347,7 +347,7 @@
 
         <div class="footer d-flex justify-content-between align-items-center">
             <p>&copy; 2025 <a href="#">Admin</a>. All rights reserved.</p>
-            <p>Version: 1.1</p>
+            <p>Version: 2.0</p>
         </div>
     </main>
 </div>

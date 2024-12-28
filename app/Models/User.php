@@ -25,7 +25,9 @@ class User extends Authenticatable
         'password',
         'refer_by',
         'balance',
-        'slip_balance'
+        'slip_balance',
+        'has_medical_permission',
+        'has_slip_permission'
     ];
 
     /**
@@ -35,7 +37,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     /**
@@ -47,7 +49,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'balance' => 'integer',
-        'slip_balance' => 'integer'
+        'slip_balance' => 'integer',
+        'has_medical_permission' => 'boolean',
+        'has_slip_permission' => 'boolean'
     ];
 
     public function banned(): HasOne

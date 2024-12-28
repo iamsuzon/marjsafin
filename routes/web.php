@@ -63,6 +63,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('slip-registration', [UserSlipController::class, 'storeSlip']);
 
         Route::get('slip-list', [UserSlipController::class, 'slipList'])->name('slip.list');
+        Route::get('medical-centers', [UserSlipController::class, 'medicalCenterRates'])->name('slip.medical-center.rates');
     });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
@@ -99,6 +100,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.user.balance.update');
     Route::get('/admin/user/pdf-generate', [AdminAuthController::class, 'generatePdf'])
         ->name('admin.user.pdf.generate');
+    Route::post('/admin/user/permission-update', [AdminAuthController::class, 'updatePermission'])
+        ->name('admin.user.permission.update');
 
     Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
         ->name('admin.new.medical-center')

@@ -76,6 +76,14 @@ class UserAuthController extends Controller
 
     public function userPanel()
     {
+        if (!hasMedicalPermission()) {
+            if (hasSlipPermission()) {
+                return redirect()->route('user.slip.list');
+            }
+
+            return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        }
+
         $user_id = Auth::guard('web')->id();
 
         if (request()->has('start_date') && request()->has('end_date')) {
@@ -141,6 +149,14 @@ class UserAuthController extends Controller
 
     public function userRegistration()
     {
+        if (!hasMedicalPermission()) {
+            if (hasSlipPermission()) {
+                return redirect()->route('user.slip.registration');
+            }
+
+            return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        }
+
         $showNotice = (bool) StaticOption::getOption('show_notice');
         $noticeText = StaticOption::getOption('notice_text') ?? '';
 
@@ -168,7 +184,7 @@ class UserAuthController extends Controller
             'profession' => 'required',
             'nationality' => 'required',
             'date_of_birth' => 'nullable',
-            'nid_no' => 'nullable|numeric',
+            'nid_no' => 'required|numeric',
             'passport_issue_date' => 'nullable',
             'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',

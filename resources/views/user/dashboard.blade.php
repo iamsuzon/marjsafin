@@ -8,6 +8,10 @@
 @section('contents')
     <div class="page-content">
 
+{{--        <div>--}}
+{{--            <a href="{{route('user.slip.medical-center.rates')}}" class="btn btn-primary">Medical Centers</a>--}}
+{{--        </div>--}}
+
         <!-- Hero -->
         <div class="hero hero-bg overflow-hidden ">
             <div class="row">
@@ -43,6 +47,13 @@
             </div>
         </div>
         <!--/ Hero -->
+
+        @if(session()->has('error'))
+            <div class="alert alert-danger bg-danger text-white alert-dismissible text-center fs-5 fade show pt-5 pb-5" role="alert">
+                {{session('error')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         <!--/ Table -->
         @auth('web')

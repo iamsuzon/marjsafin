@@ -1,5 +1,9 @@
-@extends('user.layout.user-master')
+@extends('user.layout.common-master')
 @section('title', 'Transaction History')
+
+@section('sidebar')
+    @include('user.partials.medical-sidebar')
+@endsection
 
 @section('styles')
     <style>

@@ -14,6 +14,14 @@ class UserSlipController extends Controller
 {
     public function slipRegistration()
     {
+        if (!hasSlipPermission()) {
+            if (hasMedicalPermission()) {
+                return redirect()->route('user.registration');
+            }
+
+            return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        }
+
         $showNotice = (bool) StaticOption::getOption('show_notice');
         $noticeText = StaticOption::getOption('notice_text') ?? '';
 
@@ -73,6 +81,14 @@ class UserSlipController extends Controller
 
     public function slipList()
     {
+        if (!hasSlipPermission()) {
+            if (hasMedicalPermission()) {
+                return redirect()->route('user.application.list');
+            }
+
+            return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        }
+
         $user_id = Auth::guard('web')->id();
 
         $slipList = Slip::query();
@@ -111,5 +127,11 @@ class UserSlipController extends Controller
         }
 
         return view('user.slip.slip-list', compact('slipList'));
+    }
+
+    public function medicalCenterRates()
+    {
+        $cityList = slipCenterListWithRate();
+        return view('user.slip.medical-center-rates', compact('cityList'));
     }
 }

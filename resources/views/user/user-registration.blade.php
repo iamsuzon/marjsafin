@@ -1,4 +1,5 @@
 @extends('user.layout.common-master')
+@section('title', 'Medical Registration')
 
 @section('sidebar')
     @include('user.partials.medical-sidebar')
@@ -26,16 +27,19 @@
                 [
                     'name' => 'Medical Registration',
                     'route' => route('user.registration'),
-                    'active' => true
+                    'active' => true,
+                    'has_permission' => hasMedicalPermission()
                 ],
                 [
                     'name' => 'Slip Registration',
                     'route' => route('user.slip.registration'),
-                    'active' => false
+                    'active' => false,
+                    'has_permission' => hasSlipPermission()
                 ]
             ]" />
 
-            <div class="card">
+            @if(hasMedicalPermission())
+                <div class="card">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="manage__title mb-25">Medical</h2>
@@ -283,6 +287,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 

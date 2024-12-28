@@ -466,3 +466,15 @@ function listSerialNumber($applicationList, $loop): int
 {
     return ($applicationList->currentPage() - 1) * $applicationList->perPage() + $loop->index + 1;
 }
+
+function hasSlipPermission()
+{
+    $user = auth('web')->user();
+    return $user->has_slip_permission;
+}
+
+function hasMedicalPermission()
+{
+    $user = auth('web')->user();
+    return $user->has_medical_permission;
+}
