@@ -48,10 +48,10 @@ class UserSlipController extends Controller
             'pp_issue_place' => 'nullable',
             'profession' => 'required',
             'nationality' => 'required',
-            'date_of_birth' => 'nullable',
+            'date_of_birth' => 'required',
             'nid_no' => 'nullable|numeric',
-            'passport_issue_date' => 'nullable',
-            'passport_expiry_date' => 'nullable',
+            'passport_issue_date' => 'required',
+            'passport_expiry_date' => 'required',
             'ref_no' => 'required',
         ]);
 
@@ -74,7 +74,6 @@ class UserSlipController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Something went wrong. Please try again.');
         }
-
 
         return back()->with('success', 'Slip submitted successfully.')->with('url', route('user.slip.list'));
     }

@@ -185,6 +185,8 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('admin/slip-list-single/{id}', [AdminSlipController::class, 'slipListSingle'])->name('admin.slip.list.single');
 
+    Route::get('/admin/slip-delete', [AdminSlipController::class, 'slipDelete'])->name('admin.slip.delete');
+
     Route::get('admin/slip-rates', [PaymentLogController::class, 'slipMedicalCenter'])->name('admin.slip.medical-center');
     Route::post('admin/slip-rates', [PaymentLogController::class, 'storeSlipRate']);
 

@@ -44,6 +44,7 @@
                                 <th class="mw-45">#SL</th>
                                 <th>Date</th>
                                 <th>Passport</th>
+                                <th>Info</th>
                                 <th>City</th>
                                 <th>Medical Center</th>
                                 <th>Score</th>
@@ -61,9 +62,14 @@
                                     </td>
                                     <td>
                                         <p>{{$item->passport_number}}</p>
-                                        <p>{{$item->given_name}}</p>
+                                        <p>{{$item->given_name}} {{$item->surname}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
-                                        <p class="text-capitalize">{{$item->gender}}</p>
+                                        <p class="text-capitalize">{{$item->gender}} - {{$item->marital_status}}</p>
+                                    </td>
+                                    <td>
+                                        <p>DOB: {{$item->date_of_birth?->format('d-m-Y')}}</p>
+                                        <p>P.Issue Date: {{$item->passport_issue_date?->format('d-m-Y')}}</p>
+                                        <p>P.Expire Date: {{$item->passport_expiry_date?->format('d-m-Y')}}</p>
                                     </td>
                                     <td>
                                         <p>{{slipCenterList()[$item->city_id]['title']}}</p>

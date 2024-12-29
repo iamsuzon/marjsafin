@@ -88,4 +88,28 @@ class AdminSlipController extends Controller
 
         return view('admin.slip.slip-list-single', compact('slipList', 'username'));
     }
+
+    public function slipDelete()
+    {
+        $validated = request()->validate([
+            'id' => 'required|exists:slips,id',
+        ]);
+
+        $slip = Slip::findOrFail($validated['id']);
+
+        try {
+            $slip->slipPayment()->delete();
+            $slip->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Slip deleted successfully.'
+        ]);
+    }
 }

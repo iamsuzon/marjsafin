@@ -73,7 +73,8 @@ class PaymentLogController extends Controller
 
         $oldLog = PaymentLog::where('user_id', $user->id)
             ->where('payment_type', 'score_request');
-        if ($validated['for']) {
+
+        if (isset($validated['for'])) {
             $oldLog->where('score_type', 'slip');
         }
         $oldLog = $oldLog->first();

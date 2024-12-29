@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h2 class="manage__title">
-                            Application List
+                            Slip List
 
                             @if($start_date && $end_date)
                                 <span class="text-capitalize">({{$start_date}} <i class="ri-arrow-right-line"></i> {{$end_date}})</span>
@@ -107,6 +107,7 @@
                                 <th>Date</th>
                                 <th>Slip Type</th>
                                 <th>Passport</th>
+                                <th>Info</th>
 
                                 @hasrole('super-admin')
                                 <th>Reference</th>
@@ -136,14 +137,20 @@
                                     <td>{{ucfirst($item->slip_type)}}</td>
                                     <td>
                                         <p>{{$item->passport_number}}</p>
-                                        <p>{{$item->given_name}}</p>
+                                        <p>{{$item->given_name}} {{$item->surname}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
-                                        <p class="text-capitalize">{{$item->gender}}</p>
+                                        <p class="text-capitalize">{{$item->gender}} - {{$item->marital_status}}</p>
+                                    </td>
+                                    <td>
+                                        <p>DOB: {{$item->date_of_birth?->format('d-m-Y')}}</p>
+                                        <p>P.Issue Date: {{$item->passport_issue_date?->format('d-m-Y')}}</p>
+                                        <p>P.Expire Date: {{$item->passport_expiry_date?->format('d-m-Y')}}</p>
                                     </td>
                                     @hasrole('super-admin')
                                         <td>
                                             <p>{{$item->ref_ledger}}</p>
-                                            <p>User: {{$item->user->username}}, Ref: {{$item->ref_no}}</p>
+                                            <p>User: {{$item->user->username}}</p>
+                                            <p>Ref: {{$item->ref_no}}</p>
                                         </td>
                                     @endhasrole
                                     <td>
@@ -207,17 +214,19 @@
                                         @endcan
 
                                         @can('delete-application')
-                                            <a class="delete-btn" href="javascript:void(0)"
-                                               data-id="{{$item->id}}">
-                                                <i class="ri-delete-bin-6-line"></i>
-                                            </a>
+                                            @if($item->slipPayment->payment_status === 'pending')
+                                                <a class="delete-btn" href="javascript:void(0)"
+                                                   data-id="{{$item->id}}">
+                                                    <i class="ri-delete-bin-6-line"></i>
+                                                </a>
+                                            @endif
                                         @endcan
                                     </td>
                                     @endhasanyrole
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">No Data Found</td>
+                                    <td colspan="12" class="text-center">No Data Found</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -376,20 +385,20 @@
                 window.location.href = `{{route('admin.slip.list')}}?passport_search=${passport_search}`;
             });
 
-            {{--$(document).on('click', '.delete-btn', function () {--}}
-            {{--    let id = $(this).data('id');--}}
+            $(document).on('click', '.delete-btn', function () {
+                let id = $(this).data('id');
 
-            {{--    customSwal({--}}
-            {{--        route: `{{route('admin.slip.delete')}}?id=${id}`,--}}
-            {{--        method: 'GET',--}}
-            {{--        successFunction: (res) => {--}}
-            {{--            if (res.status) {--}}
-            {{--                toastSuccess(res.message);--}}
-            {{--                reloadThisPage(1000);--}}
-            {{--            }--}}
-            {{--        }--}}
-            {{--    });--}}
-            {{--})--}}
+                customSwal({
+                    route: `{{route('admin.slip.delete')}}?id=${id}`,
+                    method: 'GET',
+                    successFunction: (res) => {
+                        if (res.status) {
+                            toastSuccess(res.message);
+                            reloadThisPage(1000);
+                        }
+                    }
+                });
+            })
         })
     </script>
 @endsection

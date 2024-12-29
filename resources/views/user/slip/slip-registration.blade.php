@@ -110,7 +110,7 @@
                                         <select class="select2" name="city_id">
                                             <option value="" selected disabled>Select a city</option>
                                             @foreach(slipCenterList() ?? [] as $index => $city)
-                                                <option {{old('city') == $index ? 'selected' : ''}} value="{{ $index }}">{{ $city['title'] }}</option>
+                                                <option {{old('city_id') == $index ? 'selected' : ''}} value="{{ $index }}">{{ $city['title'] }}</option>
                                             @endforeach
                                         </select>
                                     </div>
