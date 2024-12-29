@@ -34,7 +34,7 @@
     }
 
     .unread-message {
-        background: #f1f1f1;
+        background: rgba(235, 59, 90, 0.32);
     }
 
     .notification-listing .list {
@@ -81,69 +81,129 @@
 
         <!-- Header Right -->
         <ul class="header-right">
-            <li class="cart-list notification dropdown" id="notification-div">
-                @php
-                    $notifications = \App\Models\Notification::whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
-                    $unreadNotifications = $notifications->whereNull('read_at')->count();
-                @endphp
-                <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="ri-notification-2-line p-0"></i>
+            @hasrole('super-admin')
+                <li class="cart-list notification dropdown" id="notification-div">
+                    @php
+                        $notifications = \App\Models\Notification::whereNull('extra')->whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
+                        $unreadNotifications = $notifications->whereNull('read_at')->count();
+                    @endphp
+                    <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ri-notification-2-line p-0"></i>
 
-                    @if($unreadNotifications > 0)
-                        <span class="count">{{$unreadNotifications}}</span>
-                    @endif
-                </a>
+                        @if($unreadNotifications > 0)
+                            <span class="count">{{$unreadNotifications}}</span>
+                        @endif
+                    </a>
 
-                <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
-                    <div class="notification-header d-flex justify-content-between align-items-center mb-10">
-                        <h6>Notifications</h6>
-                        <button class="clear-notification">clear</button>
+                    <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
+                        <div class="notification-header d-flex justify-content-between align-items-center mb-10">
+                            <h6>Medical Notifications</h6>
+                            <button class="clear-notification">Clear</button>
+                        </div>
+                        <ul class="notification-listing scroll-active p-0">
+                            @forelse($notifications ?? [] as $notification)
+                                @php
+                                    $notification_type = json_decode($notification->extra, true);
+                                    if ($notification_type) {
+                                        $notification_type = $notification_type['type'] ?? null;
+                                    } else {
+                                        $notification_type = 'application';
+                                    }
+
+                                    $route = route("admin.{$notification_type}.list.single", $notification->link);
+                                @endphp
+
+                                <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
+                                    <a class="list-items custom-break-spaces dropdown-item"
+                                       href="{{$route}}" target="_blank">
+                                        <i class="ri-notification-3-line"></i>
+                                        <p class="line-clamp-2">{{$notification->message}}</p>
+                                        <span>
+                                                <small>{{$notification->created_at->diffForHumans()}}</small>
+                                            </span>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="list">
+                                    <a class="dropdown-item my-4" href="javascript:void(0)">
+                                        <p class="line-clamp text-center">No notification found</p>
+                                    </a>
+                                </li>
+                            @endforelse
+                        </ul>
+
+                        @if($notifications->count() > 10)
+                            <a href="{{route('admin.notification.all')}}" class="see-all-notification border-0">see all
+                                notification</a>
+                        @endif
                     </div>
-                    <ul class="notification-listing scroll-active p-0">
-                        @forelse($notifications ?? [] as $notification)
-                            @php
-                                $notification_type = json_decode($notification->extra, true);
-                                if ($notification_type) {
-                                    $notification_type = $notification_type['type'] ?? null;
-                                } else {
-                                    $notification_type = 'application';
-                                }
+                </li>
 
-                                $route = route("admin.{$notification_type}.list.single", $notification->link);
-                            @endphp
+                <li class="cart-list notification dropdown" id="notification-slip-div">
+                    @php
+                        $slipNotifications = \App\Models\Notification::whereNotNull('extra')->whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
+                        $unreadSlipNotifications = $slipNotifications->whereNull('read_at')->count();
+                    @endphp
+                    <a href="javascript:void(0)" class="cart-items dropdown-toggle toggle-arro-hidden"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ri-notification-badge-line p-0"></i>
 
-                            <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
-                                <a class="list-items custom-break-spaces dropdown-item"
-                                   href="{{$route}}">
-                                    <i class="ri-notification-3-line"></i>
-                                    <p class="line-clamp-2">{{$notification->message}}</p>
-                                    <span>
-                                            <small>{{$notification->created_at->diffForHumans()}}</small>
-                                        </span>
-                                </a>
-                            </li>
-                        @empty
-                            <li class="list">
-                                <a class="dropdown-item my-4" href="javascript:void(0)">
-                                    <p class="line-clamp text-center">No notification found</p>
-                                </a>
-                            </li>
-                        @endforelse
-                    </ul>
+                        @if($unreadSlipNotifications > 0)
+                            <span class="count">{{$unreadSlipNotifications}}</span>
+                        @endif
+                    </a>
 
-                    @if($notifications->count() > 10)
-                        <a href="{{route('admin.notification.all')}}" class="see-all-notification border-0">see all
-                            notification</a>
-                    @endif
-                </div>
-            </li>
+                    <div class="dropdown-list-style dropdown-menu dropdown-menu-end">
+                        <div class="notification-header d-flex justify-content-between align-items-center mb-10">
+                            <h6>Slip Notifications</h6>
+                            <button class="clear-notification">Clear</button>
+                        </div>
+                        <ul class="notification-listing scroll-active p-0">
+                            @forelse($slipNotifications ?? [] as $notification)
+                                @php
+                                    $notification_type = json_decode($notification->extra, true);
+                                    if ($notification_type) {
+                                        $notification_type = $notification_type['type'] ?? null;
+                                    } else {
+                                        $notification_type = 'application';
+                                    }
 
-            <li class="cart-list notification dropdown">
-                <a href="{{route('admin.report.excel.list')}}" class="cart-items dropdown-toggle toggle-arro-hidden">
-                    <i class="ri-file-excel-2-line p-0"></i>
-                </a>
-            </li>
+                                    $route = route("admin.{$notification_type}.list.single", $notification->link);
+                                @endphp
+
+                                <li class="list mb-6 {{! $notification->read_at ? 'unread-message' : ''}}">
+                                    <a class="list-items custom-break-spaces dropdown-item"
+                                       href="{{$route}}" target="_blank">
+                                        <i class="ri-notification-3-line"></i>
+                                        <p class="line-clamp-2">{{$notification->message}}</p>
+                                        <span>
+                                                <small>{{$notification->created_at->diffForHumans()}}</small>
+                                            </span>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="list">
+                                    <a class="dropdown-item my-4" href="javascript:void(0)">
+                                        <p class="line-clamp text-center">No notification found</p>
+                                    </a>
+                                </li>
+                            @endforelse
+                        </ul>
+
+                        @if($slipNotifications->count() > 0)
+                            <a href="{{route('admin.notification.all')}}" class="see-all-notification border-0">see all
+                                notification</a>
+                        @endif
+                    </div>
+                </li>
+            @endhasrole
+
+            {{--            <li class="cart-list notification dropdown">--}}
+            {{--                <a href="{{route('admin.report.excel.list')}}" class="cart-items dropdown-toggle toggle-arro-hidden">--}}
+            {{--                    <i class="ri-file-excel-2-line p-0"></i>--}}
+            {{--                </a>--}}
+            {{--            </li>--}}
 
             <!-- Reports -->
             {{--            <li class="cart-list position-relative d-none d-md-block">--}}

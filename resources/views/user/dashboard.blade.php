@@ -8,9 +8,11 @@
 @section('contents')
     <div class="page-content">
 
-{{--        <div>--}}
-{{--            <a href="{{route('user.slip.medical-center.rates')}}" class="btn btn-primary">Medical Centers</a>--}}
-{{--        </div>--}}
+        @if(hasSlipPermission())
+            <div>
+                <a href="{{route('user.slip.medical-center.rates')}}" class="btn btn-primary">Medical Centers</a>
+            </div>
+        @endif
 
         <!-- Hero -->
         <div class="hero hero-bg overflow-hidden ">

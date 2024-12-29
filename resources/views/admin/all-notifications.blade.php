@@ -7,7 +7,7 @@
             padding-bottom: 10px;
         }
         .unread-message {
-            background-color: #f5f5f5 !important;
+            background-color: rgba(235, 59, 90, 0.32) !important;
         }
         .unread-message a {
             font-weight: bold;
@@ -31,34 +31,70 @@
                 </div>
 
                 <div class="row mt-50">
-                    <div class="table-responsives max-height-100vh scroll-active">
-                        <table class="table-color-col table-head-border table-td-border">
-                            <thead>
-                            <tr>
-                                <th class="mw-45">#SL</th>
-                                <th>Notification</th>
-                                <th>Date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($notifications ?? [] as $item)
-                                <tr class="{{! $item->read_at ? 'unread-message' : ''}}">
-                                    <td class="align-items-center">{{$loop->iteration}}</td>
-                                    <td class="align-items-center">
-                                        <a href="{{route('admin.application.list.single', $item->link)}}">{{$item->message}}</a>
-                                    </td>
-                                    <td class="align-items-center">
-                                        {{$item->created_at->format('d-M-Y')}}
-                                        <small>({{$item->created_at->diffForHumans()}})</small>
-                                    </td>
-                                </tr>
-                            @empty
+                    <div class="col-6">
+                        <h4 class="mb-3">Medical Notifications ({{$notifications->whereNull('extra')->whereNull('read_at')->count()}})</h4>
+                        <div class="table-responsives max-height-100vh scroll-active">
+                            <table class="table-color-col table-head-border table-td-border">
+                                <thead>
                                 <tr>
-                                    <td colspan=11" class="text-center">No Data Found</td>
+                                    <th class="mw-45">#SL</th>
+                                    <th>Notification</th>
+                                    <th>Date</th>
                                 </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @forelse($notifications->whereNull('extra') ?? [] as $item)
+                                    <tr class="{{! $item->read_at ? 'unread-message' : ''}}">
+                                        <td class="align-items-center">{{$loop->iteration}}</td>
+                                        <td class="align-items-center">
+                                            <a href="{{route('admin.application.list.single', $item->link)}}">{{$item->message}}</a>
+                                        </td>
+                                        <td class="align-items-center">
+                                            {{$item->created_at->format('d-M-Y')}}
+                                            <small>({{$item->created_at->diffForHumans()}})</small>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan=11" class="text-center">No Data Found</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <h4 class="mb-3">Slip Notifications ({{$notifications->whereNotNull('extra')->whereNull('read_at')->count()}})</h4>
+                        <div class="table-responsives max-height-100vh scroll-active">
+                            <table class="table-color-col table-head-border table-td-border">
+                                <thead>
+                                <tr>
+                                    <th class="mw-45">#SL</th>
+                                    <th>Notification</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse($notifications->whereNotNull('extra') ?? [] as $item)
+                                    <tr class="{{! $item->read_at ? 'unread-message' : ''}}">
+                                        <td class="align-items-center">{{$loop->iteration}}</td>
+                                        <td class="align-items-center">
+                                            <a href="{{route('admin.slip.list.single', $item->link)}}">{{$item->message}}</a>
+                                        </td>
+                                        <td class="align-items-center">
+                                            {{$item->created_at->format('d-M-Y')}}
+                                            <small>({{$item->created_at->diffForHumans()}})</small>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan=11" class="text-center">No Data Found</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
