@@ -76,6 +76,8 @@ class PaymentLogController extends Controller
 
         if (isset($validated['for'])) {
             $oldLog->where('score_type', 'slip');
+        } else {
+            $oldLog->whereNot('score_type', 'slip');
         }
         $oldLog = $oldLog->first();
 
@@ -87,7 +89,7 @@ class PaymentLogController extends Controller
             'user_id' => auth()->id(),
             'amount' => 0,
             'payment_type' => 'score_request',
-            'score_type' => $validated['for'] ? 'slip' : 'medical',
+            'score_type' => isset($validated['for']) ? 'slip' : 'medical',
             'payment_method' => 'score_request',
             'reference_no' => 'score_request',
             'deposit_date' => now(),
@@ -130,7 +132,7 @@ class PaymentLogController extends Controller
                 'amount' => $decrease_amount,
                 'payment_type' => 'payment',
                 'deposit_date' => now(),
-                'remarks' => 'Payment for application ID: '. $application->id,
+                'remarks' => 'Payment for passport number: '. $application->passport_number,
                 'status' => 'approved'
             ]);
 

@@ -28,7 +28,7 @@ class MedicalCenterManageController extends Controller
         ]);
 
         MedicalCenter::create([
-            'username' => $validated['username'],
+            'username' => strtolower($validated['username']),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),

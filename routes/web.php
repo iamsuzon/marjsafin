@@ -15,6 +15,7 @@ use App\Http\Controllers\UnionMedicalManageController;
 use App\Http\Controllers\UnionUserManageController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\UserSlipController;
+use App\Http\Middleware\RestrictSubAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,7 +76,9 @@ Route::post('/admin', [AdminAuthController::class, 'loginAction']);
 
 Route::middleware('auth:admin')->group(function () {
     Route::get('/admin/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/application-list', [AdminAuthController::class, 'applicationList'])->name('admin.application.list');
+    Route::get('/admin/application-list', [AdminAuthController::class, 'applicationList'])
+        ->name('admin.application.list')
+        ->middleware(RestrictSubAdmin::class);
     Route::post('/admin/application-update-result', [AdminAuthController::class, 'applicationUpdateResult'])->name('admin.application.result.update');
 
     Route::get('/admin/application-edit/{id}', [AdminAuthController::class, 'applicationEdit'])->name('admin.application.edit');

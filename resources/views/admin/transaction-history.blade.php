@@ -129,10 +129,8 @@
                                         <p class="text-capitalize">{{$item->score_type}}</p>
                                     </td>
                                     <td>{{$item->deposit_date->format('d-m-Y')}}</td>
-                                    <td>
-                                        <p>{{getPaymentMethodName($item->payment_method)}}</p>
-                                    </td>
-                                    <td>{{$item->reference_no}}</td>
+                                    <td class="text-capitalize">{{$item->payment_method === 'system' ? 'system' : 'admin'}}</td>
+                                    <td class="text-capitalize">{{str_replace('_',' ',$item->reference_no)}}</td>
                                     <td>
                                         <p class="{{$item->payment_type === 'deposit' ? 'text-success' : 'text-danger'}}">
                                             {{$item->payment_type === 'deposit' ? '+' : '-'}}{{$item->amount}}
@@ -158,7 +156,7 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>Score for passport no. <strong>{{$item->application?->passport_number}}</strong></td>
+                                    <td>{{$item->remarks}}</td>
                                 </tr>
                             @empty
                                 <tr>

@@ -12,19 +12,19 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
-            @role('super-admin')
-            <x-page-tabs title="Medical" :links="[
-                [
-                    'name' => 'Medical List',
-                    'route' => route('admin.application.list'),
-                    'active' => true
-                ],
-                                [
-                    'name' => 'Slip List',
-                    'route' => route('admin.slip.list'),
-                    'active' => false
-                ]
-            ]"/>
+            @role('super-admin|sub-admin')
+                <x-page-tabs title="Medical" :links="[
+                    [
+                        'name' => 'Medical List',
+                        'route' => route('admin.application.list'),
+                        'active' => true
+                    ],
+                                    [
+                        'name' => 'Slip List',
+                        'route' => route('admin.slip.list'),
+                        'active' => false
+                    ]
+                ]"/>
             @endrole
 
             <div class="card">

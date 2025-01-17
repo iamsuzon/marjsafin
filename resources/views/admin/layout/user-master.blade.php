@@ -81,8 +81,9 @@
 
         <!-- Header Right -->
         <ul class="header-right">
-            @hasrole('super-admin')
-                <li class="cart-list notification dropdown" id="notification-div">
+            @hasrole('super-admin|sub-admin')
+                @hasrole('super-admin')
+                    <li class="cart-list notification dropdown" id="notification-div">
                     @php
                         $notifications = \App\Models\Notification::whereNull('extra')->whereDate('created_at', '>=', now()->subDays(2))->latest()->get();
                         $unreadNotifications = $notifications->whereNull('read_at')->count();
@@ -139,6 +140,7 @@
                         @endif
                     </div>
                 </li>
+                @endhasrole
 
                 <li class="cart-list notification dropdown" id="notification-slip-div">
                     @php
@@ -283,12 +285,14 @@
                         </a>
                     </li>
 
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application-list.allocations')}}">
-                        <a href="{{route('admin.application-list.allocations')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Medical Center Allocations</span>
-                        </a>
-                    </li>
+                    @hasrole('super-admin')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.application-list.allocations')}}">
+                            <a href="{{route('admin.application-list.allocations')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Medical Center Allocations</span>
+                            </a>
+                        </li>
+                    @endunlessrole
 
                     <!-- Single Menu -->
                     @hasrole('super-admin')
@@ -300,12 +304,14 @@
                     </li>
                     @endhasrole
 
-                    <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}} {{activeCurrentSidebarMenu('admin.medical-center.list.application')}}">
-                        <a href="{{route('admin.medical-center.list')}}" class="parent-item-content">
-                            <i class="ri-hand-heart-line"></i>
-                            <span class="on-half-expanded">Medical Center List</span>
-                        </a>
-                    </li>
+                    @unlessrole('sub-admin')
+                        <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.medical-center.list')}} {{activeCurrentSidebarMenu('admin.medical-center.list.application')}}">
+                            <a href="{{route('admin.medical-center.list')}}" class="parent-item-content">
+                                <i class="ri-hand-heart-line"></i>
+                                <span class="on-half-expanded">Medical Center List</span>
+                            </a>
+                        </li>
+                    @endunlessrole
 
                     @hasrole('super-admin')
                     <li class="sidebar-menu-item {{activeCurrentSidebarMenu('admin.allocate-center.list')}}">

@@ -92,12 +92,15 @@
                                             };
                                         @endphp
                                         <p class="badge {{$class}} text-capitalize">{{$item?->slipPayment?->payment_status}}</p>
-                                        <p>Score: {{$item?->slipPayment?->slip_rate}}</p>
 
-                                        @if($item->slipPayment?->discount > 0)
-                                            <p>Discount: {{$item->slipPayment?->discount}}</p>
-                                            <p>Total: $item->slipPayment?->slip_rate - $item->slipPayment?->discount</p>
-                                        @endif
+                                        @hasrole('super-admin')
+                                            <p>Score: {{$item?->slipPayment?->slip_rate}}</p>
+
+                                            @if($item->slipPayment?->discount > 0)
+                                                <p>Discount: {{$item->slipPayment?->discount}}</p>
+                                                <p>Total: $item->slipPayment?->slip_rate - $item->slipPayment?->discount</p>
+                                            @endif
+                                        @endhasrole
                                     </td>
                                     <td>
                                         @php
@@ -114,17 +117,22 @@
                                            href="{{$item?->slipStatusLink?->link ?? '#'}}"
                                            target="{{$item?->slipStatusLink?->link ? '_blank' : ''}}">{{$item->slipStatusLink?->slip_status}}</a>
                                     </td>
-                                    <td class="text-end px-15 d-flex gap-10">
-                                        @can('modify-application')
-                                            <a class="edit-btn" href="javascript:void(0)"
-                                               data-id="{{$item->id}}"
-                                               data-status="{{$item->slipStatusLink?->slip_status}}"
-                                               data-link="{{$item->slipStatusLink?->link}}"
-                                               data-bs-toggle="modal" data-bs-target="#edit-modal">
-                                                <i class="ri-file-edit-line"></i>
-                                            </a>
-                                        @endcan
-                                    </td>
+
+                                    @hasanyrole('super-admin|admin|sub-admin')
+                                        <td class="text-end px-15 d-flex gap-10">
+                                            @if(! in_array($item->slipStatusLink?->slip_status, ['cancelled', 'we-cant-not-expired', 'cancelled-for-time-out']))
+    {{--                                        @can('modify-application')--}}
+                                                <a class="edit-btn" href="javascript:void(0)"
+                                                   data-id="{{$item->id}}"
+                                                   data-status="{{$item->slipStatusLink?->slip_status}}"
+                                                   data-link="{{$item->slipStatusLink?->link}}"
+                                                   data-bs-toggle="modal" data-bs-target="#edit-modal">
+                                                    <i class="ri-file-edit-line"></i>
+                                                </a>
+    {{--                                        @endcan--}}
+                                            @endif
+                                        </td>
+                                    @endhasanyrole
                                 </tr>
                             @empty
                                 <tr>

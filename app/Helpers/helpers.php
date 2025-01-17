@@ -430,11 +430,17 @@ function generatePdfCode($location): string
     if ($location === 'mostafa_health') {
         $prefix = 'IMS-MHC-';
     }
-    elseif ($location === 'kent_medical') {
-        $prefix = 'Kent-x02-';
+//    elseif ($location === 'kent_medical') {
+//        $prefix = 'Kent-x02-';
+//    }
+//    elseif ($location === 'malancha_medical') {
+//        $prefix = 'Malancha-x02-';
+//    }
+    elseif ($location === 'malancha_medical') { // Changed at 04-Jan-2025
+        $prefix = 'Malancha-J83-';
     }
-    elseif ($location === 'malancha_medical') {
-        $prefix = 'Malancha-x02-';
+    elseif ($location === 'perlov_Medical' || $location === 'Medinova_Medical' || $location === 'Saadiq_Medical' || $location === 'kent_medical') {
+        $prefix = 'J83-';
     }
 
     // Count how many entries already exist with this location prefix

@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
                     'name' => 'admin'
                 ],
                 [
+                    'guard_name' => 'sub-admin',
+                    'name' => 'admin'
+                ],
+                [
                     'guard_name' => 'admin',
                     'name' => 'analyst'
                 ]

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentLog;
 use App\Models\Slip;
+use App\Models\SlipPayment;
 use App\Models\SlipStatusLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -51,7 +53,7 @@ class AdminSlipController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:slips,id',
-            'slip_status' => 'required|in:processed-link,cancelled,we-cant-not-expired,cancelled-for-time-out,completed',
+            'slip_status' => 'required|in:processing,processed-link,cancelled,we-cant-not-expired,cancelled-for-time-out,completed',
             'link' => 'required_if:slip_status,completed',
         ]);
 
@@ -65,6 +67,37 @@ class AdminSlipController extends Controller
                 'link' => $validated['link']
             ]
         );
+
+        try {
+            if (in_array($validated['slip_status'], ['cancelled', 'we-cant-not-expired', 'cancelled-for-time-out']))
+            {
+                $slip_payment = SlipPayment::where('slip_id', $validated['id'])->first();
+
+                if ($slip_payment && $slip_payment->payment_status === 'paid') {
+                    $slip_payment_amount = $slip_payment->slip_rate;
+
+                    $slip = Slip::where('id', $validated['id'])->first();
+                    $slip->user()->increment('slip_balance', $slip_payment_amount);
+
+                    PaymentLog::create([
+                        'user_id' => $slip->user->id,
+                        'amount' => $slip_payment_amount,
+                        'payment_type' => 'deposit',
+                        'payment_method' => 'system',
+                        'score_type' => 'slip',
+                        'reference_no' => 'system',
+                        'deposit_date' => Carbon::now(),
+                        'remarks' => 'Score refunded by admin.',
+                        'status' => 'approved'
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please contact with developer.'
+            ]);
+        }
 
         return response()->json([
             'status' => true,

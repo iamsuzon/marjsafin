@@ -6,12 +6,14 @@
             border-bottom: 2px solid var(--primary);
             padding-bottom: 10px;
         }
+
         a.slip-link p {
             white-space: nowrap;
             width: 250px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         a.slip-link p:hover {
             overflow: visible;
             color: var(--primary);
@@ -109,20 +111,20 @@
                                 <th>Passport</th>
                                 <th>Info</th>
 
-                                @hasrole('super-admin')
+                                @hasrole('super-admin|sub-admin')
                                 <th>Reference</th>
                                 @endhasrole
 
                                 <th>City</th>
                                 <th>Medical Center</th>
 
-                                @hasrole('super-admin')
-                                    <th>Score</th>
+                                @hasrole('super-admin|sub-admin')
+                                <th>Score</th>
                                 @endhasrole
 
-                                @hasanyrole('super-admin|admin')
-                                    <th>Link</th>
-                                    <th>Action</th>
+                                @hasanyrole('super-admin|admin|sub-admin')
+                                <th>Link</th>
+                                <th>Action</th>
                                 @endhasanyrole
                             </tr>
                             </thead>
@@ -146,12 +148,12 @@
                                         <p>P.Issue Date: {{$item->passport_issue_date?->format('d-m-Y')}}</p>
                                         <p>P.Expire Date: {{$item->passport_expiry_date?->format('d-m-Y')}}</p>
                                     </td>
-                                    @hasrole('super-admin')
-                                        <td>
-                                            <p>{{$item->ref_ledger}}</p>
-                                            <p>User: {{$item->user->username}}</p>
-                                            <p>Ref: {{$item->ref_no}}</p>
-                                        </td>
+                                    @hasrole('super-admin|sub-admin')
+                                    <td>
+                                        <p>{{$item->ref_ledger}}</p>
+                                        <p>User: {{$item->user->username}}</p>
+                                        <p>Ref: {{$item->ref_no}}</p>
+                                    </td>
                                     @endhasrole
                                     <td>
                                         <p>{{slipCenterList()[$item->city_id]['title']}}</p>
@@ -165,45 +167,50 @@
 
                                         <p class="text-capitalize">{{$name}}</p>
                                     </td>
-                                    @hasrole('super-admin')
-                                        <td>
-                                            @php
-                                                $class = match($item?->slipPayment?->payment_status) {
-                                                    'pending' => 'bg-warning',
-                                                    'paid' => 'bg-success',
-                                                    default => 'bg-danger'
-                                                };
-                                            @endphp
-                                            <p class="badge {{$class}} text-capitalize">{{$item?->slipPayment?->payment_status}}</p>
-                                            <p>Score: {{$item?->slipPayment?->slip_rate}}</p>
+                                    @hasrole('super-admin|sub-admin')
+                                    <td>
+                                        @php
+                                            $class = match($item?->slipPayment?->payment_status) {
+                                                'pending' => 'bg-warning',
+                                                'paid' => 'bg-success',
+                                                default => 'bg-danger'
+                                            };
+                                        @endphp
+                                        <p class="badge {{$class}} text-capitalize">{{$item?->slipPayment?->payment_status}}</p>
 
-                                            @if($item->slipPayment?->discount > 0)
-                                                <p>Discount: {{$item->slipPayment?->discount}}</p>
-                                                <p>Total: $item->slipPayment?->slip_rate - $item->slipPayment?->discount</p>
-                                            @endif
-                                        </td>
+                                        @hasrole('super-admin')
+                                        <p>Score: {{$item?->slipPayment?->slip_rate}}</p>
+
+                                        @if($item->slipPayment?->discount > 0)
+                                            <p>Discount: {{$item->slipPayment?->discount}}</p>
+                                            <p>Total: $item->slipPayment?->slip_rate - $item->slipPayment?->discount</p>
+                                        @endif
+                                        @endhasrole
+                                    </td>
                                     @endhasrole
 
-                                    @hasrole('super-admin')
-                                        <td>
-                                            @php
-                                                $class = match($item->slipStatusLink?->slip_status) {
-                                                    'processed-link' => 'bg-warning',
-                                                    'cancelled' => 'bg-danger',
-                                                    'we-cant-not-expired' => 'bg-danger',
-                                                    'cancelled-for-time-out' => 'bg-danger',
-                                                    'completed' => 'bg-success',
-                                                    default => 'bg-info'
-                                                };
-                                            @endphp
+                                    @hasrole('super-admin|sub-admin')
+                                    <td>
+                                        @php
+                                            $class = match($item->slipStatusLink?->slip_status) {
+                                                'processed-link' => 'bg-warning',
+                                                'cancelled' => 'bg-danger',
+                                                'we-cant-not-expired' => 'bg-danger',
+                                                'cancelled-for-time-out' => 'bg-danger',
+                                                'completed' => 'bg-success',
+                                                default => 'bg-info'
+                                            };
+                                        @endphp
 
-                                            <a class="slip-link badge {{$class}} text-capitalize" href="{{$item?->slipStatusLink?->link ?? '#'}}" target="{{$item?->slipStatusLink?->link ? '_blank' : ''}}">{{$item->slipStatusLink?->slip_status}}</a>
-                                        </td>
+                                        <a class="slip-link badge {{$class}} text-capitalize"
+                                           href="{{$item?->slipStatusLink?->link ?? '#'}}"
+                                           target="{{$item?->slipStatusLink?->link ? '_blank' : ''}}">{{$item->slipStatusLink?->slip_status}}</a>
+                                    </td>
                                     @endhasrole
 
-                                    @hasanyrole('super-admin|admin')
+                                    @hasanyrole('super-admin|admin|sub-admin')
                                     <td class="text-end px-15 d-flex gap-10">
-                                        @can('modify-application')
+                                        @if(! in_array($item->slipStatusLink?->slip_status, ['cancelled', 'we-cant-not-expired', 'cancelled-for-time-out']))
                                             <a class="edit-btn" href="javascript:void(0)"
                                                data-id="{{$item->id}}"
                                                data-status="{{$item->slipStatusLink?->slip_status}}"
@@ -211,10 +218,10 @@
                                                data-bs-toggle="modal" data-bs-target="#edit-modal">
                                                 <i class="ri-file-edit-line"></i>
                                             </a>
-                                        @endcan
+                                        @endif
 
                                         @can('delete-application')
-                                            @if($item->slipPayment->payment_status === 'pending')
+                                            @if($item->slipPayment?->payment_status === 'pending')
                                                 <a class="delete-btn" href="javascript:void(0)"
                                                    data-id="{{$item->id}}">
                                                     <i class="ri-delete-bin-6-line"></i>
@@ -267,6 +274,7 @@
                                     <label class="contact-label">Slip Status</label>
                                     <select name="slip_status" id="slip_status" class="form-control">
                                         <option value="">Select an option</option>
+                                        <option value="processing">Processing</option>
                                         <option value="processed-link">Processed-Link</option>
                                         <option value="cancelled">Cancelled:Non</option>
                                         <option value="we-cant-not-expired">We Can't Not Expired</option>

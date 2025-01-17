@@ -129,9 +129,13 @@
                                     <td>{{$item?->application?->passport_number}}</td>
                                     <td>
                                         @if($item->payment_type === 'deposit')
-                                            <p class="text-capitalize">Score Added</p>
+                                            @if($item->payment_method === 'system')
+                                                <p class="text-capitalize text-info">Score Refunded</p>
+                                            @else
+                                                <p class="text-capitalize text-success">Score Added</p>
+                                            @endif
                                         @else
-                                            <p class="text-capitalize">Score Deducted</p>
+                                            <p class="text-capitalize text-danger">Score Deducted</p>
                                         @endif
                                     </td>
                                     <td>
