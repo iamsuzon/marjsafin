@@ -34,8 +34,7 @@
                                 <th>Date</th>
                                 <th>Registration</th>
                                 <th>Passport</th>
-                                <th>Reference</th>
-                                <th>Traveling To</th>
+                                <th>Info</th>
                                 <th>Center</th>
                                 <th>Comment</th>
                                 <th>Allocate Center</th>
@@ -64,25 +63,23 @@
                                     </td>
                                     <td>
                                         <p>{{$item->passport_number}}</p>
-                                        <p>{{$item->given_name}}</p>
+                                        <p>{{$item->given_name}} {{$item->surname}}</p>
                                         <p>NID: {{$item->nid_no}}</p>
+                                        <p class="text-capitalize">{{$item->gender}} - {{$item->marital_status}}</p>
+                                        <p>Traveling To: {{travelingToName($item->traveling_to)}}</p>
                                     </td>
                                     <td>
-                                        <p>From Raju</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-capitalize">{{$item->gender}}</p>
-                                        <p>{{travelingToName($item->traveling_to)}}</p>
+                                        <p>DOB: {{$item->date_of_birth?->format('d-m-Y')}}</p>
+                                        <p>P.Issue Date: {{$item->passport_issue_date?->format('d-m-Y')}}</p>
+                                        <p>P.Expire Date: {{$item->passport_expiry_date?->format('d-m-Y')}}</p>
                                     </td>
                                     <td>
                                         @php
                                             $center = centerName($item->center_name);
                                             $center_name = explode(' - ', $center)[0] ?? '';
-                                            $center_address = explode(' - ', $center)[1] ?? '';
                                         @endphp
 
                                         <p class="text-capitalize">{{$center_name}}</p>
-                                        <p class="text-capitalize">{{$center_address}}</p>
                                     </td>
                                     <td>
                                         <p @class([

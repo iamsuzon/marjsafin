@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,7 +28,8 @@ class User extends Authenticatable
         'balance',
         'slip_balance',
         'has_medical_permission',
-        'has_slip_permission'
+        'has_slip_permission',
+        'has_link_permission'
     ];
 
     /**
@@ -51,7 +53,8 @@ class User extends Authenticatable
         'balance' => 'integer',
         'slip_balance' => 'integer',
         'has_medical_permission' => 'boolean',
-        'has_slip_permission' => 'boolean'
+        'has_slip_permission' => 'boolean',
+        'has_link_permission' => 'boolean'
     ];
 
     public function banned(): HasOne
@@ -61,6 +64,16 @@ class User extends Authenticatable
 
     public function applications()
     {
-        return $this->hasMany(Application::class, 'passport_number', 'username');
+        return $this->hasMany(Application::class, 'user_id', 'id');
+    }
+
+    public function slip()
+    {
+        return $this->hasMany(Slip::class, 'user_id', 'id');
+    }
+
+    public function appointmentBooking(): HasMany
+    {
+        return $this->hasMany(AppointmentBooking::class, 'user_id', 'id');
     }
 }

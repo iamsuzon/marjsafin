@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentLogController;
 use App\Http\Controllers\UnionAccountManageController;
 use App\Http\Controllers\UnionMedicalManageController;
 use App\Http\Controllers\UnionUserManageController;
+use App\Http\Controllers\UserAppointmentBookingController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\UserSlipController;
 use App\Http\Middleware\RestrictSubAdmin;
@@ -65,11 +66,16 @@ Route::middleware('auth:web')->group(function () {
 
         Route::get('slip-list', [UserSlipController::class, 'slipList'])->name('slip.list');
         Route::get('medical-centers', [UserSlipController::class, 'medicalCenterRates'])->name('slip.medical-center.rates');
+
+        Route::get('/appointment-booking-list', [UserAppointmentBookingController::class, 'appointmentBookingList'])->name('appointment.booking.list');
+        Route::get('/appointment-booking-registration', [UserAppointmentBookingController::class, 'appointmentBookingRegistration'])->name('appointment.booking.registration');
+        Route::post('/appointment-booking-registration', [UserAppointmentBookingController::class, 'storeAppointmentBooking']);
+
+        Route::get('/send-submit-request', [UserAppointmentBookingController::class, 'sendSubmitRequest'])->name('appointment.booking.submit.request.ajax');
     });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
-
 
 Route::get('/admin', [AdminAuthController::class, 'login'])->name('admin.login');
 Route::post('/admin', [AdminAuthController::class, 'loginAction']);
@@ -99,6 +105,9 @@ Route::middleware('auth:admin')->group(function () {
         ->can('view-customer');
     Route::get('/admin/user-ban/{id}', [BanUserManageController::class, 'banUser'])
         ->name('admin.user.ban');
+    Route::post('/admin/delete-user', [BanUserManageController::class, 'deleteUser'])
+        ->name('admin.user.delete')
+        ->can('delete-customer');
     Route::post('/admin/user-balance/update', [AdminAuthController::class, 'updateBalance'])
         ->name('admin.user.balance.update');
     Route::get('/admin/user/pdf-generate', [AdminAuthController::class, 'generatePdf'])

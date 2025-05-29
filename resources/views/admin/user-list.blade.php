@@ -22,7 +22,7 @@
             }
         }
 
-        .balance-td p{
+        .balance-td p {
             font-size: 13px;
         }
     </style>
@@ -100,6 +100,9 @@
                                 @if($user->has_slip_permission)
                                     <span class="badge bg-success">Slip</span>
                                 @endif
+                                @if($user->has_link_permission)
+                                    <span class="badge bg-success">Link</span>
+                                @endif
                             </td>
                             <td class="balance-td">
                                 <p>MB: {{$user->balance}}</p>
@@ -114,21 +117,27 @@
                             </td>
                             <td class="btn-set">
                                 <a href="javascript:void(0)" data-href="{{ route('admin.user.ban', $user->id) }}"
-                                   class="ban-unban-btn {{$user->banned ? 'btn-primary-fill' : 'btn-danger-fill'}}">
+                                   class="ban-unban-btn {{$user->banned ? 'btn-primary-fill' : 'btn-warning-fill'}}">
                                     {{ $user->banned ? 'Unban' : 'Ban' }} Customer
                                 </a>
+                                <a href="javascript:void(0)" data-href="{{ route('admin.user.delete') }}"
+                                   data-user-id="{{ $user->id }}"
+                                   class="btn-delete btn-danger-fill">
+                                    <i class="ri-alert-fill"></i> Delete Customer
+                                </a>
 
-{{--                                <a href="javascript:void(0)" class="balance-edit-btn btn-secondary-fill"--}}
-{{--                                   data-bs-target="#score-modal" data-bs-toggle="modal"--}}
-{{--                                   data-id="{{$user->id}}" data-name="{{$user->name}}"--}}
-{{--                                   data-balance="{{$user->balance}}"--}}
-{{--                                >Edit Score</a>--}}
+                                {{--                                <a href="javascript:void(0)" class="balance-edit-btn btn-secondary-fill"--}}
+                                {{--                                   data-bs-target="#score-modal" data-bs-toggle="modal"--}}
+                                {{--                                   data-id="{{$user->id}}" data-name="{{$user->name}}"--}}
+                                {{--                                   data-balance="{{$user->balance}}"--}}
+                                {{--                                >Edit Score</a>--}}
 
                                 <a href="javascript:void(0)" class="btn-permission btn-secondary-fill"
                                    data-bs-target="#permission-modal" data-bs-toggle="modal"
                                    data-id="{{$user->id}}" data-name="{{$user->name}}"
                                    data-has_medical_permission="{{$user->has_medical_permission ? 1 : 0}}"
                                    data-has_slip_permission="{{$user->has_slip_permission ? 1 : 0}}"
+                                   data-has_link_permission="{{$user->has_link_permission ? 1 : 0}}"
                                 >
                                     <i class="ri-equalizer-3-line"></i> Permissions
                                 </a>
@@ -208,7 +217,8 @@
                                 </div>
                             </div>
 
-                            <small class="text-info">টোটাল PDF করতে কোন ডেট সিলেক্ট করার প্রয়োজন নেই । আজকের PDF করতে স্টার্ট ডেট সিলেক্ট করুন</small>
+                            <small class="text-info">টোটাল PDF করতে কোন ডেট সিলেক্ট করার প্রয়োজন নেই । আজকের PDF করতে
+                                স্টার্ট ডেট সিলেক্ট করুন</small>
                         </div>
 
                         <div class="modal-footer">
@@ -220,7 +230,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="permission-modal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+        <div class="modal fade" id="permission-modal" tabindex="-1" aria-labelledby="scoreModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="#" method="post">
@@ -242,10 +253,15 @@
                                         <input type="checkbox" id="2" name="permissions" value="slip">
                                         <label for="2">Slip</label>
                                     </div>
+                                    <div class="check-wrap style-one mb-10">
+                                        <input type="checkbox" id="3" name="permissions" value="link">
+                                        <label for="3">Link</label>
+                                    </div>
                                 </div>
                             </div>
 
-                            <small class="text-primary">এখানে যে যে পারমিশনগুলো সিলেক্ট করবেন, ইউজার শুধু মাত্র ঐ অপশনই পাবে</small>
+                            <small class="text-primary">এখানে যে যে পারমিশনগুলো সিলেক্ট করবেন, ইউজার শুধু মাত্র ঐ অপশনই
+                                পাবে</small>
                         </div>
 
                         <div class="modal-footer">
@@ -277,6 +293,46 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href = href;
+                            }
+                        });
+                    });
+
+                    $(document).on('click', '.btn-delete', function () {
+                        let el = $(this);
+                        let href = el.data('href');
+                        let user_id = el.data('user-id');
+
+                        let name = el.closest('tr').find('td:nth-child(2)').text();
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            html: `
+                                <h5 class="text-danger">You want to delete <strong>${name}</strong>!</h5><br>
+                                <h5 class="text-dark">This action will delete the user permanently!</h5>
+                                <h5 class="text-dark">All data related to this user will be deleted!</h5>
+                            `,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33333',
+                            cancelButtonColor: 'rgba(51,59,70,0.48)',
+                            confirmButtonText: 'Yes, delete!',
+                            cancelButtonText: 'No, cancel!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: `${href}?uid=${user_id}`,
+                                    method: 'POST',
+                                    data: {
+                                        _token: '{{ csrf_token() }}',
+                                        user_id: user_id
+                                    },
+                                    success: function (response) {
+                                        if (response.status) {
+                                            el.closest('tr').remove();
+                                            toastSuccess(response.message);
+                                        }
+                                    }
+                                });
                             }
                         });
                     });
@@ -343,8 +399,7 @@
                         let name = el.data('name');
                         let has_medical_permission = el.data('has_medical_permission');
                         let has_slip_permission = el.data('has_slip_permission');
-
-                        console.log(has_medical_permission, has_slip_permission);
+                        let has_link_permission = el.data('has_link_permission');
 
                         let modal = $("#permission-modal");
                         modal.find('.modal-title').text('User Permissions for ' + name);
@@ -352,6 +407,7 @@
                         modal.find('input[name="permissions"]').prop('checked', false);
                         modal.find('input[name="permissions"][value="medical"]').prop('checked', has_medical_permission);
                         modal.find('input[name="permissions"][value="slip"]').prop('checked', has_slip_permission);
+                        modal.find('input[name="permissions"][value="link"]').prop('checked', has_link_permission);
                     });
 
                     $(document).on('click', '#permission-modal button[type="submit"]', function (e) {
@@ -360,6 +416,7 @@
                         let id = modal.find('input[name="id"]').val();
                         let medical = modal.find('input[name="permissions"][value="medical"]').is(':checked');
                         let slip = modal.find('input[name="permissions"][value="slip"]').is(':checked');
+                        let link = modal.find('input[name="permissions"][value="link"]').is(':checked');
 
                         $.ajax({
                             url: `{{route('admin.user.permission.update')}}`,
@@ -368,7 +425,8 @@
                                 _token: '{{ csrf_token() }}',
                                 id: id,
                                 medical_permission: medical,
-                                slip_permission: slip
+                                slip_permission: slip,
+                                link_permission: link
                             },
                             success: function (response) {
                                 if (response.success) {

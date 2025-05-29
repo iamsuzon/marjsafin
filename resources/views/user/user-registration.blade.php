@@ -25,13 +25,13 @@
         <div class="container-fluid">
             <x-page-tabs title="Registration" :links="[
                 [
-                    'name' => 'Medical Registration',
+                    'name' => 'Medical',
                     'route' => route('user.registration'),
                     'active' => true,
                     'has_permission' => hasMedicalPermission()
                 ],
                 [
-                    'name' => 'Slip Registration',
+                    'name' => 'Slip',
                     'route' => route('user.slip.registration'),
                     'active' => false,
                     'has_permission' => hasSlipPermission()

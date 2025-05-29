@@ -168,6 +168,64 @@ function slipCenterList(): array
                 'world-horizon-medical-services-ltd' => 'WORLD HORIZON MEDICAL SERVICES LTD',
                 'yadan-medical' => 'YADAN MEDICAL',
                 'zain-medical-limited' => 'Zain Medical Limited',
+
+                // Added on 29-apr-2025
+                'al-mahmud-medical-center' => 'AL MAHMUD MEDICAL CENTER',
+                'al-maktoum-health-care' => 'Al Maktoum Health Care',
+                'al-qassimi-health-care' => 'Al Qassimi Health Care',
+                'al-tawaf-medical-center' => 'AL TAWAF MEDICAL CENTER',
+                'al-barakah-medical-centre-limited' => 'AL-BARAKAH MEDICAL CENTRE LIMITED',
+                'aline-medical-services-ltd' => 'Aline Medical Services Ltd.',
+                'ammar-medical-center' => 'AMMAR MEDICAL CENTER',
+                'aoc-medical-center' => 'AOC Medical Center',
+                'ayaz-medical-center' => 'AYAZ MEDICAL CENTER',
+                'azwa-medical-centre' => 'AZWA MEDICAL CENTRE',
+                'bms-medical-checkup-centre' => 'BMS Medical Checkup Centre',
+                'carbon-medical-center' => 'CARBON MEDICAL CENTER',
+                'catharsis-medical-centre-limited' => 'Catharsis Medical Centre Limited',
+                'central-health-checkup' => 'Central Health Checkup',
+                'city-lab' => 'City Lab',
+                'city-medical-centre' => 'City Medical Centre',
+                'dynamic-lab' => 'Dynamic Lab',
+                'fortune-medical-centre' => 'Fortune Medical Centre',
+                'future-medical' => 'FUTURE MEDICAL',
+                'greenland-medical-center-limited' => 'Greenland Medical Center Limited',
+                'hasan-medical-service-ltd' => 'HASAN MEDICAL SERVICE LTD.',
+                'icon-medical-centre' => 'ICON MEDICAL CENTRE',
+                'indigo-healthcare-ltd' => 'Indigo Healthcare Ltd.',
+                'islamia-diagnostic-center' => 'Islamia Diagnostic Center',
+                'jg-healthcare-limited' => 'JG HEALTHCARE LIMITED',
+                'kgn-medicare-limited' => 'KGN Medicare Limited',
+                'lab-science-diagnostic' => 'LAB SCIENCE DIAGNOSTIC',
+                'lamia-medical-health-checkup-centre' => 'LAMIA MEDICAL HEALTH CHECKUP CENTRE',
+                'lifeline-medical-centre' => 'Lifeline Medical Centre',
+                'life-scan-medical-and-diagnostic-center' => 'LIFE-SCAN MEDICAL AND DIAGNOSTIC CENTER',
+                'lotus-medical-centre' => 'Lotus Medical Centre',
+                'm-rahman-medical-diagnostic-center' => 'M. RAHMAN MEDICAL & DIAGNOSTIC CENTER',
+                'medifly-health-services' => 'Medifly Health Services',
+                'medinet-medical-services' => 'Medinet Medical Services',
+                'medipath-medical-diagnostic-center' => 'MediPath Medical & Diagnostic Center',
+                'medison-medical-services-limited' => 'Medison Medical Services Limited',
+                'meem-medical-center' => 'MEEM MEDICAL CENTER',
+                'micare-health-limited' => 'MICARE HEALTH LIMITED',
+                'modern-medical-center' => 'MODERN MEDICAL CENTER',
+                'mohammdi-healthcare-systems-pvt-ltd' => 'Mohammdi Healthcare Systems Pvt. Ltd.',
+                'musa-health-checkup-centre' => 'MUSA HEALTH CHECKUP CENTRE',
+                'mysa-medical-services-pvt-ltd' => 'MYSA MEDICAL SERVICES (PVT) LTD',
+                'new-karama-medical-services' => 'NEW KARAMA MEDICAL SERVICES',
+                'on-care-diagnostic-centre' => 'On Care Diagnostic Centre',
+                'perfect-medicare-ltd' => 'PERFECT MEDICARE LTD.',
+                'precision-diagnostics-ltd' => 'Precision Diagnostics Ltd',
+                'prime-medical-centre' => 'Prime Medical Centre',
+                'sr-medical-diagnostic-center' => 'SR Medical & Diagnostic Center',
+                'true-health-medical-and-diagnostic-center' => 'True Health Medical And Diagnostic Center',
+                'unicare-medical-services' => 'UNICARE MEDICAL SERVICES',
+                'union-health-center' => 'Union Health Center',
+                'unity-medical-checkup-centre' => 'UNITY MEDICAL CHECKUP CENTRE',
+                'uttara-crescent-clinic-pvt-ltd' => 'UTTARA CRESCENT CLINIC (PVT) LTD',
+                'vita-health-medical-center' => 'Vita Health Medical Center',
+                'zam-zam-medical-center' => 'ZAM ZAM MEDICAL CENTER',
+                'zara-health-care' => 'Zara Health Care',
             ]
         ],
         '2030' => [
@@ -442,6 +500,9 @@ function generatePdfCode($location): string
     elseif ($location === 'perlov_Medical' || $location === 'Medinova_Medical' || $location === 'Saadiq_Medical' || $location === 'kent_medical') {
         $prefix = 'J83-';
     }
+    elseif ($location === 'advance_medical') {
+        $prefix = 'ADVM-'.now()->format('d-m-y').'-S-';
+    }
 
     // Count how many entries already exist with this location prefix
     $count = Application::where('center_name', $location)->count();
@@ -483,4 +544,158 @@ function hasMedicalPermission()
 {
     $user = auth('web')->user();
     return $user->has_medical_permission;
+}
+
+function hasLinkPermission()
+{
+    $user = auth('web')->user();
+    return $user->has_link_permission;
+}
+
+function appointmentBookingCountry(): array
+{
+    return [
+        'BD' => 'Bangladesh',
+        'SA'  => 'Saudi Arabia',
+        'BH'  => 'Bahrain',
+        'KW'  => 'Kuwait',
+        'OM'  => 'Oman',
+        'QA'  => 'Qatar',
+        'UAE' => 'UAE',
+        'YEM' => 'Yemen'
+    ];
+}
+
+function appointmentBookingCity(): array
+{
+    return [
+        80   => 'Dhaka',
+        2031 => 'Barishal',
+        2061 => 'Chandpur',
+        81   => 'Chitagong',
+        2033 => "Cox's Bazar",
+        2032 => 'Cumilla',
+        2030 => 'Rajshahi',
+        2059 => 'Sherpur',
+        83   => 'Sylhet'
+    ];
+}
+
+function appointmentBookingNationality(): array
+{
+    return [
+        15 => 'Bangladeshi'
+    ];
+}
+
+function appointmentBookingVisaType(): array
+{
+    return [
+        'wv' => 'Work Visa',
+        'fv' => 'Family Visa'
+    ];
+}
+
+function appointmentBookingAppliedPosition(): array
+{
+    return [
+        31  => 'Labour',
+        18  => 'Banking & Finance',
+        19  => 'Carpenter',
+        20  => 'Cashier',
+        21  => 'Electrician',
+        22  => 'Engineer',
+        23  => 'General Secretory',
+        24  => 'Health & Medicine & Nursing',
+        25  => 'Heavy Driver',
+        26  => 'IT & Internet Engineer',
+        27  => 'Leisure & Tourism',
+        28  => 'Light Driver',
+        29  => 'Mason',
+        30  => 'President',
+        32  => 'Plumber',
+        33  => 'Doctor',
+        34  => 'Family',
+        35  => 'Steel Fixer',
+        36  => 'Aluminum Technician',
+        37  => 'Nurse',
+        38  => 'Male Nurse',
+        39  => 'Ward Boy',
+        40  => 'Shovel Operator',
+        41  => 'Dozer Operator',
+        42  => 'Car Mechanic',
+        43  => 'Petrol Mechanic',
+        44  => 'Diesel Mechanic',
+        45  => 'Student',
+        46  => 'Accountant',
+        47  => 'Lab Technician',
+        48  => 'Drafts man',
+        49  => 'Auto-Cad Operator',
+        50  => 'Painter',
+        51  => 'Tailor',
+        52  => 'Welder',
+        53  => 'X-ray Technician',
+        54  => 'Lecturer',
+        55  => 'A.C Technician',
+        56  => 'Business',
+        57  => 'Cleaner',
+        58  => 'Security Guard',
+        59  => 'House Maid',
+        60  => 'Manager',
+        61  => 'Hospital Cleaning',
+        62  => 'Mechanic',
+        63  => 'Computer Operator',
+        64  => 'House Driver',
+        65  => 'Driver',
+        66  => 'Cleaning Labour',
+        67  => 'Building Electrician',
+        68  => 'Salesman',
+        69  => 'Plastermason',
+        70  => 'Servant',
+        71  => 'Barber',
+        72  => 'Residence',
+        73  => 'Shepherds',
+        74  => 'Employment',
+        75  => 'Fuel Filler',
+        76  => 'Worker',
+        77  => 'House Boy',
+        78  => 'House Wife',
+        79  => 'RCC Fitter',
+        80  => 'Clerk',
+        81  => 'Microbiologist',
+        82  => 'Teacher',
+        83  => 'Helper',
+        84  => 'Hajj Duty',
+        85  => 'Shuttering',
+        86  => 'Supervisor',
+        87  => 'Medical Specialist',
+        88  => 'Office Secretary',
+        89  => 'Technician',
+        90  => 'Butcher',
+        91  => 'Arabic Food Cook',
+        92  => 'Agricultural Worker',
+        93  => 'Service',
+        94  => 'Studio CAD Designer',
+        95  => 'Financial Analyst',
+        96  => 'Cabin Appearance (AIR LINES)',
+        97  => 'Car Washer',
+        98  => 'Surveyor',
+        99  => 'Electrical Technician',
+        100 => 'Waiter',
+        103 => 'Nursing helper',
+        104 => 'Anesthesia technician',
+        105 => '<s>Marvel',
+        106 => 'Marvel',
+        107 => 'Construction worker',
+    ];
+}
+
+function appointmentBookingTypes(): array
+{
+    return [
+        'normal' => 'Normal',
+//        'semi_normal' => 'Semi Normal',
+//        'night_normal' => 'Night Normal',
+//        'special' => 'Special'
+    ];
 }

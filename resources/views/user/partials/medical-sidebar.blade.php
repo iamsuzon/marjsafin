@@ -5,6 +5,15 @@
     </a>
 </li>
 
+@if(hasLinkPermission())
+    <li class="sidebar-menu-item {{activeCurrentSidebarMenu(['user.appointment.booking.registration', 'user.appointment.booking.list'])}}">
+        <a href="{{route('user.appointment.booking.list')}}" class="parent-item-content">
+            <i class="ri-links-line"></i>
+            <span class="on-half-expanded">Link Manage</span>
+        </a>
+    </li>
+@endif
+
 <!-- Single Menu -->
 <li class="sidebar-menu-item {{activeCurrentSidebarMenu(['user.registration', 'user.slip.registration'])}}">
     <a href="{{route('user.registration')}}" class="parent-item-content">

@@ -334,11 +334,13 @@ class AdminAuthController extends Controller
             'id' => 'required',
             'medical_permission' => 'nullable|in:true,false',
             'slip_permission' => 'nullable|in:true,false',
+            'link_permission' => 'nullable|in:true,false',
         ]);
 
         User::find($validated['id'])->update([
             'has_medical_permission' => $validated['medical_permission'] === 'true',
             'has_slip_permission' => $validated['slip_permission'] === 'true',
+            'has_link_permission' => $validated['link_permission'] === 'true',
         ]);
 
         return response()->json([

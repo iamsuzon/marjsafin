@@ -13,30 +13,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::insert(
-            [
-                [
-                    'guard_name' => 'admin',
-                    'name' => 'super-admin'
-                ],
-                [
-                    'guard_name' => 'admin',
-                    'name' => 'admin'
-                ],
-                [
-                    'guard_name' => 'sub-admin',
-                    'name' => 'admin'
-                ],
-                [
-                    'guard_name' => 'admin',
-                    'name' => 'analyst'
-                ]
-            ]
-        );
+//        Role::insert(
+//            [
+//                [
+//                    'guard_name' => 'admin',
+//                    'name' => 'super-admin'
+//                ],
+//                [
+//                    'guard_name' => 'admin',
+//                    'name' => 'admin'
+//                ],
+//                [
+//                    'guard_name' => 'sub-admin',
+//                    'name' => 'admin'
+//                ],
+//                [
+//                    'guard_name' => 'admin',
+//                    'name' => 'analyst'
+//                ]
+//            ]
+//        );
 
         $this->call([
-            AdminSeeder::class,
-            PermissionSeeder::class,
+//            AdminSeeder::class,
+//            PermissionSeeder::class,
 
 //            UserSeeder::class,
         ]);
