@@ -71,7 +71,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/appointment-booking-registration', [UserAppointmentBookingController::class, 'appointmentBookingRegistration'])->name('appointment.booking.registration');
         Route::post('/appointment-booking-registration', [UserAppointmentBookingController::class, 'storeAppointmentBooking']);
 
+        Route::get('/get-appointment-booking-list', [UserAppointmentBookingController::class, 'getAppointmentBookingList'])->name('appointment.booking.list.ajax');
         Route::get('/send-submit-request', [UserAppointmentBookingController::class, 'sendSubmitRequest'])->name('appointment.booking.submit.request.ajax');
+        Route::get('/send-submit-request-now', [UserAppointmentBookingController::class, 'sendSubmitRequestNow'])->name('appointment.booking.submit.request.now.ajax');
     });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');

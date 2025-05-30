@@ -191,6 +191,93 @@ class UserAppointmentBookingController extends Controller
         }
     }
 
+    public function sendSubmitRequestNow()
+    {
+        $id = request()->id;
+
+        if (empty($id)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'ID is required',
+            ], 400);
+        }
+
+        $user = auth()->user();
+        $cacheKey = 'appointment_bookings_user::' . $user->id;
+
+        // Retrieve cached data (item_id => timestamp)
+        $bookedItems = Cache::get($cacheKey, []);
+
+        if (array_key_exists($id, $bookedItems)) {
+            $timestamp = $bookedItems[$id];
+            if (now()->timestamp - $timestamp < 3600) { // Check if within 1 hour
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You have already submitted this request within the last hour.',
+                ]);
+            }
+        }
+
+        $appointmentBooking = AppointmentBooking::with(['links:id,appointment_booking_id,url,status'])
+            ->where(['user_id' => $user->id, 'id' => $id])
+            ->whereDoesntHave('links')
+            ->first();
+
+        if ($appointmentBooking) {
+            if ($appointmentBooking->type === 'normal' && $appointmentBooking->links()->count() === 0) {
+                $appointmentBooking->webhook_url = route('wafid.webhook');
+                $appointmentBooking->webhook_type = 'POST';
+
+                // cache current id for one hour
+                $bookedItems[$id] = now()->timestamp;
+                Cache::put($cacheKey, $bookedItems, now()->addHour()); // Store for 1 hour
+
+                $appointmentBooking['uid'] = random_int(1111,9999).$appointmentBooking->id.random_int(1111,9999);
+                unset($appointmentBooking['id']);
+
+                $handler_app_url = config('app.handler_url'). '/book-appointment';
+
+                $client = new Client();
+                $client->post($handler_app_url, [
+                    'json' => $appointmentBooking->toArray()
+                ]);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Request submitted successfully. Wait for few minutes to get the link.',
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Appointment booking not found',
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'You can not submit more than 1 request for the same appointment booking.',
+        ]);
+    }
+
+    public function getAppointmentBookingList()
+    {
+        $user = auth()->user();
+        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        $tbody = view('user.appointment-booking.render.tbody', ['linkList' => $linkList])->render();
+        $pagination = view('user.appointment-booking.render.pagination', ['linkList' => $linkList])->render();
+
+        return response()->json([
+            'status' => true,
+            'tbody' => $tbody,
+            'pagination' => $pagination,
+        ]);
+    }
+
     public function wafidWebhook(Request $request)
     {
         $data = $request->all();

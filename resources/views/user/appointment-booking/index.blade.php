@@ -173,6 +173,7 @@
                                 <th>Passport</th>
                                 <th>Link Number</th>
                                 <th>Links</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -194,6 +195,11 @@
                                             <a href="{{ $link->url }}" target="_blank">{{ $loop->iteration }}. {{ Str::limit($link->url, 40) }}</a>
                                         @endforeach
                                     </td>
+                                    <td>
+                                        @if($item->links()->count() < 1)
+                                            <a href="javascript:void(0)" class="btn btn-primary link-now-btn" data-id="{{ $item->id }}">Link Now</a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -204,7 +210,7 @@
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-start">
+                    <div class="d-flex justify-content-start pagination-custom-wrapper">
                         {{$linkList->links()}}
                     </div>
                 </div>
@@ -255,7 +261,6 @@
                     url: `{{ route('user.appointment.booking.submit.request.ajax') }}`,
                     type: 'GET',
                     success: function (response) {
-
                     },
                     error: function (xhr) {
                         console.log('An error occurred while processing your request.');
@@ -271,7 +276,27 @@
 
                 intervalId = setInterval(() => {
                     sendSubmitRequest();
-                }, 3000);
+
+                    setTimeout(() => {
+                        $.ajax({
+                            url: `{{ route('user.appointment.booking.list.ajax') }}`,
+                            type: 'GET',
+                            success: function (response) {
+                                if (response.status) {
+                                    $('tbody').html(response.tbody);
+                                    $('.pagination-custom-wrapper').html(response.pagination);
+
+                                    toastSuccess(response.message);
+                                } else {
+                                    toastError(response.message);
+                                }
+                            },
+                            error: function (xhr) {
+                                console.log('An error occurred while processing your request.');
+                            }
+                        });
+                    }, 15000);
+                }, 30000);
             });
 
             $(document).on('click', '.stop-btn', function () {
@@ -280,6 +305,36 @@
                 el.find('i').removeClass('loading-icon ri-loader-2-fill').addClass('ri-play-large-fill');
 
                 clearInterval(intervalId);
+            });
+
+            $(document).on('click', '.link-now-btn', function (e) {
+                e.preventDefault();
+                let el = $(this);
+                let id = el.attr('data-id');
+
+                el.text('Processing...');
+                clearInterval(intervalId);
+
+                $.ajax({
+                    url: `{{ route('user.appointment.booking.submit.request.now.ajax') }}?id=${id}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.status) {
+                            toastSuccess(response.message);
+
+                            setTimeout(() => {
+                                location.read();
+                            }, 30000);
+                        } else {
+                            el.text('Link Now');
+                            toastError(response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        el.text('Link Now');
+                        console.log('An error occurred while processing your request.');
+                    }
+                });
             });
         });
     </script>
