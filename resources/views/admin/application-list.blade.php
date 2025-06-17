@@ -23,6 +23,11 @@
                         'name' => 'Slip List',
                         'route' => route('admin.slip.list'),
                         'active' => false
+                    ],
+                    [
+                        'name' => 'Link List',
+                        'route' => route('admin.appointment-booking.list'),
+                        'active' => false
                     ]
                 ]"/>
             @endrole

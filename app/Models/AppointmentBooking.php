@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AppointmentBooking extends Model
 {
     protected $fillable = [
         'user_id',
         'type',
+        'reference',
+        'center_name',
         'country',
         'city',
         'country_traveling_to',
@@ -34,12 +37,18 @@ class AppointmentBooking extends Model
     protected $casts = [
         'user_id' => 'integer',
         'type' => 'string',
+        'reference' => 'string',
         'city' => 'integer',
         'dob' => 'date',
         'passport_issue_date' => 'datetime',
         'passport_expiry_date' => 'datetime',
         'applied_position' => 'integer',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function links(): HasMany
     {

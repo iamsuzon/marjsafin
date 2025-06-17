@@ -70,6 +70,8 @@ function slipCenterList(): array
                 'reda-hamzah-diagnostic-center' => 'Reda Hamzah Diagnostic Center',
                 'tabuk-medical-center' => 'Tabuk Medical Center',
                 'trust-medical-diagnostic-center' => 'Trust Medical & Diagnostic Center',
+                'qortoba-medical-center' => 'Qortoba Medical Center',
+                'afb-medical-checkup-center' =>  'AFB MEDICAL CHECKUP CENTRE',
             ]
         ],
         '80' => [
@@ -694,8 +696,18 @@ function appointmentBookingTypes(): array
 {
     return [
         'normal' => 'Normal',
-//        'semi_normal' => 'Semi Normal',
-//        'night_normal' => 'Night Normal',
-//        'special' => 'Special'
+        'normal_plus' => 'Normal Plus',
+        'special' => 'Special',
+        'special_plus' => 'Special Plus'
     ];
+}
+
+function readyForPaymentCacheKey(): string
+{
+    return "APPOINTMENT-ID";
+}
+
+function linkCacheKey($user_id, $appointment_id): string
+{
+    return "USER:{$user_id}::APPOINTMENT-LINK-ID:{$appointment_id}::LINK";
 }

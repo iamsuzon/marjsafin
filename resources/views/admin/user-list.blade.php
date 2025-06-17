@@ -107,6 +107,10 @@
                             <td class="balance-td">
                                 <p>MB: {{$user->balance}}</p>
                                 <p>SB: {{$user->slip_balance}}</p>
+                                <p class="text-primary">
+                                    <strong class="text-primary">SN:</strong>
+                                    {{ $user->slip_logs_sum_slip_amount ?? 0 }}
+                                </p>
                             </td>
                             <td>
                                 @if($user->banned)
@@ -146,6 +150,15 @@
                                    data-bs-target="#pdf-modal" data-bs-toggle="modal"
                                    data-id="{{$user->id}}" data-name="{{$user->name}}">
                                     <i class="ri-file-pdf-line"></i> PDF
+                                </a>
+
+                                <a href="javascript:void(0)" class="btn-slip-permission btn btn-primary"
+                                   data-bs-target="#slip-amount-permission-modal" data-bs-toggle="modal"
+                                   data-user-id="{{$user->id}}" data-name="{{$user->name}}"
+                                   data-running-slip-number="{{ current($user->slipLogs) ? $user->slipLogs[0]->slip_amount : 0 }}"
+                                   data-running-slip-amount="{{ current($user->slipLogs) ? $user->slipLogs[0]->amount : 0 }}"
+                                   data-running-slip-note="{{ current($user->slipLogs) ? $user->slipLogs[0]->note : '' }}">
+                                    <i class="ri-ticket-line"></i> Slip Permission
                                 </a>
                             </td>
                             @endhasrole
@@ -224,6 +237,55 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             <button type="button" class="pdf-generate-btn btn btn-primary">Generate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="slip-amount-permission-modal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="#" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="scoreModalLabel">Slip Amount Permission</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <input type="hidden" name="id">
+
+                            <div class="border border-color-info p-3">
+                                <h6>Running</h6>
+                                <div class="d-flex justify-content-start align-items-center gap-15">
+                                    <p class="running-slip-number">0</p>
+                                    :
+                                    <p class="running-slip-amount">0</p>
+                                </div>
+                                <p class="running-slip-note"></p>
+                            </div>
+
+                            <div class="border border-color-success p-3 mt-3">
+                                <h6>New</h6>
+                                <div class="d-flex justify-content-between align-items-center gap-15">
+                                    <div class="form-group mb-15">
+                                        <label class="contact-label">Slip Number</label>
+                                        <input class="form-control new-slip-number" type="number" name="slip_number">
+                                    </div>
+                                    <div class="form-group mb-15">
+                                        <label class="contact-label">Slip Amount</label>
+                                        <input class="form-control new-slip-amount" type="number" name="slip_amount">
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="text" class="form-control" name="slip_note" placeholder="Note (Optional)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
                         </div>
                     </form>
                 </div>
@@ -391,6 +453,61 @@
                         let end_date = modal.find('.end_date').val();
 
                         window.location.href = `{{route('admin.user.pdf.generate')}}?id=${id}&start_date=${start_date}&end_date=${end_date}`;
+                    });
+
+                    $(document).on('click', '.btn-slip-permission', function () {
+                        let el = $(this);
+                        let id = el.data('user-id');
+                        let name = el.data('name');
+
+                        let running_slip_number = el.data('running-slip-number');
+                        let running_slip_amount = el.data('running-slip-amount');
+                        let running_slip_note = el.data('running-slip-note');
+
+                        let modal = $("#slip-amount-permission-modal");
+                        setTimeout(() => {
+                            modal.find('.modal-title').text('Adding Slips to ' + name);
+                        }, 1000)
+                        modal.find('input[name="id"]').val(id);
+
+                        modal.find('p.running-slip-number').text(running_slip_number);
+                        modal.find('p.running-slip-amount').text(running_slip_amount);
+                        modal.find('p.running-slip-note').text(running_slip_note);
+                    });
+
+                    $(document).on('submit', '#slip-amount-permission-modal form', function (e) {
+                        e.preventDefault();
+
+                        let modal = $("#slip-amount-permission-modal");
+                        let id = modal.find('input[name="id"]').val();
+                        let slip_number = modal.find('input[name=slip_number]').val();
+                        let slip_amount = modal.find('input[name=slip_amount]').val();
+                        let slip_note = modal.find('input[name=slip_note]').val();
+
+                        if (slip_number === '' || slip_number === undefined || slip_amount === '' || slip_amount === undefined)
+                        {
+                            toastError('Kindly fillup the input fields');
+                            return ;
+                        }
+
+                        $.ajax({
+                            url: `{{ route('admin.user.Slip.amount.update') }}`,
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                id: id,
+                                slip_number: slip_number,
+                                slip_amount: slip_amount,
+                                slip_note: slip_note
+                            },
+                            success: function (response) {
+                                if (response.status) {
+                                    modal.modal('hide');
+                                    toastSuccess(response.message);
+                                    reloadThisPage(500);
+                                }
+                            }
+                        });
                     });
 
                     $(document).on('click', '.btn-permission', function () {

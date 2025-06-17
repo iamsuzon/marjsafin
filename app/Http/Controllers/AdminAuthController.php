@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\CustomerSlipLog;
 use App\Models\MedicalCenter;
 use App\Models\Notification;
 use App\Models\PaymentLog;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\AppointmentBooking;
 
 class AdminAuthController extends Controller
 {
@@ -57,16 +59,13 @@ class AdminAuthController extends Controller
             $end_date = Carbon::parse(request('end_date'))->format('Y-m-d');
 
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereBetween('created_at', [$start_date, $end_date])->paginate(20)->withQueryString();
-        }
-        else if(request()->has('passport_search'))
-        {
+        } else if (request()->has('passport_search')) {
             if (request('passport_search') == null) {
                 return back()->with('error', 'Please enter passport number.');
             }
 
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->where('passport_number', trim(request('passport_search')))->paginate(20);
-        }
-        else {
+        } else {
             $applicationList = Application::with(['applicationPayment', 'applicationCustomComment'])->whereDate('created_at', Carbon::today())->latest()->paginate(20);
         }
 
@@ -90,8 +89,7 @@ class AdminAuthController extends Controller
 
         $application = Application::find($validated['id']);
 
-        if ($application)
-        {
+        if ($application) {
             $application->applicationCustomComment()->updateOrCreate(
                 [
                     'application_id' => $application->id,
@@ -108,8 +106,8 @@ class AdminAuthController extends Controller
                 ],
                 [
                     'application_id' => $application->id,
-                    'admin_amount' => (double) $validated['application_payment'],
-                    'discount_amount' => (double) $validated['application_admin_discount'],
+                    'admin_amount' => (double)$validated['application_payment'],
+                    'discount_amount' => (double)$validated['application_admin_discount'],
                     'center_amount' => 0
                 ]
             );
@@ -235,7 +233,14 @@ class AdminAuthController extends Controller
 
     public function userList()
     {
-        $userList = User::latest()->get();
+        $userList = User::with([
+            'slipLogs' => function ($query) {
+                $query->latest()->limit(1);
+            }
+        ])->withSum('slipLogs', 'slip_amount')
+            ->latest()
+            ->get();
+
         return view('admin.user-list', compact('userList'));
     }
 
@@ -282,7 +287,7 @@ class AdminAuthController extends Controller
             'health_status',
             'health_status_details',
             'medical_status',
-        ])->with(['user','applicationPayment', 'applicationCustomComment'])->where('user_id', $validated['id']);
+        ])->with(['user', 'applicationPayment', 'applicationCustomComment'])->where('user_id', $validated['id']);
 
         $date_string = 'all';
 
@@ -292,8 +297,7 @@ class AdminAuthController extends Controller
 
             $applicationList = $applicationList->whereBetween('created_at', [$start_date, $end_date]);
             $date_string = Carbon::parse($start_date)->format('d-M-Y') . ' to ' . Carbon::parse($end_date)->format('d-M-Y');
-        }
-        elseif ($start_date) {
+        } elseif ($start_date) {
             $start_date = Carbon::parse($start_date)->format('Y-m-d');
             $applicationList = $applicationList->whereDate('created_at', $start_date);
             $date_string = Carbon::parse($start_date)->format('d-M-Y');
@@ -349,6 +353,35 @@ class AdminAuthController extends Controller
         ]);
     }
 
+    public function updateSlipAmount(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required',
+            'slip_number' => 'required|numeric',
+            'slip_amount' => 'required|numeric',
+            'slip_note' => 'nullable|string',
+        ]);
+
+        $slip_log = CustomerSlipLog::create([
+            'user_id' => $validated['id'],
+            'slip_amount' => $validated['slip_number'],
+            'amount' => $validated['slip_amount'],
+            'note' => $validated['slip_note'] ?? '',
+        ]);
+
+        if ($slip_log) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Slip amount updated successfully.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Something went wrong.'
+        ]);
+    }
+
     public function logout()
     {
         Auth::guard('admin')->logout();
@@ -368,7 +401,7 @@ class AdminAuthController extends Controller
         $medical_center_details = MedicalCenter::with('allocatedMedicalCenter')->findOrFail($id);
         $applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->latest()->paginate(10);
 
-        $unapproved_applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->whereHas('allocatedMedicalCenter', function($query) {
+        $unapproved_applications = Application::whereHas('allocatedMedicalCenter')->where('center_name', $medical_center_details->username)->whereHas('allocatedMedicalCenter', function ($query) {
             $query->where('status', false);
         })->latest()->count();
 
@@ -431,8 +464,7 @@ class AdminAuthController extends Controller
         $the_application = $applicationList->first();
 
         if ($the_application->notification) {
-            if ($the_application->notification->read_at === null)
-            {
+            if ($the_application->notification->read_at === null) {
                 $the_application->notification->update(['read_at' => now()]);
             }
         }
@@ -444,8 +476,7 @@ class AdminAuthController extends Controller
 
     public function allNotification()
     {
-        if (request()->ajax())
-        {
+        if (request()->ajax()) {
             $notificationsMarkup = view('admin.render.notification-list')->render();
             return response()->json([
                 'status' => true,
@@ -472,5 +503,14 @@ class AdminAuthController extends Controller
             'status' => true,
             'success' => 'Application updated successfully.'
         ]);
+    }
+
+    public function appointmentBookingList()
+    {
+        $linkList = AppointmentBooking::with(['user:id,name', 'links:id,appointment_booking_id,url,type,status'])
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('admin.appointment-booking.booking-list', compact('linkList'));
     }
 }

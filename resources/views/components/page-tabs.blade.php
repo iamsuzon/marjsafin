@@ -4,6 +4,7 @@
         [
             'name' => '',
             'route' => '',
+            'is_icon' => false,
             'active' => false,
             'has_permission' => true
         ]
@@ -24,7 +25,13 @@
                 @continue(isset($link['has_permission']) && ! $link['has_permission'])
 
                 <li class="sub-menu-item">
-                    <a href="{{$link['route']}}" class="single {{$link['active'] ? 'active' : ''}}">{{$link['name']}}</a>
+                    <a href="{{$link['route']}}" class="single {{$link['active'] ? 'active' : ''}}">
+                        @if(isset($link['is_icon']) && $link['is_icon'])
+                            <i class="{{ $link['name'] }}"></i>
+                        @else
+                            {{ $link['name'] }}
+                        @endif
+                    </a>
                 </li>
             @endforeach
         </ul>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserAppointmentBookingController;
+use App\Http\Controllers\WafPaymentManageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/webhook/wafid', [UserAppointmentBookingController::class, 'wafidWebhook'])->name('wafid.webhook');
+Route::get('/booking-data', [UserAppointmentBookingController::class, 'getDataforLocal']);
+
+Route::post('/set-payment-links', [WafPaymentManageController::class, 'setPaymentLinks']);

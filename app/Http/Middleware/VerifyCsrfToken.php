@@ -13,5 +13,8 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'api/webhook/*',
+        '/FortAPI/general/backToMerchant',
+        '/FortAPI/redirectionResponse/resume3ds2AfterDDCUrl',
+        'api/set-payment-links',
     ];
 }

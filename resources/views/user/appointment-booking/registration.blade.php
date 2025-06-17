@@ -28,6 +28,13 @@
                 [
                     'name' => 'Book Appointment Link List',
                     'route' => route('user.appointment.booking.list'),
+                    'active' => true,
+                    'has_permission' => hasLinkPermission()
+                ],
+                [
+                    'name' => 'ri-bank-card-line',
+                    'is_icon' => true,
+                    'route' => route('user.card.manage'),
                     'active' => false,
                     'has_permission' => hasLinkPermission()
                 ]
@@ -73,9 +80,15 @@
                                         <select class="form-control" name="type">
                                             <option value="" selected disabled>Select Link Type</option>
                                             @foreach($booking_types ?? [] as $index => $type)
-                                                <option value="{{ $index }}">{{ $type }}</option>
+                                                <option value="{{ $index }}" {{ old('type') === $index ? 'selected' : '' }}>{{ $type }}</option>
                                             @endforeach
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                    <div class="contact-form">
+                                        <label class="contact-label">Reference <span class="fillable mx-1">*</span></label>
+                                        <input class="form-control input" type="text" name="reference" placeholder="Reference Name" value="{{old('reference')}}">
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
@@ -102,11 +115,18 @@
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Country Traveling To <span class="fillable mx-1">*</span></label>
-                                        <select class="select2" name="country_traveling_to">
+                                        <select class="form-control" name="country_traveling_to">
                                             <option value="" >Select your traveling country</option>
                                             @foreach($traveling_country ?? [] as $index => $tc)
-                                                <option value="{{ $index }}">{{ $tc }}</option>
+                                                <option value="{{ $index }}" {{ ($index === 'SA' || old('country_traveling_to') === $index) ? 'selected' : '' }}>{{ $tc }}</option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                    <div class="contact-form">
+                                        <label class="contact-label">Center Name <span class="fillable mx-1">*</span></label>
+                                        <select class="form-control center select2" name="center">
                                         </select>
                                     </div>
                                 </div>
@@ -134,23 +154,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Nationality</label>
-                                        <select class="form-control" name="nationality" disabled>
-                                            @foreach($nationality as $index => $item)
-                                                <option selected value="{{ $index }}">{{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Gender <span class="fillable mx-1">*</span></label>
                                         <select class="form-control" name="gender">
                                             <option value="" selected disabled>Select Your Gender</option>
                                             @foreach($gender as $index => $item)
-                                                <option value="{{ $index }}">{{ $item }}</option>
+                                                <option value="{{ $index }}" {{ old('gender') === $index ? 'selected' : '' }}>{{ $item }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -161,7 +171,7 @@
                                         <select class="form-control" name="marital_status">
                                             <option value="" selected disabled>Select an option</option>
                                             @foreach($marital_status as $index => $item)
-                                                <option value="{{ $index }}">{{ $item }}</option>
+                                                <option value="{{ $index }}" {{ old('marital_status') === $index ? 'selected' : '' }}>{{ $item }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -198,14 +208,14 @@
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
-                                        <label class="contact-label">Passport Expiry Date <small>(Day-Month-Year)</small><span class="fillable mx-1">*</span></label>
+                                        <label class="contact-label">Passport Expiry Validity<span class="fillable mx-1">*</span></label>
 
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="input single-date-picker passport-expiry-date-picker"
-                                                   placeholder="Select Date" name="passport_expiry_date" value="{{old('passport_expiry_date')}}">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
+                                        <select class="form-control" name="passport_expiry_date">
+                                            <option value="" selected disabled>Select an option</option>
+                                            @foreach([5,10] as $year)
+                                                <option value="{{ $year }}" {{ $year === (int) old('passport_expiry_date') ? 'selected' : '' }}>{{ $year }} Years</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
@@ -214,7 +224,7 @@
                                         <select class="form-control" name="visa_type">
                                             <option value="" selected disabled>Select Visa Type</option>
                                             @foreach($visa_type ?? [] as $index => $value)
-                                                <option {{old('visa_type') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $value }}</option>
+                                                <option {{($index === 'wv' || old('visa_type') === $index) ? 'selected' : ''}} value="{{ $index }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -243,7 +253,7 @@
                                         <select class="select2" name="applied_position">
                                             <option value="" selected disabled>Select an option</option>
                                             @foreach($applied_position ?? [] as $index => $value)
-                                                <option {{old('applied_position') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $value }}</option>
+                                                <option value="{{ $index }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -289,20 +299,32 @@
             $('.dob-date-picker').val("");
             $('.dob-date-picker').val(`{{old('dob')}}`);
             $('input[name="passport_issue_date"]').val(`{{old('passport_issue_date')}}`);
-            $('input[name="passport_expiry_date"]').val(`{{old('passport_expiry_date')}}`);
 
-            // pre-select country_traveling_to === BD
-            $('select[name=country_traveling_to]').select2();
-            $('select[name=country_traveling_to]').val('BD').trigger('change');
-            // todo: pre-select not working
+            let applied_position = $('select[name="applied_position"]');
+            if (`{{ old('applied_position') }}`) {
+                applied_position.val(`{{ old("applied_position") }}`).trigger('change');
+            } else {
+                applied_position.val('31').trigger('change');
+            }
 
-
-            let city_id = `{{old('city_id')}}`;
-            let center_slug = `{{old('center_slug')}}`;
+            let timeoutId;
+            $('input[name=confirm_passport_number]').on('paste', function (e) {
+                e.preventDefault();
+                timeoutId = setTimeout(() => {
+                    clearTimeout(timeoutId);
+                    toastError('Pasting is disabled. Please type the passport number manually.');
+                }, 800);
+            });
 
             $('#link-registration-form').on('submit', function (e) {
                 let passport = $('#passport_number').val();
                 let confirm = $('#confirm_passport_number').val();
+
+                if (passport === '' || confirm === '') {
+                    e.preventDefault();
+                    toastError('Enter your passport number.');
+                    return;
+                }
 
                 if (passport !== '' && confirm !== '') {
                     if (passport.trim() !== confirm.trim()) {
@@ -318,6 +340,26 @@
                     toastError('Please acknowledge the information provided is complete, true, and accurate.');
                     return;
                 }
+            });
+
+            $(document).on('change', 'select[name=city]', function () {
+                let el = $(this);
+                let city_code = el.val();
+
+                let center_collection = @json($center_list);
+                let center = center_collection[city_code];
+
+                let $centerSelect = $('select.center');
+                $centerSelect.empty();
+
+                if (center && center.list) {
+                    $.each(center.list, function (index, item) {
+                        let newOption = new Option(item, index, false, false);
+                        $centerSelect.append(newOption);
+                    });
+                }
+
+                $centerSelect.trigger('change'); // Refresh Select2 or trigger logic
             });
         });
     </script>

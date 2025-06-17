@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDepositRequestHistoryController;
 use App\Http\Controllers\AdminSlipController;
 use App\Http\Controllers\BanUserManageController;
+use App\Http\Controllers\CardManageController;
 use App\Http\Controllers\DeveloperSettingsController;
 use App\Http\Controllers\ExcelConverterController;
 use App\Http\Controllers\GeneralSettingsController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\UnionUserManageController;
 use App\Http\Controllers\UserAppointmentBookingController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\UserSlipController;
+use App\Http\Controllers\WafPaymentManageController;
 use App\Http\Middleware\RestrictSubAdmin;
 use Illuminate\Support\Facades\Route;
 
@@ -71,13 +73,27 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/appointment-booking-registration', [UserAppointmentBookingController::class, 'appointmentBookingRegistration'])->name('appointment.booking.registration');
         Route::post('/appointment-booking-registration', [UserAppointmentBookingController::class, 'storeAppointmentBooking']);
 
+        Route::get('/appointment-booking-registration/edit/{passport_number}', [UserAppointmentBookingController::class, 'appointmentBookingEdit'])->name('appointment.booking.edit.registration');
+        Route::post('/appointment-booking-registration/edit/{passport_number}', [UserAppointmentBookingController::class, 'updateAppointmentBookingEdit']);
+
         Route::get('/get-appointment-booking-list', [UserAppointmentBookingController::class, 'getAppointmentBookingList'])->name('appointment.booking.list.ajax');
         Route::get('/send-submit-request', [UserAppointmentBookingController::class, 'sendSubmitRequest'])->name('appointment.booking.submit.request.ajax');
         Route::get('/send-submit-request-now', [UserAppointmentBookingController::class, 'sendSubmitRequestNow'])->name('appointment.booking.submit.request.now.ajax');
+
+        Route::get('/get-payment-page-data', [UserAppointmentBookingController::class, 'scrapPaymentPageData'])->name('scrap.payment.page.data');
+        Route::post('/check-last-page', [UserAppointmentBookingController::class, 'checkLastPage'])->name('check.last.page');
+
+        Route::get('/card-manage', [CardManageController::class, 'index'])->name('card.manage');
+        Route::post('/card-manage', [CardManageController::class, 'storeCard']);
+
+        Route::post('/ready-payment-process', [WafPaymentManageController::class, 'initPaymentProcess'])->name('init.payment.process');
     });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
 });
+
+Route::post('/FortAPI/general/backToMerchant', [UserAppointmentBookingController::class, 'errorPayment']);
+Route::post('/FortAPI/redirectionResponse/resume3ds2AfterDDCUrl', [UserAppointmentBookingController::class, 'lastPayment']);
 
 Route::get('/admin', [AdminAuthController::class, 'login'])->name('admin.login');
 Route::post('/admin', [AdminAuthController::class, 'loginAction']);
@@ -116,6 +132,8 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.user.pdf.generate');
     Route::post('/admin/user/permission-update', [AdminAuthController::class, 'updatePermission'])
         ->name('admin.user.permission.update');
+    Route::post('/admin/user/add-slip-amount', [AdminAuthController::class, 'updateSlipAmount'])
+        ->name('admin.user.Slip.amount.update');
 
     Route::get('/admin/new-medical-center', [MedicalCenterManageController::class, 'newMedicalCenter'])
         ->name('admin.new.medical-center')
@@ -203,6 +221,8 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('admin/slip-rates', [PaymentLogController::class, 'slipMedicalCenter'])->name('admin.slip.medical-center');
     Route::post('admin/slip-rates', [PaymentLogController::class, 'storeSlipRate']);
+
+    Route::get('admin/appointment-booking-list', [AdminAuthController::class, 'appointmentBookingList'])->name('admin.appointment-booking.list');
 
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);

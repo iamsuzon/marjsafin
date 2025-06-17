@@ -13,6 +13,7 @@ class AppointmentBookingLink extends Model
         'url',
         'type',
         'status',
+        'medical_center'
     ];
 
     protected $casts = [
@@ -20,6 +21,7 @@ class AppointmentBookingLink extends Model
         'url' => 'string',
         'type' => 'string',
         'status' => 'string',
+        'medical_center' => 'string'
     ];
 
     public function appointmentBooking(): BelongsTo

@@ -76,4 +76,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(AppointmentBooking::class, 'user_id', 'id');
     }
+
+    public function card(): HasOne
+    {
+        return $this->hasOne(Cards::class, 'user_id', 'id')->where('user_type', 1);
+    }
+
+    public function slipLogs(): HasMany
+    {
+        return $this->hasMany(CustomerSlipLog::class , 'user_id', 'id');
+    }
 }
