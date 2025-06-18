@@ -62,6 +62,7 @@ return [
 
     'handler_url' => env('APP_HANDLER_URL', 'https://localhost:3000'),
     'waf_payment_url' => env('WAF_PAYMENT_URL', 'https://localhost:3000/ready-payments'),
+    'waf_pay_url' => env('WAF_PAY_URL', 'https://localhost:3000/link-pay'),
 
     /*
     |--------------------------------------------------------------------------

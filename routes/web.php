@@ -73,6 +73,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/appointment-booking-registration', [UserAppointmentBookingController::class, 'appointmentBookingRegistration'])->name('appointment.booking.registration');
         Route::post('/appointment-booking-registration', [UserAppointmentBookingController::class, 'storeAppointmentBooking']);
 
+        Route::get('/appointment-booking-complete-list', [UserAppointmentBookingController::class, 'appointmentBookingCompleteList'])->name('appointment.booking.list.complete');
+
         Route::get('/appointment-booking-registration/edit/{passport_number}', [UserAppointmentBookingController::class, 'appointmentBookingEdit'])->name('appointment.booking.edit.registration');
         Route::post('/appointment-booking-registration/edit/{passport_number}', [UserAppointmentBookingController::class, 'updateAppointmentBookingEdit']);
 
@@ -87,6 +89,8 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/card-manage', [CardManageController::class, 'storeCard']);
 
         Route::post('/ready-payment-process', [WafPaymentManageController::class, 'initPaymentProcess'])->name('init.payment.process');
+        Route::post('/pay-on-payment-links', [WafPaymentManageController::class, 'payOnPaymentLink'])->name('pay.payment.links');
+        Route::post('/complete-appointment', [WafPaymentManageController::class, 'completeAppointment'])->name('complete.appointment');
     });
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');

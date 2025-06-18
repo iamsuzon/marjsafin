@@ -16,5 +16,6 @@ class VerifyCsrfToken extends Middleware
         '/FortAPI/general/backToMerchant',
         '/FortAPI/redirectionResponse/resume3ds2AfterDDCUrl',
         'api/set-payment-links',
+        'api/get-slip-info'
     ];
 }

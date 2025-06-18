@@ -27,6 +27,7 @@ class User extends Authenticatable
         'refer_by',
         'balance',
         'slip_balance',
+        'slip_number',
         'has_medical_permission',
         'has_slip_permission',
         'has_link_permission'
@@ -52,6 +53,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'balance' => 'integer',
         'slip_balance' => 'integer',
+        'slip_number' => 'integer',
         'has_medical_permission' => 'boolean',
         'has_slip_permission' => 'boolean',
         'has_link_permission' => 'boolean'

@@ -50,14 +50,12 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <div class="contact-form">
                             <label class="contact-label">Name <span class="fillable mx-1">*</span></label>
-                            <input class="form-control input" type="text" name="name" placeholder="Name" value="{{old('name')}}">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                        <div class="contact-form">
-                            <label class="contact-label">Username <span class="fillable mx-1">*</span></label>
-                            <input class="form-control input" type="text" name="username" placeholder="Username" value="{{old('username')}}">
-                            <p class="error">Spaces are not allowed!</p>
+                            <select name="name" id="name" class="form-control">
+                                <option value="" selected disabled>Select a center</option>
+                                @foreach($centers ?? [] as $slug => $value)
+                                    <option value="{{$slug}}" {{old('name') === $slug ? 'selected' : ''}}>{{ $value }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">

@@ -370,6 +370,13 @@ class AdminAuthController extends Controller
         ]);
 
         if ($slip_log) {
+            $user = User::find($slip_log->user_id);
+
+            if ($user) {
+                $user->slip_number += $validated['slip_number'];
+                $user->save();
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Slip amount updated successfully.'

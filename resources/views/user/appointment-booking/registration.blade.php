@@ -32,6 +32,12 @@
                     'has_permission' => hasLinkPermission()
                 ],
                 [
+                    'name' => 'Complete List',
+                    'route' => route('user.appointment.booking.list.complete'),
+                    'active' => false,
+                    'has_permission' => hasLinkPermission()
+                ],
+                [
                     'name' => 'ri-bank-card-line',
                     'is_icon' => true,
                     'route' => route('user.card.manage'),

@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('queue:work --once --timeout=240 --tries=1')
             ->everyMinute()
             ->withoutOverlapping();
+
+        $schedule->command('payment-link:create')
+            ->everyFiveMinutes();
     }
 
     /**

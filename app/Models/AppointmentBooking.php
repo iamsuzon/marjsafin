@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AppointmentBooking extends Model
 {
     protected $fillable = [
+        'status',
         'user_id',
         'type',
         'reference',
@@ -32,9 +34,11 @@ class AppointmentBooking extends Model
         'phone_number',
         'nid_number',
         'applied_position',
+        'note'
     ];
 
     protected $casts = [
+        'status' => 'boolean',
         'user_id' => 'integer',
         'type' => 'string',
         'reference' => 'string',
@@ -44,6 +48,16 @@ class AppointmentBooking extends Model
         'passport_expiry_date' => 'datetime',
         'applied_position' => 'integer',
     ];
+
+    protected function getPassportIssueDateAttribute($value): string
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    protected function getPassportExpiryDateAttribute($value): string
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
 
     public function user(): BelongsTo
     {

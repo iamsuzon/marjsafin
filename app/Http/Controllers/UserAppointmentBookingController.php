@@ -23,16 +23,41 @@ class UserAppointmentBookingController extends Controller
 {
     public function appointmentBookingList()
     {
+        $param = request()->query();
+
         $user = auth()->user();
-        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status'])
+        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status,medical_center'])
             ->where('user_id', $user->id)
+            ->where('status', false)
+            ->when(!empty($param), function ($query) use ($param) {
+                $query->where('city', $param['c']);
+            })
             ->orderByDesc('created_at')
             ->paginate(10);
 
         $added_cards = $user->card()->count();
-        $user_slip_numbers = $user->slipLogs()->sum('slip_amount');
+        $user_slip_numbers = $user->slip_number;
 
         return view('user.appointment-booking.index', compact(
+            'linkList',
+            'added_cards',
+            'user_slip_numbers',
+        ));
+    }
+
+    public function appointmentBookingCompleteList()
+    {
+        $user = auth()->user();
+        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status,medical_center'])
+            ->where('user_id', $user->id)
+            ->where('status', true)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        $added_cards = $user->card()->count();
+        $user_slip_numbers = $user->slip_number;
+
+        return view('user.appointment-booking.complete-list', compact(
             'linkList',
             'added_cards',
             'user_slip_numbers',
@@ -144,7 +169,7 @@ class UserAppointmentBookingController extends Controller
             'passport_number' => $validated['passport_number'],
             'passport_issue_date' => Carbon::parse($validated['passport_issue_date']),
             'passport_issue_place' => $validated['passport_issue_place'],
-            'passport_expiry_date' => Carbon::parse($validated['passport_issue_date'])->addMonths($validated['passport_expiry_date']),
+            'passport_expiry_date' => Carbon::parse($validated['passport_issue_date'])->addYears($validated['passport_expiry_date'])->subDay(),
             'visa_type' => $validated['visa_type'],
             'email' => $email,
             'phone_number' => $phone_number,
@@ -242,7 +267,7 @@ class UserAppointmentBookingController extends Controller
                 'passport_number' => $validated['passport_number'],
                 'passport_issue_date' => Carbon::parse($validated['passport_issue_date']),
                 'passport_issue_place' => $validated['passport_issue_place'],
-                'passport_expiry_date' => Carbon::parse($validated['passport_issue_date'])->addMonths($validated['passport_expiry_date']),
+                'passport_expiry_date' => Carbon::parse($validated['passport_issue_date'])->addYears($validated['passport_expiry_date'])->subDay(),
                 'visa_type' => $validated['visa_type'],
                 'nid_number' => $validated['nid_number'],
                 'applied_position' => $validated['applied_position'],
@@ -395,10 +420,26 @@ class UserAppointmentBookingController extends Controller
     public function getAppointmentBookingList()
     {
         $user = auth()->user();
-        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status'])
+        $linkList = AppointmentBooking::with(['links:id,appointment_booking_id,url,type,status,medical_center'])
             ->where('user_id', $user->id)
+            ->where('status', false)
             ->orderByDesc('created_at')
             ->paginate(10);
+
+        foreach ($linkList as $appointmentBooking) {
+            foreach ($appointmentBooking->links ?? [] as $link) {
+                if (Carbon::parse($link->updated_at)->lt(Carbon::now()->subMinute())) {
+                    $link->type = '';
+                    $link->save();
+                }
+
+                $cacheKey = linkCacheKey($appointmentBooking->user_id, $link->id);
+
+                if (Cache::has($cacheKey)) {
+                    $link->ready_data = Cache::get($cacheKey, []);
+                }
+            }
+        }
 
         $tbody = view('user.appointment-booking.render.tbody', ['linkList' => $linkList])->render();
         $pagination = view('user.appointment-booking.render.pagination', ['linkList' => $linkList])->render();
@@ -490,6 +531,12 @@ class UserAppointmentBookingController extends Controller
                 })
                 ->orderBy('id', 'desc')
                 ->get()
+//                ->map(function ($appointmentBooking) {
+//                    $appointmentBooking->passport_issue_date = $appointmentBooking->passport_issue_date->format('d-m-Y');
+//                    $appointmentBooking->passport_expiry_date =  $appointmentBooking->passport_expiry_date->format('d-m-Y');
+//
+//                    return $appointmentBooking;
+//                })
                 ->toArray();
         }
 

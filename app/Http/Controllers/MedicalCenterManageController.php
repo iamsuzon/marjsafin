@@ -14,28 +14,36 @@ class MedicalCenterManageController extends Controller
 {
     public function newMedicalCenter()
     {
-        return view('admin.new-medical-center');
+        $centers = allCenterList();
+        return view('admin.new-medical-center', ['centers' => $centers]);
     }
 
     public function newMedicalCenterCreate(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|unique:medical_centers',
-            'name' => 'required',
+            'name' => 'required|unique:medical_centers,username',
             'email' => 'nullable|email|unique:medical_centers',
             'password' => 'required',
             'address' => 'nullable',
         ]);
 
-        MedicalCenter::create([
-            'username' => strtolower($validated['username']),
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'address' => $validated['address'],
-        ]);
+        $all_centers = allCenterList();
+        if (array_key_exists($validated['name'], $all_centers)) {
+            $center_name = $all_centers[$validated['name']];
+            $center_slug = $validated['name'];
 
-        return back()->with('success', 'Medical Center created successfully.');
+            MedicalCenter::create([
+                'name' => $center_name,
+                'username' => $center_slug,
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'address' => $validated['address'],
+            ]);
+
+            return back()->with('success', 'Medical Center created successfully.');
+        }
+
+        return back()->with('error', 'Medical Center creation failed.');
     }
 
     public function MedicalCenterList()
@@ -158,13 +166,11 @@ class MedicalCenterManageController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required',
-            'name' => 'required',
             'email' => 'nullable|email',
             'address' => 'nullable',
         ]);
 
         $medicalCenter = MedicalCenter::find($validated['id']);
-        $medicalCenter->name = $validated['name'];
         $medicalCenter->email = $validated['email'];
         $medicalCenter->address = $validated['address'];
         $medicalCenter->save();

@@ -24,3 +24,4 @@ Route::post('/webhook/wafid', [UserAppointmentBookingController::class, 'wafidWe
 Route::get('/booking-data', [UserAppointmentBookingController::class, 'getDataforLocal']);
 
 Route::post('/set-payment-links', [WafPaymentManageController::class, 'setPaymentLinks']);
+Route::post('/get-slip-info', [WafPaymentManageController::class, 'getSlipInfo']);

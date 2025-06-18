@@ -207,18 +207,6 @@
                         <div class="row g-10">
                             <div class="col-md-12">
                                 <input type="hidden" name="medical_center_id">
-
-                                <div class="contact-form mt-15">
-                                    <label for="name">Password</label>
-                                    <input type="text" class="form-control input" id="name" name="name" required>
-                                </div>
-
-                                <div class="contact-form mt-15">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control input" id="username" name="username"
-                                           required>
-                                </div>
-
                                 <div class="contact-form mt-15">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control input" id="email" name="email" required>
