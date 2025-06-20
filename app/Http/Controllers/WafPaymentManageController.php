@@ -7,6 +7,7 @@ use App\Jobs\PayPaymentJob;
 use App\Models\AppointmentBooking;
 use App\Models\AppointmentBookingLink;
 use App\Models\User;
+use App\Services\MedicalApplicationAppointmentService;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
@@ -93,7 +94,7 @@ class WafPaymentManageController extends Controller
 
         $current_user = auth()->user();
         if ($current_user->slip_number <= 0) {
-            return  response()->json([
+            return response()->json([
                 'status' => false,
                 'message' => 'আপনার স্লিপ পেয় কোটা শেষ',
             ]);
@@ -141,12 +142,11 @@ class WafPaymentManageController extends Controller
             $appointment_booking_link = AppointmentBookingLink::find($link_id);
 
             if ($appointment_booking_link) {
-                $appointment_booking =  $appointment_booking_link->appointmentBooking;
+                $appointment_booking = $appointment_booking_link->appointmentBooking;
 
                 $user = User::find($appointment_booking->user_id);
 
-                if ($status === 'success')
-                {
+                if ($status === 'success') {
                     $appointment_booking->note = 'Payment Success';
                     $appointment_booking->save();
 
@@ -156,9 +156,7 @@ class WafPaymentManageController extends Controller
 
                     $user->slip_number -= 1;
                     $user->save();
-                }
-                else if ($status === 'failed')
-                {
+                } else if ($status === 'failed') {
                     $appointment_booking->note = $message;
                     $appointment_booking->save();
                 }
@@ -180,11 +178,23 @@ class WafPaymentManageController extends Controller
             'id' => 'required|numeric'
         ]);
 
-        $appointment_booking = AppointmentBooking::find($validated['id']);
+        $appointment_booking = AppointmentBooking::with('links')->find($validated['id']);
+
+        if ($appointment_booking->links->count() === 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No links found for this appointment booking.'
+            ]);
+
+        }
 
         if ($appointment_booking) {
             $appointment_booking->status = true;
             $appointment_booking->save();
+        }
+
+        if ($appointment_booking->status) {
+            MedicalApplicationAppointmentService::createApplication($appointment_booking);
         }
 
         return response()->json([

@@ -776,3 +776,42 @@ function hasPayingCacheKey($link_id): bool
 {
     return Cache::has(payingCacheKey($link_id));
 }
+
+function appointmentCountryToMedicalCountry($code): ?string
+{
+    $appointmentBookingCountry_name = appointmentBookingCountry()[$code] ?? '';
+
+    foreach (countryList() ?? [] as $country_code => $country) {
+        if (str_contains($country, $appointmentBookingCountry_name)) {
+            return $country_code;
+        }
+    }
+
+    return null;
+}
+
+function appointmentCenterNameToMedicalCenterName($name): string
+{
+    $name = trim($name);
+
+    foreach (allCenterList() as $key => $value) {
+        if (str_contains($value, $name)) {
+            return $key;
+        }
+    }
+
+    return str_replace(' ','-', strtolower($name));
+}
+
+function appointmentPositionToMedicalPosition($code): ?string
+{
+    $position_name = appointmentBookingAppliedPosition()[$code];
+
+    foreach (professionList() ?? [] as $key => $position) {
+        if (str_contains($position, $position_name)) {
+            return $key;
+        }
+    }
+
+    return null;
+}

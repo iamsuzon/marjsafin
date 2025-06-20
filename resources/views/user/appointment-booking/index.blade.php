@@ -346,7 +346,7 @@
                             }
                         });
                     // }, 15000);
-                }, 5000);
+                }, 3000);
             });
 
             $(document).on('click', '.stop-btn', function () {
