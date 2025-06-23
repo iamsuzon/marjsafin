@@ -57,26 +57,26 @@ class MedicalApplicationAppointmentService
 
                 try {
                     Application::create([
-                        'user_id' =>  $user_id,
-                        'center_name' =>  $center_name,
-                        'medical_type' =>  $medical_type,
-                        'passport_number' =>  $passport_number,
-                        'gender' =>  $gender,
-                        'traveling_to' =>   $traveling_to,
-                        'marital_status' =>   $marital_status,
-                        'given_name' =>   $given_name,
-                        'surname' =>    $surname,
-                        'pp_issue_place' =>  $pp_issue_place,
-                        'profession' =>   $profession,
-                        'nationality' =>  $nationality,
-                        'date_of_birth' =>   $date_of_birth,
-                        'nid_no' =>   $nid_no,
+                        'user_id' =>                $user_id,
+                        'center_name' =>            $center_name,
+                        'medical_type' =>           $medical_type,
+                        'passport_number' =>        $passport_number,
+                        'gender' =>                 $gender,
+                        'traveling_to' =>           $traveling_to,
+                        'marital_status' =>         $marital_status,
+                        'given_name' =>             $given_name,
+                        'surname' =>                $surname,
+                        'pp_issue_place' =>         $pp_issue_place,
+                        'profession' =>             $profession,
+                        'nationality' =>            $nationality,
+                        'date_of_birth' =>          $date_of_birth,
+                        'nid_no' =>                 $nid_no,
                         'passport_expiry_date' =>   $passport_expiry_date,
                         'passport_issue_date' =>    $passport_issue_date,
-                        'ref_no' =>   $ref_no,
-                        'contact_no' =>   $contact_no,
-                        'pdf_code' =>   $pdf_code,
-                        'religion' =>   $religion
+                        'ref_no' =>                 $ref_no,
+                        'contact_no' =>             $contact_no,
+                        'pdf_code' =>               $pdf_code,
+                        'religion' =>               $religion
                     ]);
 
                     return true;
