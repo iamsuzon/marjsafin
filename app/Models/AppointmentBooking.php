@@ -43,21 +43,21 @@ class AppointmentBooking extends Model
         'type' => 'string',
         'reference' => 'string',
         'city' => 'integer',
-        'dob' => 'date',
-        'passport_issue_date' => 'datetime',
-        'passport_expiry_date' => 'datetime',
+//        'dob' => 'date',
+//        'passport_issue_date' => 'date',
+//        'passport_expiry_date' => 'date',
         'applied_position' => 'integer',
     ];
 
-    protected function getPassportIssueDateAttribute($value): string
-    {
-        return Carbon::parse($value)->format('d/m/Y');
-    }
-
-    protected function getPassportExpiryDateAttribute($value): string
-    {
-        return Carbon::parse($value)->format('d/m/Y');
-    }
+//    protected function getPassportIssueDateAttribute($value): string
+//    {
+//        return Carbon::parse($value)->format('d/m/Y');
+//    }
+//
+//    protected function getPassportExpiryDateAttribute($value): string
+//    {
+//        return Carbon::parse($value)->format('d/m/Y');
+//    }
 
     public function user(): BelongsTo
     {

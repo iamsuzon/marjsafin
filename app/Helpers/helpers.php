@@ -41,7 +41,7 @@ function slipCenterList(): array
                 'apex-diagnostic-services-pvt-ltd' => 'Apex Diagnostic Services (pvt) Ltd.',
                 'check-up-diagnostic-centre' => 'Check Up Diagnostic Centre',
                 'green-crescent-medical-diagnostic' => 'Green Crescent Medical Diagnostic',
-                'human-diagnostic-and-medical-check-up-center' => 'Human Diagnostic and Medical Check up Center',
+                'human-diagnostic-&-medical-centre-ltd' => 'Human Diagnostic & Medical Centre Ltd',
                 'medical-point-diagnostic-center' => 'Medical Point Diagnostic Center',
                 'medicare-medical-check-up-centre' => 'Medicare Medical Check-up Centre',
                 'sunway-medical-centre' => 'Sunway Medical Centre',

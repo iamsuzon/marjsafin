@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\MedicalCenter;
 use App\Models\StaticOption;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -225,6 +226,25 @@ class UserAuthController extends Controller
         $pdf = PDF::loadView('user.render.report-pdf', $data)->setPaper([0, 0, 650, 450]);
 
         return $pdf->stream('application.pdf');
+    }
+
+    public function medicalCenterTypes()
+    {
+        $type = request('type');
+
+        if ($type) {
+            $type = str_replace('-', ' ', trim($type));
+            $type = strtolower($type);
+
+            $medical_centers = MedicalCenter::select(['id','name','address','note'])
+                ->whereRaw('LOWER(address) = ?', [$type])
+                ->orderBy('name')
+                ->get();
+
+            return view('user.medical-center-types', compact('medical_centers', 'type'));
+        }
+
+        abort(404);
     }
 
     public function logout()

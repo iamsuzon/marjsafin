@@ -26,10 +26,16 @@
 @section('contents')
     <div class="page-content">
         <div class="container-fluid">
-            <x-page-tabs title="Card Management" :links="[
+            <x-page-tabs title="Links" :links="[
                 [
-                    'name' => 'Book Appointment Link List',
-                    'route' => route('user.appointment.booking.list'),
+                    'name' => 'Book Appointment Link Register',
+                    'route' => route('user.appointment.booking.registration'),
+                    'active' => false,
+                    'has_permission' => hasLinkPermission()
+                ],
+                [
+                    'name' => 'Complete List',
+                    'route' => route('user.appointment.booking.list.complete'),
                     'active' => false,
                     'has_permission' => hasLinkPermission()
                 ],

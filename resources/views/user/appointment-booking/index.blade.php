@@ -272,9 +272,11 @@
                                                 Actions
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <li><a class="dropdown-item"
-                                                       href="{{ route('user.appointment.booking.edit.registration', $item->passport_number) }}">Edit</a>
-                                                </li>
+                                                @if(false)
+                                                    <li><a class="dropdown-item"
+                                                           href="{{ route('user.appointment.booking.edit.registration', $item->passport_number) }}">Edit</a>
+                                                    </li>
+                                                @endif
 {{--                                                <li><a class="dropdown-item ready-payment-btn" href="javascript:void(0)"--}}
 {{--                                                       data-id="{{ $item->id }}">Ready Payment Processing</a></li>--}}
                                                 <li><a class="dropdown-item complete" href="javascript:void(0)"

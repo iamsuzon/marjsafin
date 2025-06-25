@@ -35,14 +35,14 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-lg-end justify-content-sm-center">
+                <div class="row justify-content-lg-center justify-content-sm-center">
                     <div class="offset-lg-1 rtl-offset-lg-1 col-xxl-3 col-xl-5 col-lg-6 col-md-8 col-sm-10">
                         <div class="login-card">
 
                             <!-- Logo -->
                             <div class="logo logo-large mb-40">
                                 <a href="{{url('/')}}" class="mb-30 d-block">
-                                    <img style="width: 60px" src="{{customAsset('assets/images/logo.png')}}" alt="logo">
+                                    <img style="width: 60px" src="{{customAsset('assets/images/profile.png')}}" alt="logo">
                                 </a>
                                 <h4 class="text-18 font-600 text-center">Login to Medical Provide System</h4>
                             </div>

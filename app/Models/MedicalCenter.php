@@ -15,7 +15,8 @@ class MedicalCenter extends Authenticatable
         'email_verified_at',
         'password',
         'password_changed_at',
-        'address'
+        'address',
+        'note'
     ];
 
     protected $casts = [

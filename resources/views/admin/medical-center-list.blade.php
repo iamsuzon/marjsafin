@@ -71,6 +71,7 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Address</th>
+                        <th>Note</th>
                         @hasanyrole('super-admin|admin')
                         <th>Action</th>
                         @endhasanyrole
@@ -90,6 +91,7 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->address }}</td>
+                            <td>{{ $user->note }}</td>
 
                             @hasanyrole('super-admin|admin|analyst')
                             <td class="text-end px-15 d-flex gap-10">
@@ -216,6 +218,11 @@
                                     <label for="address">Address</label>
                                     <input type="text" class="form-control input" id="address" name="address" required>
                                 </div>
+
+                                <div class="contact-form mt-15">
+                                    <label for="note">Note</label>
+                                    <textarea class="form-control" name="note" id="note" rows="5"></textarea>
+                                </div>
                             </div>
                         </div>
 
@@ -262,12 +269,14 @@
                         let username = $(this).data('username');
                         let email = $(this).data('email');
                         let address = $(this).data('address');
+                        let note = $(this).data('note');
 
                         $('input[name=medical_center_id]').val(id);
                         $('#edit-modal input[name=name]').val(name);
                         $('#edit-modal input[name=username]').val(username);
                         $('#edit-modal input[name=email]').val(email);
                         $('#edit-modal input[name=address]').val(address);
+                        $('#edit-modal textarea[name=note]').val(note);
                     });
 
                     $(document).on('click', '.update-btn', function (e) {
@@ -278,6 +287,7 @@
                         let username = $('#username').val();
                         let email = $('#email').val();
                         let address = $('#address').val();
+                        let note = $('#note').val();
 
                         customSwal({
                             route: `{{route('admin.medical-center.update')}}`,
@@ -286,7 +296,8 @@
                                 name: name,
                                 username: username,
                                 email: email,
-                                address: address
+                                address: address,
+                                note: note
                             },
                             title: 'Update Medical Center',
                             text: 'Are you sure you want to update this medical center?',

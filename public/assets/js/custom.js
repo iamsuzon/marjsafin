@@ -38,7 +38,7 @@ const customSwal = ({
         cancelButtonText: cancelButtonText,
     }).then((result) => {
         if (result.isConfirmed) {
-            if (method === 'post') {
+            if (method.toLowerCase() === 'post') {
                 axios.post(route, data)
                     .then(successFunction)
                     .catch(errorFunction);

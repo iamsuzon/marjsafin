@@ -305,12 +305,12 @@
             });
 
             $('.dob-date-picker').val(``);
-            $('.dob-date-picker').val(`{{ $bookingItem->dob?->format("d-m-Y") }}`);
+            $('.dob-date-picker').val(`{{ \Carbon\Carbon::parse($bookingItem->dob)->format("d-m-Y") }}`);
 
             $('input[name="passport_issue_date"]').val(``);
-            $('input[name="passport_issue_date"]').val(`{{ $bookingItem->passport_issue_date?->format("d-m-Y") }}`);
+            $('input[name="passport_issue_date"]').val(`{{ \Carbon\Carbon::parse($bookingItem->passport_issue_date)->format("d-m-Y") }}`);
 
-            $('input[name="passport_expiry_date"]').val(`{{ $bookingItem->passport_expiry_date?->format("d-m-y") }}`);
+            $('input[name="passport_expiry_date"]').val(`{{ \Carbon\Carbon::parse($bookingItem->passport_expiry_date)->format("d-m-y") }}`);
 
             $('select[name=city]').select2();
             $('select[name=city]').val(`{{ $bookingItem->city }}`).trigger('change');

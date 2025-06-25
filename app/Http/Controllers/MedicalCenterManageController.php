@@ -25,6 +25,7 @@ class MedicalCenterManageController extends Controller
             'email' => 'nullable|email|unique:medical_centers',
             'password' => 'required',
             'address' => 'nullable',
+            'note' => 'nullable',
         ]);
 
         $all_centers = allCenterList();
@@ -38,6 +39,7 @@ class MedicalCenterManageController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'address' => $validated['address'],
+                'note' => $validated['note'],
             ]);
 
             return back()->with('success', 'Medical Center created successfully.');
@@ -168,11 +170,13 @@ class MedicalCenterManageController extends Controller
             'id' => 'required',
             'email' => 'nullable|email',
             'address' => 'nullable',
+            'note' => 'nullable',
         ]);
 
         $medicalCenter = MedicalCenter::find($validated['id']);
         $medicalCenter->email = $validated['email'];
         $medicalCenter->address = $validated['address'];
+        $medicalCenter->note =  $validated['note'];
         $medicalCenter->save();
 
         return response()->json([

@@ -34927,6 +34927,15 @@ span.tagify__tag-text {
 
 .login-bg {
   position: relative;
+    background: hsla(186, 66%, 40%, 1);
+
+    background: linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(186, 66%, 40%, 1) 0%, hsla(188, 78%, 69%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#239EAB", endColorstr="#74DEEE", GradientType=1 );
 }
 .login-bg::before {
   position: absolute;
@@ -34934,7 +34943,7 @@ span.tagify__tag-text {
   top: 0;
   bottom: 0;
   content: "";
-  background-image: url(../../assets/images/auth-bg.png);
+  /*background-image: url(../../assets/images/auth-bg.png);*/
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: contain;

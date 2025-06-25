@@ -203,4 +203,27 @@ class WafPaymentManageController extends Controller
             'appointment_booking_id' => $appointment_booking->id
         ]);
     }
+
+    public function deleteAppointment(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|numeric'
+        ]);
+
+        $appointment_booking = AppointmentBooking::with('links')->find($validated['id']);
+
+        if ($appointment_booking) {
+            $appointment_booking->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Appointment booking has been deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Appointment booking not found.'
+        ]);
+    }
 }

@@ -64,7 +64,7 @@
                         <!--        </div>-->
 
                         <!--        <div class="col-md-2">-->
-                                    <!-- Date Picker -->
+                        <!-- Date Picker -->
                         <!--            <div class="contact-form">-->
                         <!--                <label class="contact-label">end Date </label>-->
                         <!--                <div class="d-flex justify-content-between date-pic-icon">-->
@@ -114,7 +114,7 @@
                                 <th>Passport</th>
                                 <th>Link Number</th>
                                 <th>Links</th>
-                                <!--<th>Action</th>-->
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -129,19 +129,20 @@
                                         <p>LS: {{ $item->last_name }}</p>
                                         <p>NID: {{$item->nid_number }}</p>
                                         <p class="text-capitalize">Gender: {{ $item->gender }}</p>
+                                        <p>PID: {{ \Carbon\Carbon::parse($item->passport_issue_date)->format('d-m-Y') }}</p>
                                     </td>
                                     <td>{{ $item->passport_number }}</td>
                                     <td>{{ $item->links()->count() }}</td>
                                     <td>
                                         @foreach($item->links ?? [] as $link)
-                                            <a href="{{ $link->url }}" target="_blank">{{ $loop->iteration }}. {{ Str::limit($link->url, 40) }}</a>
+                                            <a class="badge badge-primary text-white mb-4" href="{{ $link->url }}" target="_blank">{{ $loop->iteration }}
+                                                . Link</a>
                                         @endforeach
                                     </td>
-                                    <!--<td>-->
-                                    <!--    @if($item->links()->count() < 1)-->
-                                    <!--        <a href="javascript:void(0)" class="btn btn-primary link-now-btn" data-id="{{ $item->id }}">Link Now</a>-->
-                                    <!--    @endif-->
-                                    <!--</td>-->
+                                    <td>
+                                        <a href="javascript:void(0)" class="btn btn-danger delete-appointment-btn"
+                                           data-id="{{ $item->id }}">Delete</a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -315,6 +316,26 @@
                         if (res.status) {
                             toastSuccess(res.message);
                             reloadThisPage(1000);
+                        }
+                    }
+                });
+            })
+
+            $(document).on('click', '.delete-appointment-btn', function () {
+                let el = $(this);
+                let id = el.data('id');
+
+                customSwal({
+                    route: `{{route('admin.appointment-booking.delete')}}`,
+                    method: 'POST',
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        id: id
+                    },
+                    successFunction: (response) => {
+                        if (response.status) {
+                            toastSuccess(response.message);
+                            el.closest('tr').remove();
                         }
                     }
                 });

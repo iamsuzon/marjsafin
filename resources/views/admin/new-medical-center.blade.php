@@ -76,6 +76,12 @@
                             <input class="form-control input" type="text" name="password" placeholder="Password" value="{{old('password')}}">
                         </div>
                     </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <div class="contact-form">
+                            <label class="contact-label">Note</label>
+                            <textarea class="form-control" name="note" id="note" rows="5">{{ old('note') }}</textarea>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row mt-25">

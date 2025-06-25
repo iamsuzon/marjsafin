@@ -50,8 +50,24 @@
         </div>
         <!--/ Hero -->
 
+        @if(hasLinkPermission())
+            <div>
+                <a href="{{route('user.dashboard.medical-center.types')}}?type=normal"
+                   class="btn btn-primary">Normal</a>
+                <a href="{{route('user.dashboard.medical-center.types')}}?type=normal-plus" class="btn btn-primary">Normal
+                    Plus</a>
+                <a href="{{route('user.dashboard.medical-center.types')}}?type=special"
+                   class="btn btn-primary">Special</a>
+                <a href="{{route('user.dashboard.medical-center.types')}}?type=special-plus" class="btn btn-primary">Special
+                    Plus</a>
+            </div>
+        @endif
+
+        <a href="{{route('user.scrap.payment.page.data')}}" class="btn btn-success">Test</a>
+
         @if(session()->has('error'))
-            <div class="alert alert-danger bg-danger text-white alert-dismissible text-center fs-5 fade show pt-5 pb-5" role="alert">
+            <div class="alert alert-danger bg-danger text-white alert-dismissible text-center fs-5 fade show pt-5 pb-5"
+                 role="alert">
                 {{session('error')}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

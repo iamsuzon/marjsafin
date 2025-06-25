@@ -69,6 +69,8 @@ Route::middleware('auth:web')->group(function () {
         Route::get('slip-list', [UserSlipController::class, 'slipList'])->name('slip.list');
         Route::get('medical-centers', [UserSlipController::class, 'medicalCenterRates'])->name('slip.medical-center.rates');
 
+        Route::get('medical-center-types', [UserAuthController::class, 'medicalCenterTypes'])->name('dashboard.medical-center.types');
+
         Route::get('/appointment-booking-list', [UserAppointmentBookingController::class, 'appointmentBookingList'])->name('appointment.booking.list');
         Route::get('/appointment-booking-registration', [UserAppointmentBookingController::class, 'appointmentBookingRegistration'])->name('appointment.booking.registration');
         Route::post('/appointment-booking-registration', [UserAppointmentBookingController::class, 'storeAppointmentBooking']);
@@ -227,6 +229,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/slip-rates', [PaymentLogController::class, 'storeSlipRate']);
 
     Route::get('admin/appointment-booking-list', [AdminAuthController::class, 'appointmentBookingList'])->name('admin.appointment-booking.list');
+    Route::post('admin/appointment-booking/delete', [WafPaymentManageController::class, 'deleteAppointment'])->name('admin.appointment-booking.delete');
 
     Route::get('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change.password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePasswordAction']);

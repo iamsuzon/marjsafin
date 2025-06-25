@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const crypto = require('crypto');
 const axios = require('axios');
 const https = require('https');
+const { performance } = require('perf_hooks');
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,203 @@ const agent = new https.Agent({
 });
 
 app.use(express.json()); // Parse JSON body
+
+app.get('/ready-payment', async (req, res) => {
+    console.log('Application start');
+
+    let {user_id, appointment_booking_id, appointment_booking_link_id, link} = {
+        user_id: 1,
+        appointment_booking_id: 1,
+        appointment_booking_link_id: 1,
+        link: `https://wafid.com/appointment/Pk8N5MJmx1veWK9/pay/`,
+    };
+
+    let card_holder_name = `MD MOHIUDDIN`;
+    let card_number = `5293668251515853`;
+    let card_cvv = `004`;
+    let card_expiration_date = `2703`;
+
+    // let card_holder_name = `MD SAIFUL ISLAM RAISY`;
+    // let card_number = `4937280041992486	`;
+    // let card_cvv = `951`;
+    // let card_expiration_date = `2806`;
+
+    card_expiration_date = card_expiration_date[2] + card_expiration_date[3] + card_expiration_date[0] + card_expiration_date[1];
+
+    const browser = await puppeteer.launch({
+        headless: false,
+        // executablePath: '/usr/bin/google-chrome', for server
+    });
+    const page = await browser.newPage();
+
+    let lastLink = null;
+    let startTime = 0;
+    let endTime = 0;
+
+    let action = null;
+    let postData = null;
+
+    await page.setRequestInterception(true);
+
+    page.on('request', (req) => {
+        const url = req.url();
+        if (req.method() === 'POST' && url.includes('FortAPI/paymentPage')) {
+            console.log('🚨 Detected POST to wafid:', url);
+            console.log('Request POST data:', req.postData());
+            req.abort();
+        } else {
+            req.continue();
+        }
+    });
+
+    // await page.on('request', async request => {
+    //     const currentUrl = request.url();
+    //     lastLink = currentUrl;
+        
+    //     // if (lastLink === `https://checkout.payfort.com/FortAPI/paymentPage`) {
+    //     //     startTime = performance.now();
+    //     // }
+
+    //     if (lastLink === `https://checkout.payfort.com/FortAPI/paymentPage`) {
+    //         console.log(`Inside condition: ${lastLink}`);
+
+    //     }
+        
+
+    //     if (lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
+    //         // console.log(`Last Link: ${lastLink}`);
+
+    //         // endTime = performance.now();
+    //         // let loadDuration = (endTime - startTime).toFixed(2);
+
+    //         // console.log(loadDuration);
+
+    //         // if (loadDuration >= 6000.00 && loadDuration <= 7000.00) {
+    //             // console.log(`Final URL Before: ${lastLink}`);
+
+    //             // new Promise(resolve => setTimeout(resolve, 1000));
+    //             // if (page && !page.isClosed()) page.close();
+    //             // browser.close();
+
+    //             // console.log(`Final URL After: ${lastLink}`);
+    //         // }
+
+    //         // try {
+    //         //     const response = axios.post('https://marjsafin.test/api/set-payment-links', {
+    //         //         user_id: user_id,
+    //         //         appointment_booking_id: appointment_booking_id,
+    //         //         appointment_booking_link_id: appointment_booking_link_id,
+    //         //         link: lastLink
+    //         //     }, {
+    //         //         httpsAgent: agent,
+    //         //         headers: {
+    //         //             'Content-Type': 'application/json'
+    //         //         }
+    //         //     });
+
+    //         //     console.log('Links sent successfully:', response.data);
+    //         // } catch (error) {
+    //         //     console.error('Error sending links:', error);
+    //         // }
+
+    //         // return;
+    //     }
+
+    //     request.continue();
+    // });
+
+    try {
+        await page.goto(link, {waitUntil: 'domcontentloaded', timeout: 60000});
+
+        await page.waitForSelector('input[name="card_holder_name"]');
+        await page.type('input[name="card_holder_name"]', card_holder_name);
+
+        await page.waitForSelector('input[name="card_number"]');
+        await page.type('input[name="card_number"]', card_number);
+
+        await page.waitForSelector('input[name="expiry_date"]');
+        await page.type('input[name="expiry_date"]', card_expiration_date);
+
+        await page.waitForSelector('input[name="card_security_code"]');
+        await page.type('input[name="card_security_code"]', card_cvv);
+
+        await page.waitForSelector('button[type="submit"]');
+        
+        await Promise.all([
+            page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 10000 }),
+            page.click('button[type="submit"]')
+        ]);
+
+        
+        
+        // Ensure the returnUrlForm is loaded
+        // await page.waitForSelector('#returnUrlForm', { timeout: 10000 });
+
+        // console.log('🚀 Form found, extracting action URL and post data...');
+
+        // const { action, postData } = await page.evaluate(() => {
+        //     const form = document.querySelector('#returnUrlForm');
+        //     if (!form) return {};
+
+        //     // Prevent form submission
+        //     form.onsubmit = (e) => {
+        //         e.preventDefault();
+        //         return false;
+        //     };
+
+        //     const inputs = form.querySelectorAll('input');
+        //     const postData = {};
+        //     inputs.forEach(input => {
+        //         if (input.name) {
+        //             postData[input.name] = input.value;
+        //         }
+        //     });
+
+        //     return {
+        //         action: form.action,
+        //         postData
+        //     };
+        // });
+
+        // console.log('🚀 Action URL:', action);
+        // console.log('🚀 Post Data:', postData);
+
+        // await page.close();
+
+        // // Submit manually via fetch
+        // const newPage = await browser.newPage();
+        // await newPage.goto('about:blank');
+
+        // await newPage.evaluate(async ({ action, postData }) => {
+        //     const formBody = Object.keys(postData)
+        //         .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(postData[key]))
+        //         .join('&');
+
+        //     const response = await fetch(action, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/x-www-form-urlencoded'
+        //         },
+        //         body: formBody
+        //     });
+
+        //     console.log('🚀 Form submitted. Final URL (if redirected):', response.url);
+        // }, { action, postData });
+
+        // setTimeout(async () => {
+        //     browser.close();
+        // }, 300000);
+
+        res.json({
+            initial_url: link,
+            last_link: lastLink
+        });
+    } catch (err) {
+        await browser.close();
+        console.error('Error during navigation:', err);
+        res.status(500).json({error: 'Failed to navigate', details: err.message});
+    }
+});
 
 app.post('/ready-payments', async (req, res) => {
     console.log('Application start');
@@ -31,16 +229,24 @@ app.post('/ready-payments', async (req, res) => {
     const page = await browser.newPage();
 
     let lastLink = null;
+    let startTime = performance.now();
 
-    await page.on('framenavigated', async frame => {
-        const currentUrl = frame.url();
+    await page.setRequestInterception(true);
+
+    await page.on('request', request => {
+        const currentUrl = request.url();
         lastLink = currentUrl;
 
-        console.log(lastLink);
+        const endTime = performance.now();
+        const loadDuration = (endTime - startTime).toFixed(2);
 
-        if (lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
+        if ((loadDuration >= 12000.00 && loadDuration <= 13500.00) && lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
+            new Promise(resolve => setTimeout(resolve, 1000));
+            if (page && !page.isClosed()) page.close();
+            browser.close();
+
             try {
-                const response = await axios.post('https://marjsafin.test/api/set-payment-links', {
+                const response = axios.post('https://marjsafin.test/api/set-payment-links', {
                     user_id: user_id,
                     appointment_booking_id: appointment_booking_id,
                     appointment_booking_link_id: appointment_booking_link_id,
@@ -57,16 +263,14 @@ app.post('/ready-payments', async (req, res) => {
                 console.error('Error sending links:', error);
             }
 
-            delay(1000);
-            if (page && !page.isClosed()) {
-                await page.close();
-            }
-            browser.close();
+            return;
         }
+
+        request.continue();
     });
 
     try {
-        await page.goto(link, {waitUntil: 'networkidle2', timeout: 60000});
+        await page.goto(link, {waitUntil: 'domcontentloaded', timeout: 60000});
 
         await page.waitForSelector('input[name="card_holder_name"]');
         await page.type('input[name="card_holder_name"]', card_holder_name);

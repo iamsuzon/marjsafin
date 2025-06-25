@@ -33,7 +33,7 @@ class UserAppointmentBookingController extends Controller
                 $query->where('city', $param['c']);
             })
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(20);
 
         $added_cards = $user->card()->count();
         $user_slip_numbers = $user->slip_number;
@@ -119,12 +119,12 @@ class UserAppointmentBookingController extends Controller
             'center' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
-            'dob' => 'required',
+            'dob' => 'required|date|before_or_equal:today',
             'gender' => 'required|in:male,female',
             'marital_status' => 'required|in:unmarried,married',
             'passport_number' => 'required|unique:appointment_bookings,passport_number',
             'confirm_passport_number' => 'required|same:passport_number',
-            'passport_issue_date' => 'required',
+            'passport_issue_date' => 'required|date|before_or_equal:today',
             'passport_issue_place' => 'required',
             'passport_expiry_date' => 'required|numeric|in:5,10',
             'visa_type' => 'required|in:wv,fv',
@@ -531,12 +531,13 @@ class UserAppointmentBookingController extends Controller
                 })
                 ->orderBy('id', 'desc')
                 ->get()
-//                ->map(function ($appointmentBooking) {
-//                    $appointmentBooking->passport_issue_date = $appointmentBooking->passport_issue_date->format('d-m-Y');
-//                    $appointmentBooking->passport_expiry_date =  $appointmentBooking->passport_expiry_date->format('d-m-Y');
-//
-//                    return $appointmentBooking;
-//                })
+                ->map(function ($appointmentBooking) {
+                    $appointmentBooking->dob = Carbon::parse($appointmentBooking->dob)->format('d-m-Y');
+                    $appointmentBooking->passport_issue_date = Carbon::parse($appointmentBooking->passport_issue_date)->format('d-m-Y');
+                    $appointmentBooking->passport_expiry_date = Carbon::parse($appointmentBooking->passport_expiry_date)->format('d-m-Y');
+
+                    return $appointmentBooking;
+                })
                 ->toArray();
         }
 
@@ -553,7 +554,8 @@ class UserAppointmentBookingController extends Controller
 
     public function scrapPaymentPageData()
     {
-        $link_id = request()->id;
+//        $link_id = request()->id;
+        $link_id = AppointmentBooking::find(1)->id;
 
         abort_if(empty($link_id), 400);
 
@@ -578,6 +580,8 @@ class UserAppointmentBookingController extends Controller
                     'country' => 'BD'
                 ]
             ]);
+
+        dd($response->ok(), $response->status(), $response->body());
 
         if ($response->ok()) {
             $html = $response->body();

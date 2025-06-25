@@ -516,7 +516,7 @@ class AdminAuthController extends Controller
     {
         $linkList = AppointmentBooking::with(['user:id,name', 'links:id,appointment_booking_id,url,type,status'])
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(20);
 
         return view('admin.appointment-booking.booking-list', compact('linkList'));
     }
