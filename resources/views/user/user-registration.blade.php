@@ -83,17 +83,17 @@
                                         <input class="form-control input" type="text" name="passport_number" placeholder="Passport Number" value="{{old('passport_number')}}">
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Gender<span class="fillable mx-1">*</span></label>
-                                        <select class="select2" name="gender">
-                                            <option value="" selected disabled>Select an option</option>
-                                            <option {{old('gender') === 'male' ? 'selected' : ''}} value="male">Male</option>
-                                            <option {{old('gender') === 'female' ? 'selected' : ''}} value="female">Female</option>
-                                            <option {{old('gender') === 'other' ? 'selected' : ''}} value="other">Other</option>
-                                        </select>
-                                    </div>
-                                </div>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Gender<span class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="select2" name="gender">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            <option {{old('gender') === 'male' ? 'selected' : ''}} value="male">Male</option>--}}
+{{--                                            <option {{old('gender') === 'female' ? 'selected' : ''}} value="female">Female</option>--}}
+{{--                                            <option {{old('gender') === 'other' ? 'selected' : ''}} value="other">Other</option>--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Traveling To<span class="fillable mx-1">*</span></label>
@@ -105,17 +105,17 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Marital Status</label>
-                                        <select class="select2" name="marital_status">
-                                            <option value="" selected disabled>Select an option</option>
-                                            <option {{old('marital_status') === 'unmarried' ? 'selected' : ''}} value="unmarried">Unmarried</option>
-                                            <option {{old('marital_status') === 'married' ? 'selected' : ''}} value="married">Married</option>
-                                            <option {{old('marital_status') === 'other' ? 'selected' : ''}} value="other">Other</option>
-                                        </select>
-                                    </div>
-                                </div>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Marital Status</label>--}}
+{{--                                        <select class="select2" name="marital_status">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            <option {{old('marital_status') === 'unmarried' ? 'selected' : ''}} value="unmarried">Unmarried</option>--}}
+{{--                                            <option {{old('marital_status') === 'married' ? 'selected' : ''}} value="married">Married</option>--}}
+{{--                                            <option {{old('marital_status') === 'other' ? 'selected' : ''}} value="other">Other</option>--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                                     <div class="contact-form">
                                         <label class="contact-label">Center Name<span class="fillable mx-1">*</span></label>
@@ -142,78 +142,78 @@
                                         <input class="form-control input" type="text" name="given_name" placeholder="Given Name" value="{{old('given_name')}}">
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Father Name</label>
-                                        <input class="form-control input" type="text" name="father_name" placeholder="Father Name" value="{{old('father_name')}}">
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Mother Name</label>
-                                        <input class="form-control input" type="text" name="mother_name" placeholder="Mother Name" value="{{old('mother_name')}}">
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Religion</label>
-                                        <select class="select2" name="religion">
-                                            <option value="" selected disabled>Select an option</option>
-                                            @foreach(religionList() ?? [] as $index => $religion)
-                                                <option {{old('religion') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $religion }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">PP Issue Place<span class="fillable mx-1">*</span></label>
-                                        <select class="select2" name="pp_issue_place">
-                                            <option value="" selected disabled>Select an option</option>
-                                            @foreach(ppIssuePlaceList() ?? [] as $index => $ppIssuePlace)
-                                                <option {{old('pp_issue_place') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $ppIssuePlace }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Profession<span class="fillable mx-1">*</span></label>
-                                        <select class="select2" name="profession">
-                                            <option value="" selected disabled>Select an option</option>
-                                            @foreach(ProfessionList() ?? [] as $index => $item)
-                                                <option {{old('profession') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Nationality<span class="fillable mx-1">*</span></label>
-                                        <select class="select2" name="nationality">
-                                            <option value="" selected disabled>Select an option</option>
-                                            @foreach(nationality() ?? [] as $index => $item)
-                                                <option {{old('nationality') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $item }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Date of Birth <small>(Day-Month-Year)</small></label>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Father Name</label>--}}
+{{--                                        <input class="form-control input" type="text" name="father_name" placeholder="Father Name" value="{{old('father_name')}}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Mother Name</label>--}}
+{{--                                        <input class="form-control input" type="text" name="mother_name" placeholder="Mother Name" value="{{old('mother_name')}}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Religion</label>--}}
+{{--                                        <select class="select2" name="religion">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            @foreach(religionList() ?? [] as $index => $religion)--}}
+{{--                                                <option {{old('religion') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $religion }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">PP Issue Place<span class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="select2" name="pp_issue_place">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            @foreach(ppIssuePlaceList() ?? [] as $index => $ppIssuePlace)--}}
+{{--                                                <option {{old('pp_issue_place') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $ppIssuePlace }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Profession<span class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="select2" name="profession">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            @foreach(ProfessionList() ?? [] as $index => $item)--}}
+{{--                                                <option {{old('profession') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $item }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Nationality<span class="fillable mx-1">*</span></label>--}}
+{{--                                        <select class="select2" name="nationality">--}}
+{{--                                            <option value="" selected disabled>Select an option</option>--}}
+{{--                                            @foreach(nationality() ?? [] as $index => $item)--}}
+{{--                                                <option {{old('nationality') === $index ? 'selected' : ''}} value="{{ $index }}">{{ $item }}</option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Date of Birth <small>(Day-Month-Year)</small></label>--}}
 {{--                                        <div class="d-flex justify-content-between">--}}
 {{--                                            <input type="date" class="contact-input"--}}
 {{--                                                   placeholder="{{old('date_of_birth') ?? 'Choose Date'}}" name="date_of_birth" value="{{old('date_of_birth')}}">--}}
 {{--                                            <span> <b class="caret"></b></span>--}}
 {{--                                        </div>--}}
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="input single-date-picker"
-                                                   placeholder="Choose Date" name="date_of_birth" value="{{old('date_of_birth')}}">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
+{{--                                        <div class="d-flex justify-content-between date-pic-icon">--}}
+{{--                                            <input type="text" class="input single-date-picker"--}}
+{{--                                                   placeholder="Choose Date" name="date_of_birth" value="{{old('date_of_birth')}}">--}}
+{{--                                            <span> <b class="caret"></b></span>--}}
+{{--                                            <i class="ri-calendar-line"></i>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 {{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
 {{--                                    <div class="contact-form">--}}
 {{--                                        <label class="contact-label">Contact No<span class="fillable mx-1">*</span></label>--}}
@@ -227,38 +227,38 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Passport Issue Date <small>(Day-Month-Year)</small></label>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Passport Issue Date <small>(Day-Month-Year)</small></label>--}}
 {{--                                        <div class="d-flex justify-content-between">--}}
 {{--                                            <input type="date" class="contact-input"--}}
 {{--                                                   placeholder="{{old('passport_issue_date') ?? 'Choose Date'}}" name="passport_issue_date" value="{{old('passport_issue_date')}}">--}}
 {{--                                            <span> <b class="caret"></b></span>--}}
 {{--                                        </div>--}}
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="input single-date-picker"
-                                                   placeholder="Choose Date" name="passport_issue_date" value="{{old('passport_issue_date')}}">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">Passport Expiry Date <small>(Day-Month-Year)</small></label>
+{{--                                        <div class="d-flex justify-content-between date-pic-icon">--}}
+{{--                                            <input type="text" class="input single-date-picker"--}}
+{{--                                                   placeholder="Choose Date" name="passport_issue_date" value="{{old('passport_issue_date')}}">--}}
+{{--                                            <span> <b class="caret"></b></span>--}}
+{{--                                            <i class="ri-calendar-line"></i>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">Passport Expiry Date <small>(Day-Month-Year)</small></label>--}}
 {{--                                        <div class="d-flex justify-content-between">--}}
 {{--                                            <input type="date" class="contact-input"--}}
 {{--                                                   placeholder="{{old('passport_expiry_date') ?? 'Choose Date'}}" name="passport_expiry_date" value="{{old('passport_expiry_date')}}">--}}
 {{--                                            <span> <b class="caret"></b></span>--}}
 {{--                                        </div>--}}
-                                        <div class="d-flex justify-content-between date-pic-icon">
-                                            <input type="text" class="input single-date-picker"
-                                                   placeholder="Choose Date" name="passport_expiry_date" value="{{old('passport_expiry_date')}}">
-                                            <span> <b class="caret"></b></span>
-                                            <i class="ri-calendar-line"></i>
-                                        </div>
-                                    </div>
-                                </div>
+{{--                                        <div class="d-flex justify-content-between date-pic-icon">--}}
+{{--                                            <input type="text" class="input single-date-picker"--}}
+{{--                                                   placeholder="Choose Date" name="passport_expiry_date" value="{{old('passport_expiry_date')}}">--}}
+{{--                                            <span> <b class="caret"></b></span>--}}
+{{--                                            <i class="ri-calendar-line"></i>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 {{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
 {{--                                    <div class="contact-form">--}}
 {{--                                        <label class="contact-label">Problems<span class="fillable mx-1">*</span></label>--}}

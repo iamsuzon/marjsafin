@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 function countryList(): array
 {
     return [
-//        'kuwait' => 'Kuwait',
+        'kuwait' => 'Kuwait',
 //        'oman' => 'Oman',
         'saudi_arabia' => 'Saudi Arabia',
     ];
