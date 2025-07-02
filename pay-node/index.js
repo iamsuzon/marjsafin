@@ -14,142 +14,141 @@ const agent = new https.Agent({
 
 app.use(express.json()); // Parse JSON body
 
-app.get('/ready-payment', async (req, res) => {
-    console.log('Application start');
+// app.get('/ready-payment', async (req, res) => {
+//     console.log('Application start');
 
-    let {user_id, appointment_booking_id, appointment_booking_link_id, link} = {
-        user_id: 1,
-        appointment_booking_id: 1,
-        appointment_booking_link_id: 1,
-        link: `https://wafid.com/appointment/Pk8N5MJmx1veWK9/pay/`,
-    };
+//     let {user_id, appointment_booking_id, appointment_booking_link_id, link} = {
+//         user_id: 1,
+//         appointment_booking_id: 1,
+//         appointment_booking_link_id: 1,
+//         link: `https://wafid.com/appointment/Pk8N5MJmx1veWK9/pay/`,
+//     };
 
-    let card_holder_name = `MD MOHIUDDIN`;
-    let card_number = `5293668251515853`;
-    let card_cvv = `004`;
-    let card_expiration_date = `2703`;
+//     let card_holder_name = `MD MOHIUDDIN`;
+//     let card_number = `5293668251515853`;
+//     let card_cvv = `004`;
+//     let card_expiration_date = `2703`;
 
-    // let card_holder_name = `MD SAIFUL ISLAM RAISY`;
-    // let card_number = `4937280041992486	`;
-    // let card_cvv = `951`;
-    // let card_expiration_date = `2806`;
+//     // let card_holder_name = `MD SAIFUL ISLAM RAISY`;
+//     // let card_number = `4937280041992486	`;
+//     // let card_cvv = `951`;
+//     // let card_expiration_date = `2806`;
 
-    card_expiration_date = card_expiration_date[2] + card_expiration_date[3] + card_expiration_date[0] + card_expiration_date[1];
+//     card_expiration_date = card_expiration_date[2] + card_expiration_date[3] + card_expiration_date[0] + card_expiration_date[1];
 
-    const browser = await puppeteer.launch({
-        headless: false,
-        // executablePath: '/usr/bin/google-chrome', for server
-    });
-    const page = await browser.newPage();
-    const client = await page.target().createCDPSession();
+//     const browser = await puppeteer.launch({
+//         headless: false,
+//         // executablePath: '/usr/bin/google-chrome', for server
+//     });
+//     const page = await browser.newPage();
 
-    await client.send('Network.enable');
-    await page.setRequestInterception(true);
+//     const client = await page.createCDPSession();
+//     await client.send('Network.enable');
+//     await client.send('Network.emulateNetworkConditions', {
+//                 offline: false,
+//                 downloadThroughput: 500 * 1024 / 8,
+//                 uploadThroughput: 500 * 1024 / 8,
+//                 latency: 400,
+//             });
 
-    // Track if throttling is applied
-    let throttlingApplied = false;
-    let lastLink = null;
+//     await page.setRequestInterception(true);
 
-    await page.on('request', async request => {
-        const currentUrl = request.url();
-        lastLink = currentUrl;
+//     // Track if throttling is applied
+//     let throttlingApplied = false;
+//     let lastLink = null;
 
-        // console.log(`Current URL: ${currentUrl}`);
+//     await page.on('request', async request => {
+//         const currentUrl = request.url();
+//         lastLink = currentUrl;
+
+//         // console.log(`Current URL: ${currentUrl}`);
         
-        if (!throttlingApplied && lastLink === `https://checkout.payfort.com/FortAPI/paymentPage`) {
-            console.log(`Apply throttling (Slow 3G simulation)`);
-            console.log(`Inside throttling: ${lastLink}`);
-            // Apply throttling (Slow 3G simulation)
-            console.log(`working`);
-            await client.send('Network.emulateNetworkConditions', {
-                offline: false,
-                downloadThroughput: 500 * 1024 / 8,
-                uploadThroughput: 500 * 1024 / 8,
-                latency: 400,
-            });
-            console.log(`working 2`);
+//         if (lastLink.includes('checkout.payfort.com/FortAPI/paymentPage')) {
+//             console.log(`Apply throttling (Slow 3G simulation)`);
+//             console.log(`Inside throttling: ${lastLink}`);
 
-            throttlingApplied = true;
-        }
+//             throttlingApplied = true;
+//         }
 
-        if (lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
-            console.log(`Last Link: ${lastLink}`);
-            request.abort();
-            page.close();
-            browser.close();
-            return;
+//         if (lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
+//             console.log(`Last Link: ${lastLink}`);
+//             console.log(`Got Now`);
+//             request.abort();
+//             page.close();
+//             browser.close();
+//             return;
 
-            // endTime = performance.now();
-            // let loadDuration = (endTime - startTime).toFixed(2);
+//             // endTime = performance.now();
+//             // let loadDuration = (endTime - startTime).toFixed(2);
 
-            // console.log(loadDuration);
+//             // console.log(loadDuration);
 
-            // if (loadDuration >= 6000.00 && loadDuration <= 7000.00) {
-                // console.log(`Final URL Before: ${lastLink}`);
+//             // if (loadDuration >= 6000.00 && loadDuration <= 7000.00) {
+//                 // console.log(`Final URL Before: ${lastLink}`);
 
-                // new Promise(resolve => setTimeout(resolve, 1000));
-                // if (page && !page.isClosed()) page.close();
-                // browser.close();
+//                 // new Promise(resolve => setTimeout(resolve, 1000));
+//                 // if (page && !page.isClosed()) page.close();
+//                 // browser.close();
 
-                // console.log(`Final URL After: ${lastLink}`);
-            // }
+//                 // console.log(`Final URL After: ${lastLink}`);
+//             // }
 
-            // try {
-            //     const response = axios.post('https://marjsafin.test/api/set-payment-links', {
-            //         user_id: user_id,
-            //         appointment_booking_id: appointment_booking_id,
-            //         appointment_booking_link_id: appointment_booking_link_id,
-            //         link: lastLink
-            //     }, {
-            //         httpsAgent: agent,
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         }
-            //     });
+//             // try {
+//             //     const response = axios.post('https://marjsafin.test/api/set-payment-links', {
+//             //         user_id: user_id,
+//             //         appointment_booking_id: appointment_booking_id,
+//             //         appointment_booking_link_id: appointment_booking_link_id,
+//             //         link: lastLink
+//             //     }, {
+//             //         httpsAgent: agent,
+//             //         headers: {
+//             //             'Content-Type': 'application/json'
+//             //         }
+//             //     });
 
-            //     console.log('Links sent successfully:', response.data);
-            // } catch (error) {
-            //     console.error('Error sending links:', error);
-            // }
+//             //     console.log('Links sent successfully:', response.data);
+//             // } catch (error) {
+//             //     console.error('Error sending links:', error);
+//             // }
 
-            // return;
-        }
+//             // return;
+//         }
 
-        request.continue();
-    });
+//         request.continue();
+//     });
 
-    try {
-        await page.goto(link, {waitUntil: 'domcontentloaded', timeout: 60000});
+//     try {
+//         await page.goto(link, {waitUntil: 'domcontentloaded', timeout: 60000});
 
-        await page.waitForSelector('input[name="card_holder_name"]');
-        await page.type('input[name="card_holder_name"]', card_holder_name);
+//         await page.waitForSelector('input[name="card_holder_name"]');
+//         await page.type('input[name="card_holder_name"]', card_holder_name);
 
-        await page.waitForSelector('input[name="card_number"]');
-        await page.type('input[name="card_number"]', card_number);
+//         await page.waitForSelector('input[name="card_number"]');
+//         await page.type('input[name="card_number"]', card_number);
 
-        await page.waitForSelector('input[name="expiry_date"]');
-        await page.type('input[name="expiry_date"]', card_expiration_date);
+//         await page.waitForSelector('input[name="expiry_date"]');
+//         await page.type('input[name="expiry_date"]', card_expiration_date);
 
-        await page.waitForSelector('input[name="card_security_code"]');
-        await page.type('input[name="card_security_code"]', card_cvv);
+//         await page.waitForSelector('input[name="card_security_code"]');
+//         await page.type('input[name="card_security_code"]', card_cvv);
 
-        await page.waitForSelector('button[type="submit"]');
+//         await page.waitForSelector('button[type="submit"]');
         
-        await Promise.all([
-            page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 10000 }),
-            page.click('button[type="submit"]')
-        ]);
+//         await Promise.all([
+//             page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 10000 }),
+//             page.click('button[type="submit"]')
+//         ]);
 
-        res.json({
-            initial_url: link,
-            last_link: lastLink
-        });
-    } catch (err) {
-        await browser.close();
-        console.error('Error during navigation:', err);
-        res.status(500).json({error: 'Failed to navigate', details: err.message});
-    }
-});
+//         res.json({
+//             initial_url: link,
+//             last_link: lastLink
+//         });
+//     } catch (err) {
+//         await browser.close();
+//         console.error('Error during navigation:', err);
+//         res.status(500).json({error: 'Failed to navigate', details: err.message});
+//     }
+// });
 
 app.post('/ready-payments', async (req, res) => {
     console.log('Application start');
@@ -163,27 +162,32 @@ app.post('/ready-payments', async (req, res) => {
     card_expiration_date = card_expiration_date[2] + card_expiration_date[3] + card_expiration_date[0] + card_expiration_date[1];
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         // executablePath: '/usr/bin/google-chrome', for server
     });
     const page = await browser.newPage();
 
-    let lastLink = null;
-    let startTime = performance.now();
+    const client = await page.createCDPSession();
+    await client.send('Network.enable');
+    await client.send('Network.emulateNetworkConditions', {
+            offline: false,
+            downloadThroughput: 500 * 1024 / 8,
+            uploadThroughput: 500 * 1024 / 8,
+            latency: 400,
+    });
 
     await page.setRequestInterception(true);
 
-    await page.on('request', request => {
+    let lastLink = null;
+
+    await page.on('request', async request => {
         const currentUrl = request.url();
         lastLink = currentUrl;
 
-        const endTime = performance.now();
-        const loadDuration = (endTime - startTime).toFixed(2);
+        if (lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
+            await request.abort();
 
-        if ((loadDuration >= 12000.00 && loadDuration <= 13500.00) && lastLink.includes(`checkout.payfort.com/FortAPI/redirectionResponse/threeDs2RedirectURL?token=`)) {
-            new Promise(resolve => setTimeout(resolve, 1000));
-            if (page && !page.isClosed()) page.close();
-            browser.close();
+            console.log(`aborted and closed now link is : ${lastLink}`);
 
             try {
                 const response = axios.post('https://marjsafin.test/api/set-payment-links', {
@@ -203,10 +207,18 @@ app.post('/ready-payments', async (req, res) => {
                 console.error('Error sending links:', error);
             }
 
-            return;
+            setTimeout(async () => {
+                try {
+                    await page.close();
+                    await browser.close();
+                    console.log('Browser closed successfully.');
+                } catch (e) {
+                    console.error('Error during browser/page close:', e.message);
+                }
+            }, 1000);
+        } else {
+            request.continue();
         }
-
-        request.continue();
     });
 
     try {
@@ -230,7 +242,10 @@ app.post('/ready-payments', async (req, res) => {
         await delay(500);
 
         setTimeout(async () => {
-            browser.close();
+            if (page && !page.isClosed()) {
+                await page.close();
+                await browser.close();
+            }
         }, 300000);
 
         res.json({

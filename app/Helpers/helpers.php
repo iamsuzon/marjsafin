@@ -10,7 +10,7 @@ function countryList(): array
 {
     return [
         'kuwait' => 'Kuwait',
-//        'oman' => 'Oman',
+        'oman' => 'Oman',
         'saudi_arabia' => 'Saudi Arabia',
     ];
 }

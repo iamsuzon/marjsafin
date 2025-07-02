@@ -1,11 +1,10 @@
-@extends('user.layout.common-master')
-@section('title', 'Link List')
+<?php $__env->startSection('title', 'Link List'); ?>
 
-@section('sidebar')
-    @include('user.partials.medical-sidebar')
-@endsection
+<?php $__env->startSection('sidebar'); ?>
+    <?php echo $__env->make('user.partials.medical-sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php $__env->stopSection(); ?>
 
-@section('styles')
+<?php $__env->startSection('styles'); ?>
     <style>
         .manage__title {
             border-bottom: 2px solid var(--primary);
@@ -91,12 +90,14 @@
             background-color: slategrey;
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('contents')
+<?php $__env->startSection('contents'); ?>
     <div class="page-content">
         <div class="container-fluid">
-            <x-page-tabs title="Links" :links="[
+            <?php if (isset($component)) { $__componentOriginalf5da842333934bac1365ea2ff9d5dd81 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf5da842333934bac1365ea2ff9d5dd81 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.page-tabs','data' => ['title' => 'Links','links' => [
                 [
                     'name' => 'Book Appointment Link Register',
                     'route' => route('user.appointment.booking.registration'),
@@ -116,7 +117,44 @@
                     'active' => false,
                     'has_permission' => hasLinkPermission()
                 ]
-            ]"/>
+            ]]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('page-tabs'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['title' => 'Links','links' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute([
+                [
+                    'name' => 'Book Appointment Link Register',
+                    'route' => route('user.appointment.booking.registration'),
+                    'active' => true,
+                    'has_permission' => hasLinkPermission()
+                ],
+                [
+                    'name' => 'Complete List',
+                    'route' => route('user.appointment.booking.list.complete'),
+                    'active' => false,
+                    'has_permission' => hasLinkPermission()
+                ],
+                [
+                    'name' => 'ri-bank-card-line',
+                    'is_icon' => true,
+                    'route' => route('user.card.manage'),
+                    'active' => false,
+                    'has_permission' => hasLinkPermission()
+                ]
+            ])]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf5da842333934bac1365ea2ff9d5dd81)): ?>
+<?php $attributes = $__attributesOriginalf5da842333934bac1365ea2ff9d5dd81; ?>
+<?php unset($__attributesOriginalf5da842333934bac1365ea2ff9d5dd81); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf5da842333934bac1365ea2ff9d5dd81)): ?>
+<?php $component = $__componentOriginalf5da842333934bac1365ea2ff9d5dd81; ?>
+<?php unset($__componentOriginalf5da842333934bac1365ea2ff9d5dd81); ?>
+<?php endif; ?>
 
             <div class="card">
                 <div class="row">
@@ -131,8 +169,8 @@
                                         </a>
                                     </div>
                                     <div class="d-flex gap-10 justify-content-start align-items-center">
-                                        <p class="fw-bold">Card: {{ $added_cards }}</p>
-                                        <p class="fw-bold">Slip: {{ $user_slip_numbers ?? 0 }}</p>
+                                        <p class="fw-bold">Card: <?php echo e($added_cards); ?></p>
+                                        <p class="fw-bold">Slip: <?php echo e($user_slip_numbers ?? 0); ?></p>
                                         <p class="fw-bold">Link: 0</p>
                                     </div>
                                 </div>
@@ -141,9 +179,9 @@
                                     <select class="form-select" aria-label="City" name="city-filter">
                                         <option value="" selected disabled>Select City</option>
 
-                                        @foreach(appointmentBookingCity() ?? [] as $key => $value)
-                                            <option value="{{$key}}">{{$value}}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = appointmentBookingCity() ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($key); ?>"><?php echo e($value); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                             </div>
@@ -152,35 +190,37 @@
                 </div>
 
                 <div class="row mt-50">
-                    @if(session('success'))
+                    <?php if(session('success')): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Success!</strong> {{ session('success') }}
+                            <strong>Success!</strong> <?php echo e(session('success')); ?>
+
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    @if(session('error'))
+                    <?php if(session('error')): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Unsuccessful!</strong> {{ session('error') }}
+                            <strong>Unsuccessful!</strong> <?php echo e(session('error')); ?>
 
-                            <!-- @if(session('url'))
-                                আরো স্কোর এর জন্য রিকোয়েস্ট করুন <a href="{{session('url')}}" class="btn btn-primary">Request
+
+                            <!-- <?php if(session('url')): ?>
+                                আরো স্কোর এর জন্য রিকোয়েস্ট করুন <a href="<?php echo e(session('url')); ?>" class="btn btn-primary">Request
                                     Score</a>
 
-                            @endif -->
+                            <?php endif; ?> -->
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
-                    @if($errors->any())
+                    <?php if($errors->any()): ?>
                         <div class="alert alert-danger">
                             <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><?php echo e($error); ?></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <div class="table-responsives max-height-100vh scroll-active">
                         <table class="table-color-col table-head-border table-td-border">
@@ -198,59 +238,63 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($linkList ?? [] as $item)
-                                <tr data-ap-id="{{ $item->id }}">
+                            <?php $__empty_1 = true; $__currentLoopData = $linkList ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr data-ap-id="<?php echo e($item->id); ?>">
                                     <td>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="serial-id"
-                                                   name="serial-id[]" data-id="{{ $item->id }}">
+                                                   name="serial-id[]" data-id="<?php echo e($item->id); ?>">
                                             <label class="form-check-label" for="serial-id">
-                                                {{ $item->id }}
+                                                <?php echo e($item->id); ?>
+
                                             </label>
                                         </div>
                                     </td>
-                                    <td class="note">{{ $item->note }}</td>
+                                    <td class="note"><?php echo e($item->note); ?></td>
                                     <td>
-                                        <p>Date: {{ $item->created_at->format('d/m/Y') }}</p>
-                                        <p>Reference: {{ $item->reference }}</p>
+                                        <p>Date: <?php echo e($item->created_at->format('d/m/Y')); ?></p>
+                                        <p>Reference: <?php echo e($item->reference); ?></p>
                                     </td>
                                     <td>
                                         <p class="timer text-danger"></p>
-                                        <p>{{ucwords(str_replace('_',' ',$item->type))}}</p>
+                                        <p><?php echo e(ucwords(str_replace('_',' ',$item->type))); ?></p>
                                     </td>
                                     <td>
-                                        <p>PP: {{ $item->passport_number }}</p>
-                                        <p>FN: {{ $item->first_name }}</p>
-                                        <p>LS: {{ $item->last_name }}</p>
-                                        <p>NID: {{$item->nid_number }}</p>
-                                        <p class="text-capitalize">Gender: {{ $item->gender }}</p>
+                                        <p>PP: <?php echo e($item->passport_number); ?></p>
+                                        <p>FN: <?php echo e($item->first_name); ?></p>
+                                        <p>LS: <?php echo e($item->last_name); ?></p>
+                                        <p>NID: <?php echo e($item->nid_number); ?></p>
+                                        <p class="text-capitalize">Gender: <?php echo e($item->gender); ?></p>
                                     </td>
                                     <td class="medical-center-names">
                                         <p class="text-capitalize choice-medical">
-                                            {{ str_replace('-',' ',$item->center_name) }}
+                                            <?php echo e(str_replace('-',' ',$item->center_name)); ?>
+
                                         </p>
                                         <p>-------</p>
                                         <div class="link-medical-wrapper">
-                                            @foreach($item->links ?? [] as $link)
-                                                <p class="link-medical">{{$loop->iteration}}
-                                                    . {{ $link->medical_center }}</p>
-                                            @endforeach
+                                            <?php $__currentLoopData = $item->links ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <p class="link-medical"><?php echo e($loop->iteration); ?>
+
+                                                    . <?php echo e($link->medical_center); ?></p>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
                                     </td>
                                     <td>
-                                        @foreach($item->links ?? [] as $link)
+                                        <?php $__currentLoopData = $item->links ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $link): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="my-2 d-flex justify-content-between align-items-center gap-5">
                                                 <p class="badge badge-success text-white pay-btn"
-                                                   data-id="{{ $link->id }}" data-appointment-url="{{ $link->url }}"
-                                                   data-url="{{ $link->url }}">
-                                                    <a href="javascript:void(0)" class="text-white">{{$loop->iteration}}
+                                                   data-id="<?php echo e($link->id); ?>" data-appointment-url="<?php echo e($link->url); ?>"
+                                                   data-url="<?php echo e($link->url); ?>">
+                                                    <a href="javascript:void(0)" class="text-white"><?php echo e($loop->iteration); ?>
+
                                                         . Link</a>
                                                 </p>
                                             </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </td>
                                     <td>
-                                        @php
+                                        <?php
                                             if ($item->type === 'normal') {
                                                 $status = $item->links()->count() === 1 ? 'Submitted' : 'Pending';
                                             } elseif ($item->type === 'normal_plus') {
@@ -260,9 +304,10 @@
                                             } elseif ($item->type === 'special_plus') {
                                                 $status = $item->links()->count() === 7 ? 'Submitted' : 'Pending';
                                             }
-                                        @endphp
+                                        ?>
 
-                                        {{ $status }}
+                                        <?php echo e($status); ?>
+
                                     </td>
                                     <td>
                                         <div class="action-dropdown dropdown">
@@ -272,38 +317,39 @@
                                                 Actions
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                @if(false)
+                                                <?php if(false): ?>
                                                     <li><a class="dropdown-item"
-                                                           href="{{ route('user.appointment.booking.edit.registration', $item->passport_number) }}">Edit</a>
+                                                           href="<?php echo e(route('user.appointment.booking.edit.registration', $item->passport_number)); ?>">Edit</a>
                                                     </li>
-                                                @endif
+                                                <?php endif; ?>
                                                 <li><a class="dropdown-item ready-payment-btn" href="javascript:void(0)"
-                                                       data-id="{{ $item->id }}">Ready Payment Processing</a></li>
+                                                       data-id="<?php echo e($item->id); ?>">Ready Payment Processing</a></li>
                                                 <li><a class="dropdown-item complete" href="javascript:void(0)"
-                                                       data-id="{{ $item->id }}">Complete</a></li>
+                                                       data-id="<?php echo e($item->id); ?>">Complete</a></li>
                                             </ul>
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>
                                     <td colspan="10" class="text-center">No Data Found</td>
                                 </tr>
-                            @endforelse
+                            <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
 
                     <div class="d-flex justify-content-start pagination-custom-wrapper">
-                        {{$linkList->links()}}
+                        <?php echo e($linkList->links()); ?>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
     <script>
         $(document).ready(function () {
             // Initialize datepicker for every date input field
@@ -325,11 +371,11 @@
                 let start_date = form.find('.start_date').val();
                 let end_date = form.find('.end_date').val();
 
-                window.location.href = `{{route('user.slip.list')}}?start_date=${start_date}&end_date=${end_date}`;
+                window.location.href = `<?php echo e(route('user.slip.list')); ?>?start_date=${start_date}&end_date=${end_date}`;
             });
 
             $(document).on('click', '.reset_btn', function () {
-                location.href = `{{route('user.slip.list')}}`;
+                location.href = `<?php echo e(route('user.slip.list')); ?>`;
             });
 
             $(document).on('click', '.search_btn_passport', function (e) {
@@ -337,7 +383,7 @@
 
                 let passport_search = $('input[name="passport_search"]').val();
 
-                window.location.href = `{{route('user.slip.list')}}?passport_search=${passport_search}`;
+                window.location.href = `<?php echo e(route('user.slip.list')); ?>?passport_search=${passport_search}`;
             });
 
             let intervalId;
@@ -351,7 +397,7 @@
                 intervalId = setInterval(() => {
                     // setTimeout(() => {
                     $.ajax({
-                        url: `{{ route('user.appointment.booking.list.ajax') }}`,
+                        url: `<?php echo e(route('user.appointment.booking.list.ajax')); ?>`,
                         type: 'GET',
                         success: function (response) {
                             if (response.status) {
@@ -366,7 +412,7 @@
                         }
                     });
                     // }, 15000);
-                }, 5000);
+                }, 3000);
             });
 
             $(document).on('click', '.stop-btn', function () {
@@ -380,6 +426,19 @@
             $(document).on('click', '.pay-btn', function () {
                 let el = $(this);
                 let appointment_url = el.data('appointment-url');
+
+                navigator.clipboard.writeText(appointment_url)
+                    .then(() => {
+                        toastSuccess('Appointment URL copied to clipboard');
+                    })
+                    .catch(err => {
+                        toastError('Failed to copy appointment URL');
+                    });
+
+                return;
+
+                // todo: temporarily disabled the payment button functionality
+
                 let pay_id = el.attr('data-pay-id');
 
                 if (pay_id === '' || pay_id === undefined) {
@@ -391,10 +450,10 @@
                 el.text(`${btn_array[0]}. Paying..`);
 
                 $.ajax({
-                    url: `{{ route('user.pay.payment.links') }}`,
+                    url: `<?php echo e(route('user.pay.payment.links')); ?>`,
                     type: 'POST',
                     data: {
-                        _token: `{{ csrf_token() }}`,
+                        _token: `<?php echo e(csrf_token()); ?>`,
                         pay_id: pay_id
                     },
                     success: function (response) {
@@ -416,10 +475,10 @@
                 let id = el.attr('data-id');
 
                 $.ajax({
-                    url: `{{ route('user.complete.appointment') }}`,
+                    url: `<?php echo e(route('user.complete.appointment')); ?>`,
                     type: 'POST',
                     data: {
-                        _token: `{{ csrf_token() }}`,
+                        _token: `<?php echo e(csrf_token()); ?>`,
                         id: id
                     },
                     success: function (response) {
@@ -464,10 +523,10 @@
                     startTimer(readyPaymentIds);
 
                     $.ajax({
-                        url: `{{ route('user.init.payment.process') }}`,
+                        url: `<?php echo e(route('user.init.payment.process')); ?>`,
                         type: 'POST',
                         data: {
-                            _token: `{{ csrf_token() }}`,
+                            _token: `<?php echo e(csrf_token()); ?>`,
                             id: id
                         },
                         success: function (response) {
@@ -523,46 +582,46 @@
                         let seconds = countdown % 60;
                         timerElement.text(`${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')} : ${seconds.toString().padStart(2, '0')}`);
 
-                        {{--$.ajax({--}}
-                        {{--    url: `{{ route('user.ready.payment.links') }}`,--}}
-                        {{--    type: 'POST',--}}
-                        {{--    data: {--}}
-                        {{--        _token: `{{ csrf_token() }}`,--}}
-                        {{--        id: id--}}
-                        {{--    },--}}
-                        {{--    success: function (response) {--}}
-                        {{--        if (response.status) {--}}
-                        {{--            let linkArray = response.paymentLinks;--}}
-                        {{--            let appointment_booking_id = response.appointment_booking_id;--}}
-                        {{--            let note = response.note;--}}
-                        {{--            let appointmentBookingMedical = response.appointmentBookingMedical;--}}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        {{--            let tr = $(`tr[data-ap-id=${appointment_booking_id}]`);--}}
-                        {{--            tr.find('.note').text(note);--}}
+                        
+                        
 
-                        {{--            let j = 1;--}}
-                        {{--            let Link_medical_wrapper = $('.link-medical-wrapper');--}}
-                        {{--            appointmentBookingMedical.forEach(function (value, index) {--}}
-                        {{--                let p_tag = $('<p>', {--}}
-                        {{--                    text: `${j++}. ${value.medical_center}`,--}}
-                        {{--                    class: 'link-medical'--}}
-                        {{--                });--}}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        {{--                Link_medical_wrapper.append(p_tag);--}}
-                        {{--            });--}}
+                        
+                        
 
-                        {{--            let i = 1;--}}
-                        {{--            linkArray.forEach(function(value, index) {--}}
-                        {{--                let payBtn = $(`.pay-btn[data-id=${value.link_id}]`);--}}
-                        {{--                payBtn.attr('data-pay-id', value.link_id);--}}
-                        {{--                payBtn.find('a').text(`${i++}. Pay`);--}}
-                        {{--            });--}}
-                        {{--        }--}}
-                        {{--    },--}}
-                        {{--    error: function (xhr) {--}}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
-                        {{--    }--}}
-                        {{--});--}}
+                        
+                        
                     } else {
                         timerElement.text(``);
                         clearInterval(intervalId); // Stop this specific timer
@@ -628,7 +687,7 @@
                 el.find('a').html(`<i class="loading-icon ri-loader-2-fill"></i>`);
                 el.find('a').addClass('disabled');
 
-                axios.get(`{{ route('user.scrap.payment.page.data') }}?id=${id}`, {
+                axios.get(`<?php echo e(route('user.scrap.payment.page.data')); ?>?id=${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'text/html',
@@ -668,8 +727,8 @@
             });
 
             function checkLastPage(appointment_url, link_id, el) {
-                axios.post(`{{ route('user.check.last.page') }}`, {
-                    _token: `{{ csrf_token() }}`,
+                axios.post(`<?php echo e(route('user.check.last.page')); ?>`, {
+                    _token: `<?php echo e(csrf_token()); ?>`,
                     link_id: link_id,
                     current_url: appointment_url
                 })
@@ -700,8 +759,10 @@
                 let el = $(this);
                 let city_value = el.val();
 
-                location.href = `{{route('user.appointment.booking.list')}}?c=${city_value}`;
+                location.href = `<?php echo e(route('user.appointment.booking.list')); ?>?c=${city_value}`;
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('user.layout.common-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Herd\marjsafin\resources\views/user/appointment-booking/index.blade.php ENDPATH**/ ?>

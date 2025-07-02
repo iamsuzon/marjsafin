@@ -172,7 +172,7 @@ class UserAuthController extends Controller
         $validated = $request->validate([
             'medical_type' => 'required',
             'passport_number' => 'required|unique:applications,passport_number',
-            'gender' => 'required',
+//            'gender' => 'required',
             'traveling_to' => 'required',
             'marital_status' => 'nullable',
             'center_name' => 'required',
@@ -182,10 +182,10 @@ class UserAuthController extends Controller
             'mother_name' => 'nullable',
             'religion' => 'nullable',
             'pp_issue_place' => 'nullable',
-            'profession' => 'required',
-            'nationality' => 'required',
+//            'profession' => 'required',
+//            'nationality' => 'required',
             'date_of_birth' => 'nullable',
-            'nid_no' => 'required|numeric',
+//            'nid_no' => 'required|numeric',
             'passport_issue_date' => 'nullable',
             'passport_expiry_date' => 'nullable',
             'ref_no' => 'required',
@@ -197,6 +197,10 @@ class UserAuthController extends Controller
         $validated['pdf_code'] = generatePdfCode($validated['center_name']);
         $validated['contact_no'] = 0000;
         $validated['religion'] = 'none';
+        $validated['gender'] = 'none';
+        $validated['profession'] = 'none';
+        $validated['nationality'] = 'bangladeshi';
+        $validated['nid_no'] = 0;
 //        $validated['problem'] = json_encode($validated['problem']);
 
         Application::create($validated);

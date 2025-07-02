@@ -220,12 +220,12 @@
 {{--                                        <input class="form-control input" type="text" name="contact_no" placeholder="Passport Number" value="{{old('contact_no')}}">--}}
 {{--                                    </div>--}}
 {{--                                </div>--}}
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                    <div class="contact-form">
-                                        <label class="contact-label">NID No</label>
-                                        <input class="form-control input" type="number" name="nid_no" placeholder="NID Number" value="{{old('nid_no')}}">
-                                    </div>
-                                </div>
+{{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
+{{--                                    <div class="contact-form">--}}
+{{--                                        <label class="contact-label">NID No</label>--}}
+{{--                                        <input class="form-control input" type="number" name="nid_no" placeholder="NID Number" value="{{old('nid_no')}}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
 {{--                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">--}}
 {{--                                    <div class="contact-form">--}}

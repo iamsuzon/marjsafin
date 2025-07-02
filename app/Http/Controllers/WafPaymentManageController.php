@@ -20,7 +20,6 @@ class WafPaymentManageController extends Controller
 {
     public function initPaymentProcess(Request $request)
     {
-        Cache::flush();
         $validated = $request->validate([
             'id' => 'required|numeric',
         ]);
@@ -82,8 +81,19 @@ class WafPaymentManageController extends Controller
 
 //            if (!Cache::has($cacheKey)) {
             Cache::put($cacheKey, ['link_id' => $appointment_booking_link_id, 'link' => $link], now()->addHours(2));
+
+            \Log::info($cacheKey);
+            \Log::info($link);
 //            }
+
+            return response()->json([
+                'status' => true,
+            ]);
         }
+
+        return response()->json([
+            'status' => false,
+        ]);
     }
 
     public function payOnPaymentLink(Request $request)

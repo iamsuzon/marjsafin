@@ -25,7 +25,7 @@
 <div id="layout-wrapper">
     <main>
         <!-- Login area S t a r t  -->
-        <div class="login-area login-bg">
+        <div class="login-area login-bg" style="background: url('{{ asset('assets/images/background.jpeg') }}'); background-size: contain; background-position: center center; background-repeat: no-repeat">
             <div class="container-fluid">
                 <div class="row justify-content-lg-end justify-content-sm-center">
                     <div class="offset-lg-1 col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-10">
